@@ -7,7 +7,7 @@ cut.LoadAll("Test");
 PrintAll(cut);
 Console.ReadLine();
 Console.Clear();
-cut.Parts[0].PartName = "NewPartName!!!";
+cut.Parts[0].PartName = "Start";
 cut.SaveAll("Test");
 cut.LoadAll("Test");
 PrintAll(cut);

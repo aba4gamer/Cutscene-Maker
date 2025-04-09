@@ -1,4 +1,6 @@
-bin/
+Cutscene Maker/bin/
 .vscode/
-obj/
+Cutscene Maker/obj/
 Hack.io/
+.gitignore
+Cutscene Maker/net9.0/

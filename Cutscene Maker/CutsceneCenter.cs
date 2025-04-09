@@ -1,8 +1,6 @@
 ﻿using static Abacus.Hashes;
-using Hack.io.BCSV;
-using System.Buffers.Binary;
+using Hack.io.BCSV; // Super Hackio's libraries.
 using Hack.io.Utility;
-using Microsoft.VisualBasic; // From Hack.io libraries
 
 namespace Abacus;
 /*
@@ -12,7 +10,7 @@ namespace Abacus;
     Note for the UI designer: I think you can directly load every parameter from the respective class of each Part, you don't have to search inside the BCSVs.
 */
 /// <summary>
-/// Idk if this should be static.
+/// The main Cutscene that contains a lot of different Parts.
 /// </summary>
 public class Cutscene(string CutsceneName)
 {
@@ -21,7 +19,7 @@ public class Cutscene(string CutsceneName)
     /// </summary>
     public string CutsceneName = CutsceneName;
     /// <summary>
-    /// Feel free to use this list.
+    /// Feel free to use this list however you want.
     /// </summary>
     public List<Part> Parts = [];
 
@@ -94,7 +92,8 @@ public class Cutscene(string CutsceneName)
 
     protected void FillProperties(ICommonEntries part, string PartName)
     {
-        if (GetPartNameIndex(PlayerBCSV, PartName) is int iPlayer && iPlayer != -1) // Do I need the "&& iPlayer != -1"?)
+        int iPlayer = GetPartNameIndex(PlayerBCSV, PartName);
+        if (iPlayer != -1)
         {
             part.PlayerEntry = new()
             {
@@ -103,7 +102,9 @@ public class Cutscene(string CutsceneName)
                 Visible = (int)PlayerBCSV[iPlayer][PlayerBCSV[PlayerHashes.VISIBLE]]
             };
         }
-        if (GetPartNameIndex(WipeBCSV, PartName) is int iWipe && iWipe != -1)
+
+        int iWipe = GetPartNameIndex(WipeBCSV, PartName);
+        if (iWipe != -1)
         {
             part.WipeEntry = new()
             {
@@ -112,7 +113,9 @@ public class Cutscene(string CutsceneName)
                 WipeFrame = (int)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_FRAME]]
             };
         }
-        if (GetPartNameIndex(SoundBCSV, PartName) is int iSound && iSound != -1)
+
+        int iSound = GetPartNameIndex(SoundBCSV, PartName);
+        if (iSound != -1)
         {
             part.SoundEntry = new()
             {
@@ -124,7 +127,9 @@ public class Cutscene(string CutsceneName)
                 AllSoundStopFrame = (int)SoundBCSV[iSound][SoundBCSV[SoundHashes.ALL_SOUND_STOP_FRAME]]
             };
         }
-        if (GetPartNameIndex(ActionBCSV, PartName) is int iAction && iAction != -1)
+
+        int iAction = GetPartNameIndex(ActionBCSV, PartName);
+        if (iAction != -1)
         {
             part.ActionEntry = new()
             {
@@ -135,7 +140,9 @@ public class Cutscene(string CutsceneName)
                 AnimName = (string)ActionBCSV[iAction][ActionBCSV[ActionHashes.ANIM_NAME]]
             };
         }
-        if (GetPartNameIndex(CameraBCSV, PartName) is int iCamera && iCamera != -1)
+
+        int iCamera = GetPartNameIndex(CameraBCSV, PartName);
+        if (iCamera != -1)
         {
             part.CameraEntry = new()
             {
@@ -151,17 +158,16 @@ public class Cutscene(string CutsceneName)
 
     protected static void LoadBCSV(string filePath, BCSV bcsv)
     {
-        byte[] fileBytes = File.ReadAllBytes(filePath);
         StreamUtil.SetEndianBig(); // StreamUtil my beloved. This saved me from manually reverse every byte.
-        using MemoryStream stream = new(fileBytes);
+        using FileStream stream = File.OpenRead(filePath);
         bcsv.Load(stream);
     }
+
     protected static void SaveBCSV(string filePath, BCSV bcsv)
     {
         StreamUtil.SetEndianBig();
-        using MemoryStream stream = new();
+        using FileStream stream = File.Open(filePath, FileMode.Open); // I don't use OpenWrite because I clear the files before writing on them.
         bcsv.Save(stream);
-        File.WriteAllBytes(filePath, stream.ToArray());
     }
 
     /// <summary>
@@ -206,9 +212,7 @@ public class Cutscene(string CutsceneName)
             if (part.CameraEntry != null)
                 CameraBCSV.Add(part.CameraEntry.CreateEntryAndSave(part.PartName));
             if (part.SubPartEntries != null)
-            {
-                SubPartBCSV.AddRange(part.SubPartEntries.Select(p => p.CreateEntryAndSave(part.PartName)).ToList()); // Yipee, first time using LINQ.
-            }
+                SubPartBCSV.AddRange(part.SubPartEntries.Select(p => p.CreateEntryAndSave(part.PartName)).ToList()); // Yipee, first time using LINQ.  
         }
         try
         {
@@ -227,7 +231,7 @@ public class Cutscene(string CutsceneName)
             Console.WriteLine($"Something went wrong with saving!\nCheck this: {e.Message}");
         }
     }
-    public void CreateAllNewFromTemplate()
+    public void NewCutsceneFromTemplate()
     {
 
     }
