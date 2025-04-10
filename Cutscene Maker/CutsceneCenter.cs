@@ -10,14 +10,20 @@ namespace Abacus;
     Note for the UI designer: I think you can directly load every parameter from the respective class of each Part, you don't have to search inside the BCSVs.
 */
 /// <summary>
-/// The main Cutscene that contains a lot of different Parts.
+/// The main Cutscene that contains a lot of different Parts. Use the static functions to create one.
 /// </summary>
-public class Cutscene(string CutsceneName)
+public class Cutscene
 {
+    protected Cutscene(string CutsceneName)
+    {
+        this.CutsceneName = CutsceneName;
+    }
     /// <summary>
     /// Idk if in-game does but here the name doesn't require "Demo" before the CutsceneName... But just in case add "Demo" to the name.
     /// </summary>
-    public string CutsceneName = CutsceneName;
+    public string CutsceneName;
+ // public string FolderPath; Hmmm, not right now.
+
     /// <summary>
     /// Feel free to use this list however you want.
     /// </summary>
@@ -34,9 +40,9 @@ public class Cutscene(string CutsceneName)
     public BCSV ActionBCSV = new();
     public BCSV CameraBCSV = new();
     /// <summary>
-    /// Load all BCSVs from a folder (NOT RARC!), only when you're sure that they exist!!!
+    /// Load all BCSVs from a folder. You can use this function to reload a Cutscene if you know the folder where it is.
     /// </summary>
-    public void LoadAll(string folderPath)
+    public void LoadAll(string folderPath) // Since NewCutsceneFromFiles() exists idk which accesibility modificator use so I'll keep it in public.
     {
         try
         {
@@ -166,7 +172,7 @@ public class Cutscene(string CutsceneName)
     protected static void SaveBCSV(string filePath, BCSV bcsv)
     {
         StreamUtil.SetEndianBig();
-        using FileStream stream = File.Open(filePath, FileMode.Open); // I don't use OpenWrite because I clear the files before writing on them.
+        using FileStream stream = File.Create(filePath);
         bcsv.Save(stream);
     }
 
@@ -216,6 +222,8 @@ public class Cutscene(string CutsceneName)
         }
         try
         {
+            Directory.CreateDirectory(folderPath);
+
             SaveBCSV(Path.Combine(folderPath, CutsceneName + "Time.bcsv"), TimeBCSV);
             SaveBCSV(Path.Combine(folderPath, CutsceneName + "Player.bcsv"), PlayerBCSV);
             SaveBCSV(Path.Combine(folderPath, CutsceneName + "Wipe.bcsv"), WipeBCSV);
@@ -231,30 +239,50 @@ public class Cutscene(string CutsceneName)
             Console.WriteLine($"Something went wrong with saving!\nCheck this: {e.Message}");
         }
     }
-    public void NewCutsceneFromTemplate()
+    /// <summary>
+    /// Creates a new Cutscene from empty BCSVs.
+    /// </summary>
+    /// <param name="CutsceneName"></param>
+    /// <returns></returns>
+    public static Cutscene NewCutsceneFromTemplate(string CutsceneName)
     {
+        Cutscene cut = new("DemoTemplate");
+        cut.LoadAll("Templates");
+        cut.CutsceneName = CutsceneName;
+        return cut;
+    }
+    /// <summary>
+    /// Returns a Cutscene from bcsv files on a folder.
+    /// </summary>
+    /// <param name="TimeBCSVPath"></param>
+    /// <returns></returns>
+    public static Cutscene NewCutsceneFromFiles(string TimeBCSVPath)
+    {
+        string CutsceneName = Path.GetFileName(TimeBCSVPath).Replace("Time", "");
+        string folderPath = Path.GetDirectoryName(TimeBCSVPath)!;
+        Cutscene cut = new(CutsceneName);
+        cut.LoadAll(folderPath);
+        return cut;
+    }
 
+    /// <summary>
+    /// This connects the same PartName across all the BCSVs with the idea of each Part being an independent object with multiple entries.
+    /// </summary>
+    /// <param name="PartName"></param>
+    public class Part(string PartName) : ICommonEntries
+    {
+        public string PartName = PartName;
+
+        // This means, don't have more than one entry per BCSV with the same PartName. Otherwise... this would be a bunch of work that I don't want to do.
+        public Time TimeEntry = new();
+        public Player? PlayerEntry { get; set; }
+        public Wipe? WipeEntry { get; set; }
+        public Sound? SoundEntry { get; set; }
+        public Action? ActionEntry { get; set; }
+        public Camera? CameraEntry { get; set; }
+        public List<SubPart>? SubPartEntries; // I'll make an exception with SubPart.
     }
 }
-
-/// <summary>
-/// This connects the same PartName across all the BCSVs with the idea of each Part being an independent object with multiple entries.
-/// </summary>
-/// <param name="PartName"></param>
-public class Part(string PartName) : ICommonEntries
-{
-    public string PartName = PartName;
-
-    // This means, don't have more than one entry per BCSV with the same PartName. Otherwise... this would be a bunch of work that I don't want to do.
-    public Time TimeEntry = new();
-    public Player? PlayerEntry { get; set; }
-    public Wipe? WipeEntry { get; set; }
-    public Sound? SoundEntry { get; set; }
-    public Action? ActionEntry { get; set; }
-    public Camera? CameraEntry { get; set; }
-    public List<SubPart>? SubPartEntries; // I'll make an exception with SubPart.
-}
-
 // You maybe ask why aren't these entries objects from BCSV.Entry. With this you can easily access every property instead of getting it using a hash for every property like I did before. 
 #region EntryClasses 
 

@@ -1,7 +1,5 @@
 namespace Abacus;
 
-#pragma warning disable CS3003 // Yes, I use uints, any problem? NO!
-
 /// <summary>
 /// All the Hashes of all BCSVs cutscene-related stored here.
 /// </summary>
