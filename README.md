@@ -1,5 +1,5 @@
 # Custcene Maker
-README in progress. To build use Hack.io and Hack.io.BCSV and .NET 9.0
+README in progress. **.NET 9 is REQUIRED** To build use Hack.io and Hack.io.BCSV.
 
 To do:
 
