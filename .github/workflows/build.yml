@@ -21,7 +21,7 @@ jobs:
         - shell: cmd
           run: mkdir CutsceneMaker-linux CutsceneMaker-macos CutsceneMaker-win
         - shell: cmd
-          working-directory: SyatiManager
+          working-directory: CutsceneMaker
           run: |
             dotnet restore
             dotnet publish -p:PublishProfile=Properties\PublishProfiles\Linux.pubxml
