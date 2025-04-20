@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" Width="330" Height="125"
+        x:Class="CutsceneMaker.CutsceneNameDialog"
+        Title="New Cutscene"
+		WindowStartupLocation="CenterOwner"
+		CanResize="False">
+	<StackPanel Margin="10" Spacing="8">
+		<TextBlock Text="Enter the Cutscene Name:" Height="20"/>
+		<TextBox Name="InputBox" KeyDown="EnterClick" Watermark="Ex: DemoMyCoolCutscene"/>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
+			<Button Content="Ok" Click="ButtonClick"/>
+		</StackPanel>
+	</StackPanel>
+</Window>

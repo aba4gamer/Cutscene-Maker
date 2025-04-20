@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:CutsceneMaker"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CutsceneMaker.MainWindow"
+        Title="CutsceneMaker"
+		Background="WhiteSmoke">
+	<DockPanel>
+		<Menu
+			DockPanel.Dock="Top"
+			Background="Aqua"
+			VerticalAlignment="Top">
+			<MenuItem Header="_File">
+				<MenuItem Header="New" Click="OnClickNew"/>
+				<MenuItem Header="Load" Click="OnClickLoad"/>
+				<MenuItem Name="SaveButton" Header="Save" Click="OnClickSave"/>
+				<MenuItem Header="Save As" Click="OnClickSaveAs"/>
+			</MenuItem>
+		</Menu>
+		<SplitView
+			DisplayMode="Inline"
+			PanePlacement="Left"
+			OpenPaneLength="150"
+			IsPaneOpen="True">
+			<SplitView.Pane>
+				<Grid RowDefinitions="80*,Auto">
+					<TreeView Grid.Row="0"
+						FontSize="11"
+						Name="TreeParts"
+						Background="LightBlue"
+						SelectionChanged="OnTreeViewSelectionChanged">
+					</TreeView>
+					<DockPanel Grid.Row="1">
+						<Button Name="PartNameButton" Content="Create Part" Click="OnClickCreatePart" IsVisible="True"/>
+						<Button Name="ArrowUp" Content="↑" Width="30" Click="OnMoveUp"/>
+						<Button Name="ArrowDown" Content="↓" Width="30" Click="OnMoveDown"/>
+						<TextBox Name="PartNameBox" IsVisible="False" KeyDown="OnEnterClick" LostFocus="OnLostFocusCreatePart"/>
+					</DockPanel>
+				</Grid>
+			</SplitView.Pane>
+			<SplitView.Content>
+				<TabControl>
+					<TabItem Name="MainTab" Header="Main" FontSize="15"/>
+					<TabItem Name="PlayerTab" Header="Player" FontSize="15"/>
+					<TabItem Name="ActionTab" Header="Action" FontSize="15"/>
+					<TabItem Name="CameraTab" Header="Camera" FontSize="15"/>
+					<TabItem Name="SoundTab" Header="Sound" FontSize="15"/>
+					<TabItem Name="WipeTab" Header="Wipe" FontSize="15"/>
+				</TabControl>
+			</SplitView.Content>
+		</SplitView>
+	</DockPanel>
+	<Window.Resources>
+			<MenuFlyout x:Key="PartsFlyout" Opened="CheckPart">
+				<MenuItem Header="Rename" Click="OnRename"/>
+				<MenuItem Header="Delete" Click="OnDelete"/>
+				<MenuItem Name="AddSubPartButton" Header="Add SubPart" Click="OnAddSubPart"/>
+			</MenuFlyout>
+	</Window.Resources>
+</Window>

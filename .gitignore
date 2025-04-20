@@ -1,7 +1,12 @@
-Cutscene Maker/bin/
+Abacus/bin/
+Abacus/.vs/
 .vscode/
-Cutscene Maker/obj/
+.vs/
+Abacus/obj/
 Hack.io/
 .gitignore
-Cutscene Maker/net9.0/
-Cutscene Maker/Test/
+Abacus/net9.0/
+Abacus/Test/
+CutsceneMaker/.vs/
+CutsceneMaker/bin/
+CutsceneMaker/obj/
