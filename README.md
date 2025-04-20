@@ -10,3 +10,7 @@ To do:
 
 ## Building
 To build use Hack.io and Hack.io.BCSV.
+
+## Credits
+- Hack.io libraries: Super Hackio
+- MessageBox.Avalonia: CreateLab
