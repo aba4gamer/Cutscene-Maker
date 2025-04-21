@@ -26,13 +26,13 @@ jobs:
         run: dotnet restore CutsceneMaker/CutsceneMaker.csproj
 
       - name: Build and publish (win-x64)
-        run: dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r win-x64 -o publish/win --self-contained true
+        run: dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r win-x64 -o publish/win --self-contained true --publish-single-file true
 
       - name: Build and publish (linux-x64)
-        run: dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r linux-x64 -o publish/linux --self-contained true
+        run: dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r linux-x64 -o publish/linux --self-contained true --publish-single-file true
 
       - name: Build and publish (osx-x64)
-        run: dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r osx-x64 -o publish/macos --self-contained true
+        run: dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r osx-x64 -o publish/macos --self-contained true --publish-single-file true
 
       - name: Copy Templates to each publish folder
         run: |
