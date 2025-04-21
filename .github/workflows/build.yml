@@ -1,0 +1,65 @@
+name: CutsceneMaker
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v4
+
+      - name: Clone Hack.io repo
+        run: |
+          git clone https://github.com/SuperHackio/Hack.io.git temp_hackio
+          mv temp_hackio/Hack.io ./Hack.io
+          mv temp_hackio/Hack.io.BCSV ./Hack.io.BCSV
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore CutsceneMaker/CutsceneMaker.csproj
+
+      - name: Build and publish (win-x64)
+        run: dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r win-x64 -o publish/win --self-contained true
+
+      - name: Build and publish (linux-x64)
+        run: dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r linux-x64 -o publish/linux --self-contained true
+
+      - name: Build and publish (osx-x64)
+        run: dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r osx-x64 -o publish/macos --self-contained true
+
+      - name: Copy Templates to each publish folder
+        run: |
+          cp -r Abacus/Templates publish/win/
+          cp -r Abacus/Templates publish/linux/
+          cp -r Abacus/Templates publish/macos/
+
+      - name: Create zip packages
+        run: |
+          cd publish
+          zip -r win.zip win/
+          zip -r linux.zip linux/
+          zip -r macos.zip macos/
+          cd ..
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CutsceneMaker-Builds
+          path: publish/*.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: CutsceneMaker Release
+          tag_name: release-${{ github.run_number }}
+          files: |
+            publish/win.zip
+            publish/linux.zip
+            publish/macos.zip

@@ -1,5 +1,5 @@
 # Custcene Maker
-README in progress. To build use Hack.io and Hack.io.BCSV and .NET 9.0
+README in progress. **.NET 9 is REQUIRED**.
 
 To do:
 
@@ -7,3 +7,10 @@ To do:
 - Add some picker lists for Wipe and Action.
 - Fix some little bugs.
 - ~~Add a timeline control~~
+
+## Building
+To build use Hack.io and Hack.io.BCSV.
+
+## Credits
+- Hack.io libraries: Super Hackio
+- MessageBox.Avalonia: CreateLab
