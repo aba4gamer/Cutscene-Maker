@@ -24,9 +24,9 @@ jobs:
           dotnet publish -p:MacOSProfile
       - name: Zip Compress
         run: |
-          Compress-Archive -Path Windows\ -DestinationPath CutsceneMaker-windows-x64.zip
-          Compress-Archive -Path MacOS\ -DestinationPath CutsceneMaker-osx-x64.zip
-          Compress-Archive -Path Linux\ -DestinationPath CutsceneMaker-linux-x64.zip
+          Compress-Archive -Path ${{ github.workspace }}\Windows -DestinationPath CutsceneMaker-windows-x64.zip
+          Compress-Archive -Path ${{ github.workspace }}\MacOS -DestinationPath CutsceneMaker-osx-x64.zip
+          Compress-Archive -Path ${{ github.workspace }}\Linux -DestinationPath CutsceneMaker-linux-x64.zip
       - name: Create release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
