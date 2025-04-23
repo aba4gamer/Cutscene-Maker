@@ -28,18 +28,23 @@ jobs:
           dotnet publish CutsceneMaker/CutsceneMaker.csproj -p:LinuxProfile
           dotnet publish CutsceneMaker/CutsceneMaker.csproj -p:MacOSProfile
 
-      - name: Verify
+      - name: Middle step because otherwise it won't work
+        shell: pwsh
         run: |
-          Get-ChildItem -Path "${{ github.workspace }}\CutsceneMaker\bin\Release" -Recurse -Directory | Where-Object { $_.Name -eq "publish" }
+          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\CutsceneMaker-win-x64"
+          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\CutsceneMaker-linux-x64"
+          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\CutsceneMaker-osx-x64"
+
+          Copy-Item -Recurse -Force "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\win-x64\publish\*" "${{ github.workspace }}\CutsceneMaker-win-x64\"
+          Copy-Item -Recurse -Force "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\linux-x64\publish\*" "${{ github.workspace }}\CutsceneMaker-linux-x64\"
+          Copy-Item -Recurse -Force "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\osx-x64\publish\*" "${{ github.workspace }}\CutsceneMaker-osx-x64\"
 
       - name: Compress
         shell: pwsh
         run: |
-          $base = "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0"
-
-          Compress-Archive -Path "$base\win-x64\publish" -DestinationPath "${{ github.workspace }}\CutsceneMaker-win-x64.zip"
-          Compress-Archive -Path "$base\osx-x64\publish" -DestinationPath "${{ github.workspace }}\CutsceneMaker-osx-x64.zip"
-          Compress-Archive -Path "$base\linux-x64\publish" -DestinationPath "${{ github.workspace }}\CutsceneMaker-linux-x64.zip"
+          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-win-x64" -DestinationPath "${{ github.workspace }}\CutsceneMaker-win-x64.zip"
+          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-linux-x64" -DestinationPath "${{ github.workspace }}\CutsceneMaker-linux-x64.zip"
+          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-osx-x64" -DestinationPath "${{ github.workspace }}\CutsceneMaker-osx-x64.zip"
 
       - name: Create release
         uses: marvinpinto/action-automatic-releases@latest
