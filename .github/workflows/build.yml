@@ -26,7 +26,7 @@ jobs:
           dotnet publish -p:LinuxProfile
           dotnet publish -p:MacOSProfile
       - name: Move files
-        working-directory: CutsceneMaker\bin\Release\net9.0\publish
+        working-directory: CutsceneMaker\bin\Release\net9.0\
         run: |
          xcopy /s linux-x64 ${{ github.workspace }}\CutsceneMaker-linux-x64
          xcopy /s osx-x64 ${{ github.workspace }}\CutsceneMaker-osx-x64
