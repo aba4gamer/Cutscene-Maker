@@ -28,9 +28,9 @@ jobs:
       - name: Move files
         working-directory: CutsceneMaker\bin\Release\net9.0
         run: |
-         xcopy /s linux-x64 ${{ github.workspace }}\CutsceneMaker-linux-x64
-         xcopy /s osx-x64 ${{ github.workspace }}\CutsceneMaker-osx-x64
-         xcopy /s win-x64 ${{ github.workspace }}\CutsceneMaker-win-x64
+         xcopy /s linux-x64 CutsceneMaker-linux-x64
+         xcopy /s osx-x64 CutsceneMaker-osx-x64
+         xcopy /s win-x64 CutsceneMaker-win-x64
       - name: Zip Compress
         run: |
           Compress-Archive -Path ${{ github.workspace }}\CutsceneMaker-win-x64 -DestinationPath ${{ github.workspace }}\CutsceneMaker-win-x64.zip
