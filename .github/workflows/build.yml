@@ -25,16 +25,12 @@ jobs:
           dotnet publish -p:WindowsProfile
           dotnet publish -p:LinuxProfile
           dotnet publish -p:MacOSProfile
-      - name: Move folders
-        run: |
-         xcopy /s LinuxOutput ${{ github.workspace }}\LinuxOutput
-         xcopy /s MacOSOutput ${{ github.workspace }}\MacOSOutput
-         xcopy /s WindowsOutput ${{ github.workspace }}\WindowsOutput
       - name: Zip Compress
+        working-directory: CutsceneMaker\bin\Release\net9.0
         run: |
-          Compress-Archive -Path WindowsOutput -DestinationPath ${{ github.workspace }}/CutsceneMaker-windows-x64.zip
-          Compress-Archive -Path MacOSOutput -DestinationPath ${{ github.workspace }}/CutsceneMaker-osx-x64.zip
-          Compress-Archive -Path LinuxOutput -DestinationPath ${{ github.workspace }}/CutsceneMaker-linux-x64.zip
+          Compress-Archive -Path WindowsOutput -DestinationPath ${{ github.workspace }}\CutsceneMaker-windows-x64.zip
+          Compress-Archive -Path MacOSOutput -DestinationPath ${{ github.workspace }}\CutsceneMaker-osx-x64.zip
+          Compress-Archive -Path LinuxOutput -DestinationPath ${{ github.workspace }}\CutsceneMaker-linux-x64.zip
       - name: Create release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
