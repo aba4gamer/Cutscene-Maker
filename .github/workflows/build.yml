@@ -13,9 +13,9 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-      - name: Access the solution
-        run: cd CutsceneMaker
       - name: Build
+        working-directory: CutsceneMaker
         run: dotnet build --no-restore
       - name: Test
+        working-directory: CutsceneMaker
         run: dotnet test --no-build --verbosity normal
