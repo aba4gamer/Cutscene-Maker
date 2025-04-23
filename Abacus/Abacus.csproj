@@ -12,6 +12,9 @@
 	<ItemGroup>
     <ProjectReference Include="..\Hack.io\Hack.io.BCSV\Hack.io.BCSV.csproj" />
     <ProjectReference Include="..\Hack.io\Hack.io\Hack.io.csproj" />
+    <Content Include="Templates\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
