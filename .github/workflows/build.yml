@@ -24,21 +24,12 @@ jobs:
 
       - name: Publish
         run: |
-          dotnet publish CutsceneMaker/CutsceneMaker.csproj -p:WindowsProfile
-          dotnet publish CutsceneMaker/CutsceneMaker.csproj -p:LinuxProfile
-          dotnet publish CutsceneMaker/CutsceneMaker.csproj -p:MacOSProfile
-
-      - name: Middle step because otherwise it won't work
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\CutsceneMaker-win-x64"
-          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\CutsceneMaker-linux-x64"
-          New-Item -ItemType Directory -Force -Path "${{ github.workspace }}\CutsceneMaker-osx-x64"
-
-          Copy-Item -Recurse -Force "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\win-x64\publish\*" "${{ github.workspace }}\CutsceneMaker-win-x64\"
-          Copy-Item -Recurse -Force "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\linux-x64\publish\*" "${{ github.workspace }}\CutsceneMaker-linux-x64\"
-          Copy-Item -Recurse -Force "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\osx-x64\publish\*" "${{ github.workspace }}\CutsceneMaker-osx-x64\"
-
+          dotnet build Abacus/Abacus.csproj
+          dotnet build Hack.io/Hack.io/Hack.io.csproj
+          dotnet build Hack.io/Hack.io.BCSV/Hack.io.BCSV.csproj
+          dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r win-x64
+          dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r osx-64
+          dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r linux-x64
       - name: Compress
         shell: pwsh
         run: |
