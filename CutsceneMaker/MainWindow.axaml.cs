@@ -40,6 +40,7 @@ namespace CutsceneMaker
             if (string.IsNullOrEmpty(d.CutsceneName))
                 return;
             cut = Cutscene.NewCutsceneFromTemplate(d.CutsceneName!);
+            LoadTree(cut!);
             await MessageBoxManager.GetMessageBoxStandard("Success", "Created new cutscene: " + cut.CutsceneName, MsBox.Avalonia.Enums.ButtonEnum.Ok).ShowAsync();
             isNew = true;
             SaveButton.IsEnabled = false;
