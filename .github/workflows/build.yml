@@ -21,9 +21,9 @@ jobs:
         run: git clone https://github.com/SuperHackio/Hack.io
       - name: Build
         run: |
-          dotnet publish -p:WindowsProfile
-          dotnet publish -p:LinuxProfile
-          dotnet publish -p:MacOSProfile
+          dotnet publish CutsceneMaker\CutsceneMaker.csproj -p:WindowsProfile
+          dotnet publish CutsceneMaker\CutsceneMaker.csproj -p:LinuxProfile
+          dotnet publish CutsceneMaker\CutsceneMaker.csproj -p:MacOSProfile
       - name: Move files
         run: |
          xcopy /s ${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\linux-x64 ${{ github.workspace }}\CutsceneMaker-linux-x64
