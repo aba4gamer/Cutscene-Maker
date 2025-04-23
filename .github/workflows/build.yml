@@ -33,5 +33,5 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: auto
           title: "Auto"
-          prerelease: false
+          prerelease: true
           files: *.zip
