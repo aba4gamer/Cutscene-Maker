@@ -10,3 +10,5 @@ Abacus/Test/
 CutsceneMaker/.vs/
 CutsceneMaker/bin/
 CutsceneMaker/obj/
+CutsceneMaker/Properties
+CutsceneMaker/CutsceneMaker.csproj.user
