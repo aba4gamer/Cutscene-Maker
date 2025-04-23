@@ -19,6 +19,8 @@ jobs:
         dotnet-version: 9.0.x
     - name: Restore dependencies
       run: dotnet restore
+    - name: Enter folder
+      run: cd Cutscene-Maker
     - name: Build
       run: dotnet build --no-restore
     - name: Test
