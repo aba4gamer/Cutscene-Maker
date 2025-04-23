@@ -28,7 +28,7 @@ jobs:
           dotnet build Hack.io/Hack.io/Hack.io.csproj
           dotnet build Hack.io/Hack.io.BCSV/Hack.io.BCSV.csproj
           dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r win-x64
-          dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r osx-64
+          dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r osx-x64
           dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r linux-x64
       - name: Compress
         shell: pwsh
