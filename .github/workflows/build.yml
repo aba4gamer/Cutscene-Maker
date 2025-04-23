@@ -16,9 +16,12 @@ jobs:
       - name: Get Hack.io libraries
         working-directory: CutsceneMaker
         run: git clone https://github.com/SuperHackio/Hack.io
-      - name: Build
+      - name: Build Windows-x64
         working-directory: CutsceneMaker
-        run: dotnet build --no-restore
-      - name: Test
+        run: dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
+      - name: Build MacOS
         working-directory: CutsceneMaker
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet publish -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=true
+      - name: Build Linux
+        working-directory: CutsceneMaker
+        run: dotnet publish -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
