@@ -2,7 +2,7 @@ name: Auto release Cutscene Maker
 
 on:
   push:
-      branches: [ main ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -19,14 +19,14 @@ jobs:
       - name: Build
         working-directory: CutsceneMaker
         run: |
-          dotnet publish -p:WindowsProfile
-          dotnet publish -p:LinuxProfile
-          dotnet publish -p:MacOSProfile
+          dotnet publish -p:WindowsProfile -o ${{ github.workspace }}/output/Windows
+          dotnet publish -p:LinuxProfile -o ${{ github.workspace }}/output/Linux
+          dotnet publish -p:MacOSProfile -o ${{ github.workspace }}/output/MacOS
       - name: Zip Compress
         run: |
-          Compress-Archive -Path Windows/* -DestinationPath CutsceneMaker-windows-x64.zip
-          Compress-Archive -Path MacOS/* -DestinationPath CutsceneMaker-osx-x64.zip
-          Compress-Archive -Path Linux/* -DestinationPath CutsceneMaker-linux-x64.zip
+          Compress-Archive -Path ${{ github.workspace }}/output/Windows/* -DestinationPath ${{ github.workspace }}/CutsceneMaker-windows-x64.zip
+          Compress-Archive -Path ${{ github.workspace }}/output/MacOS/* -DestinationPath ${{ github.workspace }}/CutsceneMaker-osx-x64.zip
+          Compress-Archive -Path ${{ github.workspace }}/output/Linux/* -DestinationPath ${{ github.workspace }}/CutsceneMaker-linux-x64.zip
       - name: Create release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
