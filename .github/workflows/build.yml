@@ -20,17 +20,15 @@ jobs:
       - name: Get Hack.io libraries
         run: git clone https://github.com/SuperHackio/Hack.io
       - name: Build
-        working-directory: CutsceneMaker
         run: |
           dotnet publish -p:WindowsProfile
           dotnet publish -p:LinuxProfile
           dotnet publish -p:MacOSProfile
       - name: Move files
-        working-directory: CutsceneMaker\bin\Release\net9.0\
         run: |
-         xcopy /s linux-x64 ${{ github.workspace }}\CutsceneMaker-linux-x64
-         xcopy /s osx-x64 ${{ github.workspace }}\CutsceneMaker-osx-x64
-         xcopy /s win-x64 ${{ github.workspace }}\CutsceneMaker-win-x64
+         xcopy /s ${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\linux-x64 ${{ github.workspace }}\CutsceneMaker-linux-x64
+         xcopy /s ${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\osx-x64 ${{ github.workspace }}\CutsceneMaker-osx-x64
+         xcopy /s ${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\win-x64 ${{ github.workspace }}\CutsceneMaker-win-x64
       - name: Zip Compress
         run: |
           Compress-Archive -Path ${{ github.workspace }}\CutsceneMaker-win-x64 -DestinationPath ${{ github.workspace }}\CutsceneMaker-win-x64.zip
