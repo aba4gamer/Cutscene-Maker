@@ -34,4 +34,5 @@ jobs:
           automatic_release_tag: auto
           title: "Auto"
           prerelease: true
-          files: *.zip
+          files: |
+            *.zip
