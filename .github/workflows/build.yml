@@ -33,10 +33,13 @@ jobs:
           Get-ChildItem -Path "${{ github.workspace }}\CutsceneMaker\bin\Release" -Recurse -Directory | Where-Object { $_.Name -eq "publish" }
 
       - name: Compress
+        shell: pwsh
         run: |
-          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\win-x64\publish\*" -DestinationPath "${{ github.workspace }}\CutsceneMaker-win-x64.zip"
-          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\osx-x64\publish\*" -DestinationPath "${{ github.workspace }}\CutsceneMaker-osx-x64.zip"
-          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\linux-x64\publish\*" -DestinationPath "${{ github.workspace }}\CutsceneMaker-linux-x64.zip"
+          $base = "${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0"
+
+          Compress-Archive -Path "$base\win-x64\publish" -DestinationPath "${{ github.workspace }}\CutsceneMaker-win-x64.zip"
+          Compress-Archive -Path "$base\osx-x64\publish" -DestinationPath "${{ github.workspace }}\CutsceneMaker-osx-x64.zip"
+          Compress-Archive -Path "$base\linux-x64\publish" -DestinationPath "${{ github.workspace }}\CutsceneMaker-linux-x64.zip"
 
       - name: Create release
         uses: marvinpinto/action-automatic-releases@latest
