@@ -22,14 +22,20 @@ jobs:
       - name: Build
         working-directory: CutsceneMaker
         run: |
-          dotnet publish -p:WindowsProfile -o ${{ github.workspace }}/output/Windows
-          dotnet publish -p:LinuxProfile -o ${{ github.workspace }}/output/Linux
-          dotnet publish -p:MacOSProfile -o ${{ github.workspace }}/output/MacOS
+          dotnet publish -p:WindowsProfile
+          dotnet publish -p:LinuxProfile
+          dotnet publish -p:MacOSProfile
+      - name: Move files
+        working-directory: CutsceneMaker\bin\Release\net9.0
+        run: |
+         xcopy /s linux-x64 ${{ github.workspace }}\CutsceneMaker-linux-x64
+         xcopy /s osx-x64 ${{ github.workspace }}\CutsceneMaker-osx-x64
+         xcopy /s win-x64 ${{ github.workspace }}\CutsceneMaker-win-x64
       - name: Zip Compress
         run: |
-          Compress-Archive -Path ${{ github.workspace }}/output/Windows/* -DestinationPath ${{ github.workspace }}/CutsceneMaker-windows-x64.zip
-          Compress-Archive -Path ${{ github.workspace }}/output/MacOS/* -DestinationPath ${{ github.workspace }}/CutsceneMaker-osx-x64.zip
-          Compress-Archive -Path ${{ github.workspace }}/output/Linux/* -DestinationPath ${{ github.workspace }}/CutsceneMaker-linux-x64.zip
+          Compress-Archive -Path ${{ github.workspace }}\CutsceneMaker-win-x64 -DestinationPath ${{ github.workspace }}\CutsceneMaker-win-x64.zip
+          Compress-Archive -Path ${{ github.workspace }}\CutsceneMaker-osx-x64 -DestinationPath ${{ github.workspace }}\CutsceneMaker-osx-x64.zip
+          Compress-Archive -Path ${{ github.workspace }}\CutsceneMaker-linux-x64 -DestinationPath ${{ github.workspace }}\CutsceneMaker-linux-x64.zip
       - name: Create release
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
