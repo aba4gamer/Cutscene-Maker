@@ -18,6 +18,6 @@ jobs:
       - name: Build
         working-directory: CutsceneMaker
         run: |
-          dotnet publish -p:PublishProfile=Properties\PublishProfiles\WindowsProfile.pubxml
-          dotnet publish -p:PublishProfile=Properties\PublishProfiles\LinuxProfile.pubxml
-          dotnet publish -p:PublishProfile=Properties\PublishProfiles\MacOSProfile.pubxml
+          dotnet publish -p:WindowsProfile
+          dotnet publish -p:LinuxProfile
+          dotnet publish -p:MacOSProfile
