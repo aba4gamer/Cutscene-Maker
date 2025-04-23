@@ -1,5 +1,5 @@
 # Custcene Maker
-README in progress. **.NET 9 is REQUIRED**.
+README in progress. If you can't run the app install .NET 9 but I think actually it's not mandatory.
 
 To do:
 
