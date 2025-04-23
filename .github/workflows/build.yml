@@ -21,3 +21,5 @@ jobs:
           dotnet publish -p:WindowsProfile
           dotnet publish -p:LinuxProfile
           dotnet publish -p:MacOSProfile
+      - name: Compress folders
+        run: zip Cutscene-Maker-windows-x64
