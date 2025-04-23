@@ -1,7 +1,7 @@
 name: Auto release Cutscene Maker
 
 permissions:
-    contents: write
+  contents: write
 
 on:
   push:
@@ -13,29 +13,36 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup .NET 9
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
+
       - name: Get Hack.io libraries
         run: git clone https://github.com/SuperHackio/Hack.io
-      - name: Build
-        working-directory: CutsceneMaker
+
+      - name: Publish
         run: |
-          dotnet publish -p:WindowsProfile
-          dotnet publish -p:LinuxProfile
-          dotnet publish -p:MacOSProfile
-      - name: Zip Compress
+          dotnet build Abacus/Abacus.csproj
+          dotnet build Hack.io/Hack.io/Hack.io.csproj
+          dotnet build Hack.io/Hack.io.BCSV/Hack.io.BCSV.csproj
+          dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r win-x64 /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --self-contained true -o "${{ github.workspace }}\CutsceneMaker-win-x64" 
+          dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r osx-x64 /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --self-contained true -o "${{ github.workspace }}\CutsceneMaker-linux-x64"
+          dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r linux-x64 /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --self-contained true -o "${{ github.workspace }}\CutsceneMaker-osx-x64"
+      - name: Compress
+        shell: pwsh
         run: |
-          Compress-Archive -Path ${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\win-x64\publish -DestinationPath ${{ github.workspace }}\CutsceneMaker-win-x64.zip
-          Compress-Archive -Path ${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\osx-x64\publish -DestinationPath ${{ github.workspace }}\CutsceneMaker-osx-x64.zip
-          Compress-Archive -Path ${{ github.workspace }}\CutsceneMaker\bin\Release\net9.0\linux-x64\publish -DestinationPath ${{ github.workspace }}\CutsceneMaker-linux-x64.zip
+          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-win-x64" -DestinationPath CutsceneMaker-win-x64.zip"
+          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-linux-x64" -DestinationPath CutsceneMaker-linux-x64.zip"
+          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-osx-x64" -DestinationPath CutsceneMaker-osx-x64.zip"
+
       - name: Create release
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: auto
           title: "Auto"
-          prerelease: true
+          prerelease: false
           files: |
-            *.zip
+              *.zip
