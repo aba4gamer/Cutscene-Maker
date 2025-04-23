@@ -33,14 +33,16 @@ jobs:
       - name: Compress
         shell: pwsh
         run: |
-          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-win-x64" -DestinationPath "${{ github.workspace }}\CutsceneMaker-win-x64.zip"
-          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-linux-x64" -DestinationPath "${{ github.workspace }}\CutsceneMaker-linux-x64.zip"
-          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-osx-x64" -DestinationPath "${{ github.workspace }}\CutsceneMaker-osx-x64.zip"
+          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-win-x64" -DestinationPath CutsceneMaker-win-x64.zip"
+          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-linux-x64" -DestinationPath CutsceneMaker-linux-x64.zip"
+          Compress-Archive -Path "${{ github.workspace }}\CutsceneMaker-osx-x64" -DestinationPath CutsceneMaker-osx-x64.zip"
 
       - name: Create release
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: Auto
+          automatic_release_tag: auto
+          title: "Auto"
+          prerelease: false
           files: |
-            *.zip
+              *.zip
