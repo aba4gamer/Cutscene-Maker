@@ -6,12 +6,11 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CutsceneMaker.MainWindow"
         Title="CutsceneMaker"
-		Icon="Assets/Lumalee.ico"
-		Background="WhiteSmoke">
+		Icon="Assets/Lumalee.ico">
 	<DockPanel>
 		<Menu
 			DockPanel.Dock="Top"
-			Background="Aqua"
+			Background="DarkBlue"
 			VerticalAlignment="Top">
 			<MenuItem Header="_File">
 				<MenuItem Header="New" Click="OnClickNew"/>
@@ -30,7 +29,7 @@
 					<TreeView Grid.Row="0"
 						FontSize="11"
 						Name="TreeParts"
-						Background="LightBlue"
+						Background="DarkSlateBlue"
 						SelectionChanged="OnTreeViewSelectionChanged">
 					</TreeView>
 					<DockPanel Grid.Row="1">
