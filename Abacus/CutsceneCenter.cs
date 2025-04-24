@@ -206,22 +206,13 @@ public class Cutscene
         foreach (Part part in Parts)
         {
             TimeBCSV.Add(part.TimeEntry.CreateEntryAndSave(part.PartName));
-            if (part.PlayerEntry != null)
-                PlayerBCSV.Add(part.PlayerEntry.CreateEntryAndSave(part.PartName));
-            if (part.WipeEntry != null)
-                WipeBCSV.Add(part.WipeEntry.CreateEntryAndSave(part.PartName));
-            if (part.SoundEntry != null)
-                SoundBCSV.Add(part.SoundEntry.CreateEntryAndSave(part.PartName));
-            if (part.ActionEntry != null)
-                ActionBCSV.Add(part.ActionEntry.CreateEntryAndSave(part.PartName));
-            if (part.CameraEntry != null)
-                CameraBCSV.Add(part.CameraEntry.CreateEntryAndSave(part.PartName));
+            SaveProperties(part, part.PartName);
             if (part.SubPartEntries != null)
-            {
                 foreach (SubPart subPart in part.SubPartEntries)
-                    subPart.MainPartName = part.PartName;
-                SubPartBCSV.AddRange(part.SubPartEntries.Select(p => p.CreateEntryAndSave(part.PartName)).ToList()); // Yipee, first time using LINQ.  
-            }
+                {
+                    SubPartBCSV.Add(subPart.CreateEntryAndSave(part.PartName));
+                    SaveProperties(subPart, subPart.SubPartName);
+                }
         }
         try
         {
@@ -242,6 +233,21 @@ public class Cutscene
             Console.WriteLine($"Something went wrong with saving!\nCheck this: {e.Message}");
         }
     }
+
+    private void SaveProperties(ICommonEntries part, string PartName)
+    {
+        if (part.PlayerEntry != null)
+            PlayerBCSV.Add(part.PlayerEntry.CreateEntryAndSave(PartName));
+        if (part.WipeEntry != null)
+            WipeBCSV.Add(part.WipeEntry.CreateEntryAndSave(PartName));
+        if (part.SoundEntry != null)
+            SoundBCSV.Add(part.SoundEntry.CreateEntryAndSave(PartName));
+        if (part.ActionEntry != null)
+            ActionBCSV.Add(part.ActionEntry.CreateEntryAndSave(PartName));
+        if (part.CameraEntry != null)
+            CameraBCSV.Add(part.CameraEntry.CreateEntryAndSave(PartName));
+    }
+
     /// <summary>
     /// Creates a new Cutscene from empty BCSVs.
     /// </summary>
@@ -321,8 +327,9 @@ public class SubPart(string SubPartName) : ICommonEntries
     public Sound? SoundEntry { get; set; }
     public Action? ActionEntry { get; set; }
     public Camera? CameraEntry { get; set; }
-    public BCSV.Entry CreateEntryAndSave(string PartName)
+    public BCSV.Entry CreateEntryAndSave(string MainPartName)
     {
+        this.MainPartName = MainPartName;
         BCSV.Entry entry = new();
         entry.Add(SubPartHashes.SUB_PART_NAME, SubPartName);
         entry.Add(SubPartHashes.SUB_PART_TOTAL_STEP, SubPartTotalStep);
