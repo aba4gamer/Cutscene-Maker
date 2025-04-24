@@ -2,24 +2,27 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Abacus;
-using System.Reactive;
 using System;
-using System.Reactive.Linq;
 
 namespace CutsceneMaker;
 
 public partial class Action : UserControl
 {
-    /// <summary>
-    /// ONLY USED FOR THE DESIGNER. DON'T USE!
-    /// </summary>
+    private IDisposable? _castNameSubscription;
+    private IDisposable? _castIDSubscription;
+    private IDisposable? _actionTypeSubscription;
+    private IDisposable? _posNameSubscription;
+    private IDisposable? _animNameSubscription;
+
     public Action()
     {
         InitializeComponent();
     }
+
     public Action(ICommonEntries part)
     {
         InitializeComponent();
+
         if (part.ActionEntry != null)
         {
             IsActionEnabled.IsChecked = true;
@@ -29,39 +32,69 @@ public partial class Action : UserControl
             PosName.Text = part.ActionEntry.PosName;
             AnimName.Text = part.ActionEntry.AnimName;
 
-            // I really have NO IDEA of how does this work... but if it works it's useful.
-            CastName.GetObservable(TextBox.TextProperty).Subscribe(text => part.ActionEntry.CastName = text ?? string.Empty);
-            CastID.GetObservable(NumericUpDown.ValueProperty).Subscribe(value => part.ActionEntry.CastID = value.HasValue ? (int)value.Value : -1);
-            ActionType.GetObservable(NumericUpDown.ValueProperty).Subscribe(value => part.ActionEntry.ActionType = value.HasValue ? (int)value.Value : -1);
-            PosName.GetObservable(TextBox.TextProperty).Subscribe(text => part.ActionEntry.PosName = text ?? string.Empty);
-            AnimName.GetObservable(TextBox.TextProperty).Subscribe(text => part.ActionEntry.AnimName = text ?? string.Empty);
+            SubscribeToChanges(part);
         }
-        IsActionEnabled.GetObservable(CheckBox.IsCheckedProperty).Subscribe(Observer.Create<bool?>(isChecked =>
+
+        IsActionEnabled.GetObservable(CheckBox.IsCheckedProperty).Subscribe(isChecked =>
         {
             if (isChecked == true)
             {
                 part.ActionEntry ??= new Abacus.Action();
-                CastName.IsEnabled = true;
-                CastID.IsEnabled = true;
-                ActionType.IsEnabled = true;
-                PosName.IsEnabled = true;
-                AnimName.IsEnabled = true;
+                SetControlsEnabled(true);
 
                 part.ActionEntry.CastName = CastName.Text ?? string.Empty;
                 part.ActionEntry.CastID = CastID.Value.HasValue ? (int)CastID.Value.Value : -1;
                 part.ActionEntry.ActionType = ActionType.Value.HasValue ? (int)ActionType.Value.Value : -1;
                 part.ActionEntry.PosName = PosName.Text ?? string.Empty;
                 part.ActionEntry.AnimName = AnimName.Text ?? string.Empty;
+
+                SubscribeToChanges(part);
             }
             else
             {
                 part.ActionEntry = null;
-                CastName.IsEnabled = false;
-                CastID.IsEnabled = false;
-                ActionType.IsEnabled = false;
-                PosName.IsEnabled = false;
-                AnimName.IsEnabled = false;
+                SetControlsEnabled(false);
+
+                DisposeSubscriptions();
             }
-        }));
+        });
+    }
+
+    private void SetControlsEnabled(bool isEnabled)
+    {
+        CastName.IsEnabled = isEnabled;
+        CastID.IsEnabled = isEnabled;
+        ActionType.IsEnabled = isEnabled;
+        PosName.IsEnabled = isEnabled;
+        AnimName.IsEnabled = isEnabled;
+    }
+
+    private void SubscribeToChanges(ICommonEntries part)
+    {
+        DisposeSubscriptions();
+
+        _castNameSubscription = CastName.GetObservable(TextBox.TextProperty)
+            .Subscribe(text => part.ActionEntry!.CastName = text ?? string.Empty);
+
+        _castIDSubscription = CastID.GetObservable(NumericUpDown.ValueProperty)
+            .Subscribe(value => part.ActionEntry!.CastID = value.HasValue ? (int)value.Value : -1);
+
+        _actionTypeSubscription = ActionType.GetObservable(NumericUpDown.ValueProperty)
+            .Subscribe(value => part.ActionEntry!.ActionType = value.HasValue ? (int)value.Value : -1);
+
+        _posNameSubscription = PosName.GetObservable(TextBox.TextProperty)
+            .Subscribe(text => part.ActionEntry!.PosName = text ?? string.Empty);
+
+        _animNameSubscription = AnimName.GetObservable(TextBox.TextProperty)
+            .Subscribe(text => part.ActionEntry!.AnimName = text ?? string.Empty);
+    }
+
+    private void DisposeSubscriptions()
+    {
+        _castNameSubscription?.Dispose();
+        _castIDSubscription?.Dispose();
+        _actionTypeSubscription?.Dispose();
+        _posNameSubscription?.Dispose();
+        _animNameSubscription?.Dispose();
     }
 }
