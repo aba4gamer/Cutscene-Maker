@@ -1,20 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <RootNamespace>Abacus</RootNamespace>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <Platforms>AnyCPU;x64</Platforms>
-  </PropertyGroup>
-	
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<RootNamespace>Abacus</RootNamespace>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Platforms>AnyCPU;x64</Platforms>
+	</PropertyGroup>
+
 	<ItemGroup>
-    <ProjectReference Include="..\Hack.io\Hack.io.BCSV\Hack.io.BCSV.csproj" />
-    <ProjectReference Include="..\Hack.io\Hack.io\Hack.io.csproj" />
-    <Content Include="Templates\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+		<ProjectReference Include="..\Hack.io\Hack.io.BCSV\Hack.io.BCSV.csproj" />
+		<ProjectReference Include="..\Hack.io\Hack.io.RARC\Hack.io.RARC.csproj" />
+		<ProjectReference Include="..\Hack.io\Hack.io\Hack.io.csproj" />
+		<Content Include="Templates\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
 </Project>

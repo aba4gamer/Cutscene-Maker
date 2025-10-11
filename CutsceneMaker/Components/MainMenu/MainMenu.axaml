@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="CutsceneMakerUI.MainMenu">
+	<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="7">
+		<TextBlock HorizontalAlignment="Center">You haven't open any cutscene arc file!</TextBlock>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
+			<Button Name="NewArchiveBtn">New Archive (TODO)</Button>
+			<Button Name="OpenArchiveBtn">Open Archive</Button>
+		</StackPanel>
+	</StackPanel>
+</UserControl>
