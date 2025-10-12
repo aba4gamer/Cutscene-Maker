@@ -7,6 +7,7 @@ To do:
 - ~~Fix the warning spam when building~~ *Done*
 - ~~"Fix" the menu buttons to make them work~~ *Done*
 - ~~Move the RARC handlers in Abacus~~ *Done*
+- ~~Add resizable timeline~~
 - Fix the SubPart box in timeline to make it match the part line
 - Add some cool icons (if I can do them cool lel)
 - Add some context menus because people like them
