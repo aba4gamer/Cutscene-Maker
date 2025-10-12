@@ -4,7 +4,8 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="CutsceneMakerUI.TimelineStepFrac">
-	<DockPanel Width="40" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-		<Border BorderThickness="0, 0, 1, 0" BorderBrush="#8f8f8f"></Border>
-	</DockPanel>
+	<Grid RowDefinitions="1*, 1*" Width="40" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+		<StackPanel Grid.Row="0" />
+		<Border Grid.Row="1" BorderThickness="0, 0, 1, 0" BorderBrush="#8f8f8f"></Border>
+	</Grid>
 </UserControl>

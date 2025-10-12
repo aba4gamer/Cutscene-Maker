@@ -4,7 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="CutsceneMakerUI.TimelinePart">
-	<Border Name="Border" BorderThickness="1" BorderBrush="#cce" HorizontalAlignment="Left" VerticalAlignment="Center" Height="50">
+	<Border Name="Border" BorderThickness="1" BorderBrush="#cce" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0, 10">
 		<Grid Name="Grid" ColumnDefinitions="1*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#668">
 			<Label Name="NameLabel" VerticalAlignment="Center"></Label>
 		</Grid>

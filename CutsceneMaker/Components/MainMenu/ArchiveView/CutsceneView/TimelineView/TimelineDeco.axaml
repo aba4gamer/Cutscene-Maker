@@ -5,9 +5,9 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="CutsceneMakerUI.TimelineDeco">
 	<Border BorderThickness="0, 0, 1, 0" BorderBrush="White">
-		<StackPanel HorizontalAlignment="Left">
-			<DockPanel Width="80" Height="20" Background="#112"></DockPanel>
-			<Border BorderThickness="0, 0, 0, 1" BorderBrush="White">
+		<Grid RowDefinitions="1*, 4*, 1*, 4*" HorizontalAlignment="Left">
+			<DockPanel Grid.Row="0" Width="80" Background="#112"></DockPanel>
+			<Border Grid.Row="1" BorderThickness="0, 0, 0, 1" BorderBrush="White">
 				<DockPanel Background="#223" HorizontalAlignment="Stretch">
 					<Grid ColumnDefinitions="1*" Width="80" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center">
 						<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -16,8 +16,8 @@
 					</Grid>
 				</DockPanel>
 			</Border>
-			<DockPanel Width="80" Height="20" Background="#112"></DockPanel>
-			<DockPanel Background="#191929" HorizontalAlignment="Stretch">
+			<DockPanel Grid.Row="2" Width="80" Background="#112"></DockPanel>
+			<DockPanel Grid.Row="3" Background="#191929" HorizontalAlignment="Stretch">
 				<Grid ColumnDefinitions="1*" Width="80" Height="60" HorizontalAlignment="Left" VerticalAlignment="Center">
 					<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="1">
 						<Label FontSize="8" HorizontalAlignment="Center">Sub</Label>
@@ -25,6 +25,6 @@
 					</StackPanel>
 				</Grid>
 			</DockPanel>
-		</StackPanel>
+		</Grid>
 	</Border>
 </UserControl>

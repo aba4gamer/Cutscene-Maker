@@ -4,9 +4,9 @@
 Test/
 CutsceneMaker/Templates/
 
-*/bin/*
-*/dbg/*
-*/obj/*
+**/bin/
+**/dbg/
+**/obj/
 
 *.old
 *.user
