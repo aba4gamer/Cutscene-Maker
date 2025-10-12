@@ -5,9 +5,9 @@ To do:
 
 - ~~Update the README.md~~ *Done*
 - ~~Fix the warning spam when building~~ *Done*
-- "Fix" the menu buttons to make them work
+- ~~"Fix" the menu buttons to make them work~~ *Done*
+- ~~Move the RARC handlers in Abacus~~ *Done*
 - Fix the SubPart box in timeline to make it match the part line
-- Move the RARC handlers in Abacus
 - Add some cool icons (if I can do them cool lel)
 - Add some context menus because people like them
 - Add support for creating arcs
