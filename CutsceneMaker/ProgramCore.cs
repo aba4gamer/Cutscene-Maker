@@ -10,11 +10,176 @@ namespace CutsceneMaker;
 public class CutsceneCore
 {
 
-	public CutsceneArchive? Archive { get; private set; } = null;
-	public string? SelectedPartName { get; private set; } = null;
-	public string? SelectedSubPartName { get; private set; } = null;
+	private Data Core = new();
 
 	public CutsceneCore()
+	{
+
+	}
+
+
+
+	#region Checks
+	public bool HasArchiveOpen()
+	{
+		return Core.HasArchiveOpen();
+	}
+
+	public bool HasCutsceneSelected()
+	{
+		return Core.HasCutsceneSelected();
+	}
+
+	public bool HasPartSelected()
+	{
+		return Core.HasPartSelected();
+	}
+
+	public bool HasSubPartSelected()
+	{
+		return Core.HasSubPartSelected();
+	}
+	#endregion
+
+
+
+	#region Gets
+	public CutsceneArchive GetArchive()
+	{
+		return Core.GetArchive();
+	}
+
+	public Cutscene GetCutscene()
+	{
+		return Core.GetArchive().GetLoadedCutscene();
+	}
+
+	public string GetSelectedPartName()
+	{
+		return Core.GetSelectedPartName();
+	}
+
+	public string GetSelectedSubPartName()
+	{
+		return Core.GetSelectedSubPartName();
+	}
+	#endregion
+
+
+
+	#region Archive
+	public void LoadArchive(CutsceneArchive arc)
+	{
+		Core.SetSelectedPartName(null);
+		Core.SetSelectedSubPartName(null);
+		Core.SetArchive(arc);
+	}
+
+	public void SaveArchive()
+	{
+		Core.GetArchive().Save();
+	}
+
+	public void SaveArchiveTo(string path)
+	{
+		if (!File.Exists(path))
+		{
+			FileStream stream = File.Create(path);
+			stream.Close();
+		}
+
+		Core.GetArchive().SaveTo(path);
+	}
+	#endregion
+
+
+
+	#region Cutscene
+	public void RenameCutscene(string newName)
+	{
+		// TODO
+	}
+
+	public bool PartNameAlreadyExists(string partName)
+	{
+		foreach (Cutscene.Part part in Core.GetArchive().GetLoadedCutscene().Parts)
+		{
+			if (part.PartName == partName)
+				return true;
+
+			if (part.SubPartEntries != null)
+			{
+				foreach (SubPart subPart in part.SubPartEntries)
+				{
+					if (subPart.SubPartName == partName)
+						return true;
+				}
+			}
+		}
+
+		return false;
+	}
+	#endregion
+
+
+
+	#region CutscenePart
+	public void SetSelectedPart(string partName)
+	{
+		Core.SetSelectedPartName(partName);
+	}
+
+	public Cutscene.Part GetSelectedPart()
+	{
+		foreach (Cutscene.Part part in Core.GetArchive().GetLoadedCutscene().Parts)
+		{
+			if (part.PartName == Core.GetSelectedPartName())
+				return part;
+		}
+
+		throw new Exception($"No parts found with the name '{Core.GetSelectedPartName()}'!");
+	}
+	#endregion
+
+
+
+	#region CutsceneSubPart
+	public void SetSelectedSubPart(string partName)
+	{
+		Core.SetSelectedSubPartName(partName);
+	}
+
+	public SubPart GetSelectedSubPart()
+	{
+		Cutscene.Part part = GetSelectedPart();
+		if (part.SubPartEntries == null)
+			throw new Exception($"{part.PartName} doesn't have any SubParts!");
+
+		foreach (SubPart subPart in part.SubPartEntries)
+		{
+			if (subPart.SubPartName == Core.GetSelectedSubPartName())
+				return subPart;
+		}
+
+		throw new Exception($"No subParts found with the name '{Core.GetSelectedSubPartName()}'!");
+	}
+
+	public void DeselectSubPart()
+	{
+		Core.SetSelectedSubPartName(null);
+	}
+	#endregion
+
+}
+
+
+public class Data
+{
+	private CutsceneArchive? Archive = null;
+	private string? SelectedPartName = null;
+	private string? SelectedSubPartName = null;
+
+	public Data()
 	{
 
 	}
@@ -41,108 +206,58 @@ public class CutsceneCore
 	{
 		return HasPartSelected() && SelectedSubPartName != null;
 	}
-	#endregion Checks
+	#endregion
 
 
 
 	#region Gets
-	public Cutscene GetCutscene()
+	public CutsceneArchive GetArchive()
 	{
-		if (Archive == null) throw new Exception("No Archive selected!");
-		return Archive.GetLoadedCutscene();
-	}
-	#endregion Gets
+		if (Archive == null)
+			throw new Exception("Can't get Archive because it's null!");
 
-
-
-	#region Archive
-	public void LoadArchive(CutsceneArchive arc)
-	{
-		SelectedPartName = null;
-		SelectedSubPartName = null;
-		Archive = arc;
+		return Archive;
 	}
 
-	public void SaveArchive()
+	public string GetSelectedPartName()
 	{
-		if (!HasArchiveOpen())
-			return;
+		if (Archive == null)
+			throw new Exception("Can't get SelectedPartName because the Archive is null!");
+		if (SelectedPartName == null)
+			throw new Exception("Can't get the SelectedPartName because it's null!");
 
-		Archive.Save();
+		return SelectedPartName;
 	}
 
-	public void SaveArchiveTo(string path)
+	public string GetSelectedSubPartName()
 	{
-		if (!HasArchiveOpen())
-			return;
+		if (Archive == null)
+			throw new Exception("Can't get SelectedSubPartName because the Archive is null!");
+		if (SelectedPartName == null)
+			throw new Exception("Can't get the SelectedSubPartName because the SelectedPartName is null!");
+		if (SelectedSubPartName == null)
+			throw new Exception("Can't get the SelectedSubPartName because it's null!");
 
-		if (!File.Exists(path))
-		{
-			FileStream stream = File.Create(path);
-			stream.Close();
-		}
-		Archive.SaveTo(path);
+		return SelectedSubPartName;
 	}
-	#endregion Archive
+	#endregion
 
 
 
-	#region Cutscene
-	public void RenameCutscene(string newName)
+	#region Sets
+	public void SetArchive(CutsceneArchive archive)
 	{
-
-	}
-	#endregion Cutscene
-
-
-
-	#region CutscenePart
-	public void SetSelectedPart(string partName)
-	{
-		SelectedPartName = partName;
+		Archive = archive;
 	}
 
-	public Cutscene.Part GetSelectedPart()
+	public void SetSelectedPartName(string? selPartName)
 	{
-		if (!HasCutsceneSelected())
-			throw new Exception("Cannot return a Part if there is no cutscene loaded!");
-
-		foreach (Cutscene.Part part in Archive.GetLoadedCutscene().Parts)
-		{
-			if (part.PartName == SelectedPartName)
-				return part;
-		}
-
-		throw new Exception($"No parts found with the name '{SelectedPartName}'!");
-	}
-	#endregion CutscenePart
-
-
-
-	#region CutsceneSubPart
-	public void SetSelectedSubPart(string partName)
-	{
-		SelectedSubPartName = partName;
+		SelectedPartName = selPartName;
 	}
 
-	public SubPart GetSelectedSubPart()
+	public void SetSelectedSubPartName(string? selSubPartName)
 	{
-		if (!HasPartSelected())
-			throw new Exception("Cannot return a SubPart if there is no Part selected!");
-
-		foreach (SubPart part in GetSelectedPart().SubPartEntries)
-		{
-			if (part.SubPartName == SelectedSubPartName)
-				return part;
-		}
-
-		throw new Exception($"No subParts found with the name '{SelectedSubPartName}'!");
+		SelectedSubPartName = selSubPartName;
 	}
-
-	public void DeselectSubPart()
-	{
-		SelectedSubPartName = null;
-	}
-	#endregion CutsceneSubPart
-
+	#endregion
 }

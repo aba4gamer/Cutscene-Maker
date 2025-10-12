@@ -360,12 +360,6 @@ public class Cutscene
 			rarc[$"Stage/csv/{CutsceneName}Camera.bcsv"] = rarcCamera;
 			rarc[$"Stage/csv/{CutsceneName}SubPart.bcsv"] = rarcSubPart;
 
-			Console.WriteLine("Plz help.");
-			foreach (string f in ((RARC.Directory) rarc["Stage/csv"]).Items.Keys)
-			{
-				Console.WriteLine(f);
-			}
-
 			Console.WriteLine($"[Abacus] '{CutsceneName}' and saved in the archive succesfully");
 		}
 		catch (Exception e)

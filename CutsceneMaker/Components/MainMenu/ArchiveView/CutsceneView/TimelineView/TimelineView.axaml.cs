@@ -45,10 +45,39 @@ public partial class TimelineView : UserControl
 				}
 
 
-				string subPartName = (string) (((ComboBoxItem) SubPartComboBox.Items[i]).Content);
+
+
+				string subPartName = GetContentFromComboBoxItem(i); // (string) (((ComboBoxItem) SubPartComboBox.Items[i]).Content);
 				if (SelectedTimelinePart != null && RequestSubParts != null)
 					RenderSubParts(RequestSubParts(SelectedTimelinePart.PartName, subPartName));
 			});
+	}
+
+	private string GetContentFromComboBoxItem(int i)
+	{
+		object? maybeComboBox = SubPartComboBox.Items[i];
+		if (maybeComboBox == null)
+			throw new Exception($"There is no item at index {i}");
+		if (!(maybeComboBox is ComboBoxItem))
+			throw new Exception($"The item at index {i} is not a ComboBoxItem");
+
+		ComboBoxItem comboItemPart = (ComboBoxItem) maybeComboBox;
+		object? content = comboItemPart.Content;
+		if (content == null)
+			throw new Exception($"The content of the ComboBoxItem at {i} is null!");
+		return (string) content;
+	}
+
+	private void SetContentToComboBoxItem(int i, string partName)
+	{
+		object? maybeComboBox = SubPartComboBox.Items[i];
+		if (maybeComboBox == null)
+			throw new Exception($"There is no item at index {i}");
+		if (!(maybeComboBox is ComboBoxItem))
+			throw new Exception($"The item at index {i} is not a ComboBoxItem");
+
+		ComboBoxItem comboItemPart = (ComboBoxItem) maybeComboBox;
+		comboItemPart.Content = partName;
 	}
 
 
@@ -131,6 +160,9 @@ public partial class TimelineView : UserControl
 
 	private void SelectedSubPart(TimelinePart timelinePart)
 	{
+		if (SelectedTimelinePart == null)
+			return;
+
 		ActivateAllSubParts();
 		timelinePart.Select(true);
 		SelectedTimelinePart.SelectedSubPart();
@@ -159,7 +191,7 @@ public partial class TimelineView : UserControl
 
 		SubPartComboBox.SelectedIndex = 1;
 
-		string subPartName = (string) (((ComboBoxItem) SubPartComboBox.Items[1]).Content);
+		string subPartName = GetContentFromComboBoxItem(1);
 		if (SelectedTimelinePart != null && RequestSubParts != null)
 			RenderSubParts(RequestSubParts(SelectedTimelinePart.PartName, subPartName));
 	}
@@ -204,7 +236,7 @@ public partial class TimelineView : UserControl
 		_IsEditingSubPartIndex = true;
 		SelectedTimelineSubPart.ChangeName(name);
 		int i = SubPartComboBox.SelectedIndex;
-		((ComboBoxItem) SubPartComboBox.Items[i]).Content = name;
+		SetContentToComboBoxItem(i, name);
 		SubPartComboBox.SelectedIndex = 0;
 		SubPartComboBox.SelectedIndex = i; // This is for updating the string shown in the selected box. Idk why it doesn't change when I change the Content.
 		_IsEditingSubPartIndex = false;
@@ -224,11 +256,11 @@ public partial class TimelineView : UserControl
 
 	public void DeselectSubPart()
 	{
-		if (SelectedTimelineSubPart == null)
+		if (SelectedTimelinePart == null || SelectedTimelineSubPart == null)
 			return;
 
 		SelectedTimelineSubPart.Select(false);
-		OnDeselectSubPart(SelectedTimelineSubPart.PartName, SelectedTimelineSubPart.PartName);
+		OnDeselectSubPart(SelectedTimelinePart.PartName, SelectedTimelineSubPart.PartName);
 		SelectedTimelineSubPart = null;
 	}
 

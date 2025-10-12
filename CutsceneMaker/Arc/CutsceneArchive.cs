@@ -129,19 +129,11 @@ public class CutsceneArchive {
 
 	public void SaveTo(string path)
 	{
-		foreach (string f in ((RARC.Directory) _rarc.Root["csv"]).Items.Keys)
-		{
-			Console.WriteLine(f);
-		}
+
 
 		foreach (Cutscene cutscene in LoadedCutscenes.Values)
 		{
 			cutscene.SaveAll(_rarc);
-		}
-
-		foreach (string f in ((RARC.Directory) _rarc.Root["csv"]).Items.Keys)
-		{
-			Console.WriteLine(f);
 		}
 
 		StreamUtil.SetEndianBig();

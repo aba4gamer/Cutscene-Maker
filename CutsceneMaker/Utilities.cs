@@ -43,7 +43,7 @@ class MsgBox
 		// 	folderPaths = await sp.OpenFolderPickerAsync(new FolderPickerOpenOptions { AllowMultiple = false });
 		// }
 
-		IStorageFile file = await sp.SaveFilePickerAsync(new FilePickerSaveOptions
+		IStorageFile? file = await sp.SaveFilePickerAsync(new FilePickerSaveOptions
 		{
 			Title = "Save Demo .arc file",
 			SuggestedFileName = "DemoMyCutscene.arc",
@@ -54,7 +54,7 @@ class MsgBox
 		if (file == null)
 			return null;
 
-		string localFile = file.TryGetLocalPath();
+		string? localFile = file.TryGetLocalPath();
 		if (localFile == null)
 			return null;
 

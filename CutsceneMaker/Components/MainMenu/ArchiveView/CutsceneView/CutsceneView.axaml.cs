@@ -40,6 +40,9 @@ public partial class CutsceneView : UserControl
 
 	public void LoadPart(Cutscene.Part part)
 	{
+		if (WorkstationUI == null)
+			return;
+
 		Main.Children.Clear();
 
 		WorkstationUI.Part_TotalStep = TotalStepChange;
@@ -51,6 +54,9 @@ public partial class CutsceneView : UserControl
 
 	public void LoadSubPart(SubPart subPart)
 	{
+		if (WorkstationUI == null)
+			return;
+
 		Main.Children.Clear();
 
 		WorkstationUI.SubPart_TotalStep = TotalStepChangeSubPart;

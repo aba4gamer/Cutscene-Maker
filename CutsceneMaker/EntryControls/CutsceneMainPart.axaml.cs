@@ -72,6 +72,9 @@ public partial class CutsceneMainPart : UserControl
 
 	private void OnPartNameChange(object? sender, RoutedEventArgs e)
 	{
+		if (Part == null || PartName.Text == null)
+			return;
+
 		Part.PartName = PartName.Text;
 		PartNameChange(PartName.Text);
 	}

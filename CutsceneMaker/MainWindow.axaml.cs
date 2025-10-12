@@ -24,9 +24,6 @@ public partial class MainWindow : Window
 	private CutsceneCore Core;
 	private bool IsDialogOpen = false;
 	private ArchiveView? ArchiveUI = null;
-	// private CutsceneArchive? archive;
-	// private string? selectedPart;
-	// private bool hasDialogWindowOpen = false;
 
 
 	public MainWindow()
@@ -53,30 +50,6 @@ public partial class MainWindow : Window
 		// Set the title and the status to ready
 		Title = "CutsceneMaker - Main Menu";
 		StatusText.Text = "Ready!";
-
-		// PartsFlyout = this.FindResource("PartsFlyout") as MenuFlyout;
-// 			EnableSaveButtons(false);
-// 			MainViewLoaded.IsVisible = false;
-//
-// 			ArchiveSidebarEmpty.IsVisible = false;
-// 			ArchiveSidebarPopulation.IsVisible = false;
-//
-// 			CutscenePanelEmpty.IsVisible = false;
-// 			CutscenePanelPopulation.IsVisible = false;
-//
-// 			CutscenePanelNoParts.IsVisible = false;
-// 			CutscenePanelTabs.IsVisible = false;
-//
-// 			CutsceneMenu.IsEnabled = false;
-// 			ArchiveMenu.IsEnabled = false;
-//
-// 			ClientSizeProperty.Changed.Subscribe(size => {
-// 				// Update the timeline when resized
-// 				CreateTimelineSecondStamps();
-// 			});
-//
-// 			MainWindowX.Title = "CutsceneMaker - Main Menu";
-// 			StatusText.Text = "Ready!";
 	}
 
 
@@ -169,7 +142,8 @@ public partial class MainWindow : Window
 
 	public async Task<bool> AskDiscardChanges()
 	{
-		if (IsDialogOpen) return false;
+		if (IsDialogOpen)
+			return false;
 
 		IsDialogOpen = true;
 		bool res = await MsgBox.SendMessage(this, "Discard changes?", "You have unsaved changes, if you continue your progress will be lost, are you sure?", ButtonEnum.YesNo) == ButtonResult.No;
@@ -220,18 +194,10 @@ public partial class MainWindow : Window
 		}
 		Core.LoadArchive(archiveWrapper.GetResult());
 
-		// Check if the archive if null just to suppress the null deferencing warning.
-		if (!Core.HasArchiveOpen())
-		{
-			await MsgBox.SendMessage(this, "Error while opening the .arc file", $"Couldn't open '{arcPathName}'.\nI don't know what happened. The archive was loaded but it was null", ButtonEnum.Ok);
-			StatusText.Text = $"Failed to open '{arcPathName}'.";
-			return;
-		}
-
 		// Update the menu buttons & update the UI
 		ArchiveUI = new();
 		ArchiveUI.Click = OnSelectCutscene;
-		ArchiveUI.LoadCutsceneList(Core.Archive.CutsceneNames);
+		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
 
 		BtnsLayer_ArchiveOpen();
 		MainMenu.Children.Clear();
@@ -255,9 +221,19 @@ public partial class MainWindow : Window
 
 	private async void OnClickSaveAs(object? sender, RoutedEventArgs e)
 	{
-		string? filePath = await MsgBox.AskSaveArcFile(StorageProvider, null);
+		// If we have an archive already opened, set it as a default destination
+		string? defaultFilePath = null;
+		if (Core.HasArchiveOpen())
+			defaultFilePath = Core.GetArchive().FilePath;
+
+		// Finally ask the user where to save the file.
+		// If the string is null it means that the user aborted the saving
+		string? filePath = await MsgBox.AskSaveArcFile(StorageProvider, defaultFilePath);
 		if (filePath == null)
+		{
+			StatusText.Text = $"Save aborted!";
 			return;
+		}
 
 		Core.SaveArchiveTo(filePath);
 		StatusText.Text = $"Successfully saved the archive to {filePath}!";
@@ -269,30 +245,32 @@ public partial class MainWindow : Window
 	#region ActionHandlers
 	private void OnSelectCutscene(string cutsceneName)
 	{
-		if (!Core.HasArchiveOpen())
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
 			return;
 
 		// Load the selected cutscene
-		Core.Archive.LoadCutscene(cutsceneName);
+		Core.GetArchive().LoadCutscene(cutsceneName);
 
 		// Update the menu buttons & update the UI
 		BtnsLayer_CutsceneOpen();
-		ArchiveUI.LoadCutscene(Core.Archive.GetLoadedCutscene());
+		ArchiveUI.LoadCutscene(Core.GetArchive().GetLoadedCutscene());
+		if (ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
+			return;
 		ArchiveUI.CutsceneUI.TimelineUI.OnSelectPart = OnSelectPart;
 		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
-		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(Core.Archive.GetLoadedCutscene().Parts);
+		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(Core.GetArchive().GetLoadedCutscene().Parts);
 		ArchiveUI.CutsceneUI.TimelineUI.RequestSubParts = (string partName, string subPartName) => {
 			return Core.GetSelectedPart().SubPartEntries ?? [];
 		};
 
 		// Update the status & set the title.
 		StatusText.Text = $"Selected '{cutsceneName}' Cutscne!";
-		Title = $"CutsceneMaker - [{Core.Archive.FilePath}] [{cutsceneName}]";
+		Title = $"CutsceneMaker - [{Core.GetArchive().FilePath}] [{cutsceneName}]";
 	}
 
 	private void OnSelectPart(string partName)
 	{
-		if (!Core.HasCutsceneSelected())
+		if (!Core.HasCutsceneSelected() || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
 			return;
 
 		// Set selected
@@ -330,7 +308,7 @@ public partial class MainWindow : Window
 
 	private void OnSelectSubPart(string partName, string subPartName)
 	{
-		if (!Core.HasCutsceneSelected())
+		if (!Core.HasCutsceneSelected() || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
 			return;
 
 		// Set selected
@@ -362,7 +340,7 @@ public partial class MainWindow : Window
 
 	private void OnDeselectSubPart(string partName, string subPartName)
 	{
-		if (!Core.HasCutsceneSelected())
+		if (!Core.HasCutsceneSelected() || ArchiveUI == null || ArchiveUI.CutsceneUI == null)
 			return;
 
 		// Deselect the subpart
@@ -373,6 +351,7 @@ public partial class MainWindow : Window
 
 		// Re-select the part
 		Core.SetSelectedPart(partName);
+		ArchiveUI.CutsceneUI.LoadPart(Core.GetSelectedPart());
 	}
 	#endregion ActionHandlers
 
