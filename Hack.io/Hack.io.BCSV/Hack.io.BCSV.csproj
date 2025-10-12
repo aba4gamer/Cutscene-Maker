@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Title>Hack.io.BCSV</Title>
+    <Version>2.0.0.0</Version>
+    <Company>Super Hackio Incorporated</Company>
+    <Authors>SuperHackio</Authors>
+    <Copyright>©Super Hackio Incorporated 2018-2023</Copyright>
+    <PackageProjectUrl>https://github.com/SuperHackio/Hack.io</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SuperHackio/Hack.io</RepositoryUrl>
+    <PackageReleaseNotes>Update to .NET 7</PackageReleaseNotes>
+    <Description>A Library for the Binary Comma Separated Values used in various games.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hack.io\Hack.io.csproj" />
+  </ItemGroup>
+
+</Project>

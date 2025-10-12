@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "v/q/e4DX2lE=",
+  "success": true,
+  "projectFilePath": "/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io.BCSV/Hack.io.BCSV.csproj",
+  "expectedPackageFiles": [
+    "/home/anto/.nuget/packages/system.text.encoding.codepages/7.0.0/system.text.encoding.codepages.7.0.0.nupkg.sha512",
+    "/home/anto/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.20/microsoft.aspnetcore.app.ref.8.0.20.nupkg.sha512"
+  ],
+  "logs": []
+}

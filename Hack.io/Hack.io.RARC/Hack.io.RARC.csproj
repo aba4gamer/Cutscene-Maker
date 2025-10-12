@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <Title>Hack.io.RARC</Title>
+    <Version>2.5.0</Version>
+    <FileVersion></FileVersion>
+    <Authors>SuperHackio</Authors>
+    <Company>Super Hackio Incorporated</Company>
+    <Description>IO Library for Revolution Archives (.arc/.rarc)
+[NOT FOR U8 ARCHIVES]</Description>
+    <Copyright>©Super Hackio Incorporated 2018-2023</Copyright>
+    <PackageProjectUrl>https://github.com/SuperHackio/Hack.io</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SuperHackio/Hack.io</RepositoryUrl>
+    <PackageReleaseNotes>Update to .NET 7.0</PackageReleaseNotes>
+    <AssemblyVersion>2.5.0.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hack.io\Hack.io.csproj" />
+  </ItemGroup>
+
+</Project>

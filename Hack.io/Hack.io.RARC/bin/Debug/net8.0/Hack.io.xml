@@ -1,0 +1,1498 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Hack.io</name>
+    </assembly>
+    <members>
+        <member name="T:Hack.io.Class.Archive">
+            <summary>
+            The base class for Archive like systems
+            </summary>
+        </member>
+        <member name="F:Hack.io.Class.Archive.NULL_ROOT_EXCEPTION">
+            <summary>
+            String for when the ROOT is null.
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.Archive.FileName">
+            <summary>
+            Filename of this Archive.
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.Archive.Root">
+            <summary>
+            The Root Directory of the Archive
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.Archive.Item(System.String)">
+            <summary>
+            Get or Set a file based on a path. When setting, if the file doesn't exist, it will be added (Along with any missing subdirectories). Set the file to null to delete it
+            </summary>
+            <param name="Path">The Path to take. Does not need the Root name to start, but cannot start with a '/'</param>
+            <returns></returns>
+        </member>
+        <member name="P:Hack.io.Class.Archive.Name">
+            <summary>
+            Get the name of the archive without the path
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.Archive.TotalFileCount">
+            <summary>
+            The total amount of files inside this archive.
+            </summary>
+        </member>
+        <member name="M:Hack.io.Class.Archive.Load(System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Hack.io.Class.Archive.Save(System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Hack.io.Class.Archive.ItemExists(System.String,System.Boolean)">
+            <summary>
+            Checks to see if an Item Exists based on a Path
+            </summary>
+            <param name="Path">The path to take</param>
+            <param name="IgnoreCase">Ignore casing of the file</param>
+            <returns>false if the Item isn't found</returns>
+        </member>
+        <member name="M:Hack.io.Class.Archive.GetItemKeyFromNoCase(System.String)">
+            <summary>
+            This will return the absolute path of an item if it exists in some way. Useful if you don't know the casing of the filename inside the file. Returns null if nothing is found.
+            </summary>
+            <param name="Path">The path to get the Actual path from</param>
+            <returns>null if nothing is found</returns>
+        </member>
+        <member name="M:Hack.io.Class.Archive.ClearAll">
+            <summary>
+            Clears all the files out of this archive
+            </summary>
+        </member>
+        <member name="M:Hack.io.Class.Archive.MoveItem(System.String,System.String)">
+            <summary>
+            Moves an item to a new directory
+            </summary>
+            <param name="OriginalPath"></param>
+            <param name="NewPath"></param>
+            <exception cref="T:System.NullReferenceException"></exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
+            <exception cref="T:System.IO.FileNotFoundException"></exception>
+        </member>
+        <member name="M:Hack.io.Class.Archive.FindItems(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Search the archive for files that match the regex
+            </summary>
+            <param name="Pattern">The regex pattern to use</param>
+            <param name="RootLevelOnly">If TRUE, all subdirectories will be skipped</param>
+            <param name="IgnoreCase">Ignore the filename casing</param>
+            <returns>A list of Archive paths that match the pattern</returns>
+        </member>
+        <member name="M:Hack.io.Class.Archive.Import(System.String)">
+            <summary>
+            Create an Archive from a Folder
+            </summary>
+            <param name="Folderpath">Folder to make an archive from</param>
+        </member>
+        <member name="M:Hack.io.Class.Archive.Export(System.String,System.Boolean)">
+            <summary>
+            Dump the contents of this archive to a folder
+            </summary>
+            <param name="FolderPath">The Path to save to. Should be a folder</param>
+            <param name="Overwrite">If there are contents already at the chosen location, delete them?</param>
+        </member>
+        <member name="M:Hack.io.Class.Archive.ReadFile``1(System.String,``0@)">
+            <summary>
+            Reads a file inside this archive into the provided class
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="ArchivePath">The path in the archive (Files only)</param>
+            <param name="Destination">The reference to the object to load into</param>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown when the file isn't found inside the archive</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the selected ArchivePath doesn't lead to an actual file</exception>
+        </member>
+        <member name="M:Hack.io.Class.Archive.WriteFile``1(System.String,``0@)">
+            <summary>
+            Writes a file into this archive from the provided class<para/>Note that if the ArchivePath does not exist, it will be created.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="ArchivePath"></param>
+            <param name="Source"></param>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Hack.io.Class.Archive.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:Hack.io.Class.Archive.Read(System.IO.Stream)">
+            <summary>
+            The Binary I/O function for reading the file
+            </summary>
+            <param name="ArchiveFile"></param>
+        </member>
+        <member name="M:Hack.io.Class.Archive.Write(System.IO.Stream)">
+            <summary>
+            The Binary I/O function for writing the file
+            </summary>
+            <param name="ArchiveFile"></param>
+        </member>
+        <member name="M:Hack.io.Class.Archive.OnItemSet(System.Object,System.String)">
+            <summary>
+            Executed when you use ArchiveBase["FilePath"] to set a file
+            </summary>
+            <param name="value"></param>
+            <param name="Path"></param>
+        </member>
+        <member name="M:Hack.io.Class.Archive.NewDirectory">
+            <summary>
+            Creates a new directory
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Class.Archive.NewDirectory(Hack.io.Class.Archive,Hack.io.Class.ArchiveDirectory)">
+            <summary>
+            Creates a new directory
+            </summary>
+            <param name="Owner">The owner Archive</param>
+            <param name="parent">The parent directory</param>
+            <returns></returns>
+        </member>
+        <member name="T:Hack.io.Class.ArchiveDirectory">
+            <summary>
+            Folder contained inside the Archive. Can contain more <see cref="T:Hack.io.Class.ArchiveDirectory"/>s if desired, as well as <see cref="T:Hack.io.Class.ArchiveFile"/>s
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveDirectory.Name">
+            <summary>
+            The name of the Directory
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveDirectory.Items">
+            <summary>
+            The contents of this directory.
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveDirectory.Parent">
+            <summary>
+            The parent directory (Null if non-existant)
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveDirectory.Item(System.String)">
+            <summary>
+            Get or Set a file based on a path. When setting, if the file doesn't exist, it will be added (Along with any missing subdirectories)
+            </summary>
+            <param name="Path">The Path to take</param>
+            <returns></returns>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveDirectory.FullPath">
+            <summary>
+            The full path of this directory. Cannot be used if this .arc doesn't belong to a RARC object
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveDirectory.Count">
+            <summary>
+            Returns the amount of Items in this directory (Items in subdirectories not included)
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveDirectory.HasOwnerArchive">
+            <summary>
+            Checks to see if this directory has an owner archive
+            </summary>
+        </member>
+        <member name="F:Hack.io.Class.ArchiveDirectory.OwnerArchive">
+            <summary>
+            The Archive that owns this directory
+            </summary>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.#ctor">
+            <summary>
+            Create a new Archive Directory
+            </summary>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.#ctor(Hack.io.Class.Archive,Hack.io.Class.ArchiveDirectory)">
+            <summary>
+            Create a new, child directory
+            </summary>
+            <param name="Owner">The Owner Archive</param>
+            <param name="parentdir">The Parent Directory. NULL if this is the Root Directory</param>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.CreateFromFolder(System.String,Hack.io.Class.Archive)">
+            <summary>
+            Create an ArchiveDirectory. You cannot use this function unless this directory is empty
+            </summary>
+            <param name="FolderPath">The Disk folder path to import</param>
+            <param name="OwnerArchive">The <paramref name="OwnerArchive"/> [Optional]</param>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.ItemExists(System.String,System.Boolean)">
+            <summary>
+            Checks to see if an Item Exists based on a Path
+            </summary>
+            <param name="Path">The path to take</param>
+            <param name="IgnoreCase">Ignore casing</param>
+            <returns>false if the Item isn't found</returns>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.ItemKeyExists(System.String,System.Boolean)">
+            <summary>
+            Checks to see if an item exists in this directory only
+            </summary>
+            <param name="ItemName">The name of the Item to look for (Case Sensitive)</param>
+            <param name="IgnoreCase">Ignore casing</param>
+            <returns>false if the Item doesn't exist</returns>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.GetItemKeyFromNoCase(System.String,System.Boolean,System.StringComparison)">
+            <summary>
+            Gets an Item Key without Case Sensitivity
+            </summary>
+            <param name="Path">Archive path to the file.</param>
+            <param name="AttachRootName">if TRUE, will attatch the archive root name at the front</param>
+            <param name="Comparison">Don't need to set.</param>
+            <returns>NULL if the item cannot be found. Otherwise, a full archive path.</returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.FindItems(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Search the directory for files that match the regex
+            </summary>
+            <param name="Pattern">The regex pattern to use</param>
+            <param name="TopLevelOnly">If true, all subdirectories will be skipped</param>
+            <param name="IgnoreCase">Ignore the filename casing</param>
+            <returns>List of Item Keys</returns>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.MoveItemToDirectory(System.String,Hack.io.Class.ArchiveDirectory)">
+            <summary>
+            Moves an item from it's current directory to a new directory
+            </summary>
+            <param name="ItemKey">The Key of the Item</param>
+            <param name="TargetDirectory">The directory to move the item to</param>
+            <exception cref="T:System.UnauthorizedAccessException"></exception>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.RenameItem(System.String,System.String)">
+            <summary>
+            Rename an item in the directory
+            </summary>
+            <param name="OldKey">The old key of the item (Case-sensitive)</param>
+            <param name="NewKey">The new key of the item (Case-sensitive)</param>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.Clear">
+            <summary>
+            Clears all the items out of this directory
+            </summary>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.GetCountAndChildren">
+            <summary>
+            Gets the number of items inside this directory and it's children
+            </summary>
+            <returns>the total number of items inside this directory. Directories themselves not included.</returns>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.SortItemsByOrder(System.String[])">
+            <summary>
+            Sorts the Items inside this directory using the provided string[]. This string[] MUST contain all entries inside this directory
+            </summary>
+            <param name="NewItemOrder"></param>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.Export(System.String)">
+            <summary>
+            Export this Directory to a folder.
+            </summary>
+            <param name="FolderPath">Folder to Export to. Don't expect the files to appear here. Expect a Folder with this <see cref="P:Hack.io.Class.ArchiveDirectory.Name"/> to appear</param>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.NewDirectory">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveDirectory.NewDirectory(Hack.io.Class.Archive,Hack.io.Class.ArchiveDirectory)">
+            <summary>
+            
+            </summary>
+            <param name="Owner"></param>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Hack.io.Class.ArchiveFile">
+            <summary>
+            File contained inside the Archive
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveFile.Name">
+            <summary>
+            Name of the File
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveFile.FileData">
+            <summary>
+            The Actual Data for the file
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveFile.Parent">
+            <summary>
+            The parent directory (Null if non-existant)
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveFile.FullPath">
+            <summary>
+            The full path of this file. Cannot be used if this file doesn't belong to an Archive somehow
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveFile.Extension">
+            <summary>
+            The extension of this file
+            </summary>
+        </member>
+        <member name="P:Hack.io.Class.ArchiveFile.Length">
+            <summary>
+            The length of the file in bytes. Shortcut for FileData.Length.
+            </summary>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveFile.#ctor">
+            <summary>
+            Empty file
+            </summary>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveFile.Load(System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveFile.Save(System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveFile.CopyTo(Hack.io.Class.ArchiveFile)">
+            <summary>
+            Copies the data from this <see cref="T:Hack.io.Class.ArchiveFile"/> to another <see cref="T:Hack.io.Class.ArchiveFile"/>
+            </summary>
+            <param name="target">The destination <see cref="T:Hack.io.Class.ArchiveFile"/> instance</param>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveFile.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveFile.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveFile.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveFile.GetFullPath(System.Text.StringBuilder)">
+            <summary>
+            This is a helper function.<para/>
+            Gets the full path of this archive file.
+            </summary>
+            <param name="Path">The incoming path to append</param>
+        </member>
+        <member name="M:Hack.io.Class.ArchiveFile.op_Explicit(Hack.io.Class.ArchiveFile)~System.IO.MemoryStream">
+            <summary>
+            Cast a File to a MemoryStream
+            </summary>
+            <param name="x"></param>
+        </member>
+        <member name="T:Hack.io.Interface.ILoadSaveFile">
+            <summary>
+            The interface indicating that this type can be Loaded and Saved
+            </summary>
+        </member>
+        <member name="M:Hack.io.Interface.ILoadSaveFile.Load(System.IO.Stream)">
+            <summary>
+            Loads the format data off a <see cref="T:System.IO.FileStream"/>, <see cref="T:System.IO.MemoryStream"/>, or other <see cref="T:System.IO.Stream"/> class.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+        </member>
+        <member name="M:Hack.io.Interface.ILoadSaveFile.Save(System.IO.Stream)">
+            <summary>
+            Saves the format data to a <see cref="T:System.IO.FileStream"/>, <see cref="T:System.IO.MemoryStream"/>, or other <see cref="T:System.IO.Stream"/> class.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+        </member>
+        <member name="F:Hack.io.Interface.DocGen.DOC_MAGIC">
+            <summary>
+            The file identifier
+            </summary>
+        </member>
+        <member name="T:Hack.io.Utility.CollectionUtil">
+            <summary>
+            A static class for functions relating to collections. (Array, List, etc.)
+            </summary>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.NewICollection``2(``1,System.Int32)">
+            <summary>
+            Creates a new ICollection (Such as a <see cref="T:System.Collections.Generic.List`1"/>) with a specified value for every entry
+            </summary>
+            <typeparam name="Class"></typeparam>
+            <typeparam name="Type"></typeparam>
+            <param name="InitValue"></param>
+            <param name="Size"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.InitilizeArray``1(``0,System.Int32)">
+            <summary>
+            Creates a new Array with the provided value and length
+            </summary>
+            <typeparam name="T">An array type</typeparam>
+            <param name="Value">The value to initlize with</param>
+            <param name="Length">The desired array length</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.SwapValues``1(``0@,``0@)">
+            <summary>
+            Swaps two values.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Left">Our first contestant</param>
+            <param name="Right">Our second contestant</param>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.SwapValues``1(System.Tuple{``0,``0}@)">
+            <summary>
+            Swaps two values using a Tuple
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Values">The tuple to swap values of</param>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.CycleValues``1(System.Boolean,``0[])">
+            <summary>
+            Cycles an set of objects. Can be cycled backwards
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Reverse">If true, cycles from left to right instead of right to left</param>
+            <param name="Values">The values to cycle</param>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.Equals``2(System.Collections.Generic.Dictionary{``0,``1},System.Collections.Generic.Dictionary{``0,``1})">
+            <summary>
+            Compares the contents of two dictionaries
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="Left"></param>
+            <param name="Right"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.ContainsSubsequence``1(System.Collections.Generic.IList{``0},System.Collections.Generic.IList{``0})">
+            <summary>
+            Finds out if a sequence exists in a list
+            </summary>
+            <typeparam name="T">List element type</typeparam>
+            <param name="List">The larger list to look in</param>
+            <param name="SubSequence">The smaller sequence to look for</param>
+            <returns>TRUE if the sequence is found, FALSE otherwise</returns>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.SubListIndex``1(System.Collections.Generic.IList{``0},System.Int32,System.Collections.Generic.IList{``0})">
+            <summary>
+            Finds a list inside a list
+            </summary>
+            <typeparam name="T">List element type</typeparam>
+            <param name="List">The larger list to look in</param>
+            <param name="Start">The index to Start searching from</param>
+            <param name="SubList">The list to find</param>
+            <returns>The index of the sublist. -1 if not found</returns>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.Move``1(System.Collections.Generic.IList{``0},System.Int32,System.Int32)">
+            <summary>
+            Moves an item to a new index in the list
+            </summary>
+            <typeparam name="T">List element type</typeparam>
+            <param name="List">The list to move an item in</param>
+            <param name="OldIndex">The original index of the item</param>
+            <param name="NewIndex">The new index of the item</param>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.SortBy``1(System.Collections.Generic.IList{``0},``0[])">
+            <summary>
+            Sort a list of items based on an array of items
+            </summary>
+            <typeparam name="T">List element type</typeparam>
+            <param name="OriginalList">The original list to sort</param>
+            <param name="SortRef">The list to reference while sorting</param>
+            <returns>A new list sorted by "<paramref name="SortRef"/>".<para/>If <paramref name="SortRef"/> does not contain an element from <paramref name="OriginalList"/>, it will NOT be included!</returns>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.Equals``1(System.ReadOnlySpan{``0},System.ReadOnlySpan{``0})">
+            <summary>
+            Compares the contents of two spans to see if they match
+            </summary>
+            <typeparam name="T">List element type</typeparam>
+            <param name="Left">The list on the left side of the Equals Sign</param>
+            <param name="Right">The list on the right side of the Equals Sign</param>
+            <returns>TRUE if both lists match, FALSE otherwise.</returns>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.Equals``1(``0[],``0[])">
+            <summary>
+            Compares the contents of two nullable ararys to see if they match
+            </summary>
+            <typeparam name="T">List element type</typeparam>
+            <param name="Left">The array on the left side of the Equals Sign</param>
+            <param name="Right">The array on the right side of the Equals Sign</param>
+            <returns>TRUE if both arrays match, FALSE otherwise.</returns>
+        </member>
+        <member name="M:Hack.io.Utility.CollectionUtil.Equals``1(System.ReadOnlySpan{``0},System.ReadOnlySpan{``0},System.Func{``0,``0,System.Boolean})">
+            <summary>
+            Compares the contents of the two lists using a custom function
+            </summary>
+            <typeparam name="T">List element type</typeparam>
+            <param name="Left">The list on the left side of the Equals Sign</param>
+            <param name="Right">The list on the right side of the Equals Sign</param>
+            <param name="comparefunc">The function to use as a comparator</param>
+            <returns>TRUE if both lists match, FALSE otherwise.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Hack.io.Utility.CollectionUtil.IndexOfReference``1(System.Collections.Generic.IList{``0},``0)" -->
+        <member name="T:Hack.io.Utility.ConsoleUtil">
+            <summary>
+            A static class for additional console functions
+            </summary>
+        </member>
+        <member name="M:Hack.io.Utility.ConsoleUtil.Confirm(System.ConsoleKey,System.ConsoleKey)">
+            <summary>
+            Checks to see if the user presses a certain "yes" key, or a certain "no" key
+            </summary>
+            <param name="YesKey">The key to indicate "Yes"</param>
+            <param name="NoKey">The key to indicate "No"</param>
+            <returns>true if the user presses the YesKey</returns>
+        </member>
+        <member name="M:Hack.io.Utility.ConsoleUtil.WriteColoured(System.String,System.ConsoleColor,System.ConsoleColor,System.Boolean)">
+            <summary>
+            Writes a coloured message to the console
+            </summary>
+            <param name="Message">Message to print</param>
+            <param name="ForeColour">ConsoleColor to use for the text</param>
+            <param name="BackColour">ConsoleColor to use for the background of the text</param>
+            <param name="Newline">Switch to the next line?</param>
+        </member>
+        <member name="P:Hack.io.Utility.ConsoleUtil.IsConsolePresent">
+            <summary>
+            returns TRUE if a console is present
+            </summary>
+        </member>
+        <member name="T:Hack.io.Utility.EncodingUtil">
+            <summary>
+            Extra Encoding Functions
+            </summary>
+        </member>
+        <member name="M:Hack.io.Utility.EncodingUtil.GetStride(System.Text.Encoding)">
+            <summary>
+            Gets the amount of bytes this Encoding uses.<para/>Note: This retursn 2 for SHIFT-JIS.
+            </summary>
+            <param name="enc"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Hack.io.Utility.FileUtil">
+            <summary>
+            A static class for File helper functions
+            </summary>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.IsFileLocked(System.IO.FileInfo)">
+            <summary>
+            Check if a file cannot be opened.
+            </summary>
+            <param name="file">File to check for</param>
+            <returns>TRUE if the file cannot be accessed</returns>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.CreateDirectoryIfNotExist(System.String)">
+            <summary>
+            Creates a directory if it doesn't exist
+            </summary>
+            <param name="DirPath">The full path to the desired directory</param>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.LoadFile(System.String,System.Action{System.IO.Stream})">
+            <summary>
+            Loads a file to the disk.<para/>This exists so I don't have to keep writing FileStream Ctors
+            </summary>
+            <param name="FilePath">The system path to read from</param>
+            <param name="Action">The method used to read the file</param>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.LoadFile``1(System.String,System.Func{System.IO.Stream,``0})">
+            <summary>
+            Loads a file to the disk.<para/>This exists so I don't have to keep writing FileStream Ctors
+            </summary>
+            <param name="FilePath">The system path to read from</param>
+            <param name="Function">The method used to read the file</param>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.SaveFile(System.String,System.Action{System.IO.Stream})">
+            <summary>
+            Saves a file to the disk.<para/>This exists so I don't have to keep writing FileStream save functions.
+            </summary>
+            <param name="FilePath">The system path to write to</param>
+            <param name="Action">The method used to save the file</param>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.SaveFile``1(System.String,System.Func{System.IO.Stream,``0})">
+            <summary>
+            Saves a file to the disk.<para/>This exists so I don't have to keep writing FileStream save functions.
+            </summary>
+            <param name="FilePath">The system path to write to</param>
+            <param name="Function">The method used to save the file</param>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.RunForFileStream(System.String,System.IO.FileMode,System.Action{System.IO.Stream})">
+            <summary>
+            Executes a function using a FileStream from FilePath
+            </summary>
+            <param name="FilePath">The system path to write to</param>
+            <param name="Mode">The mode to access the file in</param>
+            <param name="Action">The method used on the FileStream</param>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.RunForFileStream``1(System.String,System.IO.FileMode,System.Func{System.IO.Stream,``0})">
+            <summary>
+            Executes a function using a FileStream from FilePath
+            </summary>
+            <param name="FilePath">The system path to write to</param>
+            <param name="Mode">The mode to access the file in</param>
+            <param name="Function">The method used on the FileStream</param>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.RunForFileBytes(System.String,System.Func{System.Byte[],System.Byte[]})">
+            <summary>
+            Executes a function on all the bytes of a given file.
+            </summary>
+            <param name="FilePath">The system path to use to</param>
+            <param name="Function">The function to run on all the bytes</param>
+            <returns>The processed bytes</returns>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.ExceptionOnBadMagic(System.IO.Stream,System.ReadOnlySpan{System.Byte})">
+            <summary>
+            throws an exception if the current stream position does not contain the requested magic
+            </summary>
+            <param name="Strm">The stream to check</param>
+            <param name="Magic">The magic to check for</param>
+            <exception cref="T:System.BadImageFormatException"></exception>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.ExceptionOnBadMagic(System.IO.Stream,System.ReadOnlySpan{System.Char})">
+            <inheritdoc cref="M:Hack.io.Utility.FileUtil.ExceptionOnBadMagic(System.IO.Stream,System.ReadOnlySpan{System.Byte})" />
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.ExceptionOnBadMagic(System.IO.Stream,System.ReadOnlySpan{System.Char},System.Text.Encoding)">
+            <summary>
+            throws an exception if the current stream position does not contain the requested magic
+            </summary>
+            <param name="Strm">The stream to check</param>
+            <param name="Magic">The magic to check for</param>
+            <param name="Enc">The encoding to read the stream with</param>
+            <exception cref="T:System.BadImageFormatException"></exception>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.ExceptionOnMisMatchedBOM(System.IO.Stream)">
+            <summary>
+            throws an exception if the current Endian mode of Hack.io does not match the one present in the stream's BOM
+            </summary>
+            <param name="Strm"></param>
+        </member>
+        <member name="M:Hack.io.Utility.FileUtil.LoadFileWithDecompression(System.String,System.Action{System.IO.Stream},System.ValueTuple{System.Func{System.IO.Stream,System.Boolean},System.Func{System.Byte[],System.Byte[]}}[])">
+            <summary>
+            Tries to read a file from the disk using one of the provided decompressors.
+            </summary>
+            <param name="FilePath">The system path to read from</param>
+            <param name="Action">The method used to read the file</param>
+            <param name="DecompressOptions">An array of decoding options to attempt</param>
+            <returns>-1 if none of the decompressors work. Otherwise will return the index of the decompressor that was used</returns>
+        </member>
+        <member name="T:Hack.io.Utility.MathUtil">
+            <summary>
+            A static class for math helper functions
+            </summary>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.Clamp``1(``0,``0,``0)">
+            <summary>
+            Clamps a value to the specified minimum and maximum value
+            </summary>
+            <typeparam name="T">IComparable</typeparam>
+            <param name="val">The value to clamp</param>
+            <param name="min">Minimum value to clamp to</param>
+            <param name="max">Maximum value to clamp to</param>
+            <returns>Max or Min, depending on Val</returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.Lerp(System.Byte,System.Byte,System.Single)">
+            <summary>
+            Lerp 2 bytes via a time
+            </summary>
+            <param name="min"></param>
+            <param name="max"></param>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.Lerp(System.Single,System.Single,System.Single)">
+            <summary>
+            Lerp 2 floats via a time
+            </summary>
+            <param name="min"></param>
+            <param name="max"></param>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.Lerp(System.Double,System.Double,System.Double)">
+            <summary>
+            Lerp 2 floats via a time
+            </summary>
+            <param name="min"></param>
+            <param name="max"></param>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.GetPercentOf(System.Single,System.Single,System.Single)">
+            <summary>
+            Gets the percent value of a given number. Usually used by Background Workers
+            </summary>
+            <param name="Current"></param>
+            <param name="Max"></param>
+            <param name="OutOf"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.Scale(System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Scales a number between W and X to be between Y and Z
+            </summary>
+            <param name="valueIn"></param>
+            <param name="baseMin"></param>
+            <param name="baseMax"></param>
+            <param name="limitMin"></param>
+            <param name="limitMax"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.RadianToDegree(System.Single)">
+            <summary>
+            Converts a Radian to a Degree
+            </summary>
+            <param name="angle">Radian angle</param>
+            <returns>Degree Angle</returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.DegreeToRadian(System.Single)">
+            <summary>
+            Converts a Degree to a Radian
+            </summary>
+            <param name="angle">Degree Angle</param>
+            <returns>Radian Angle</returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.GetDecimal(System.Double)">
+            <summary>
+            Returns the decimal part of a number
+            </summary>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.LeastSigBitSet(System.Int32)">
+            <summary>
+            Returns the Rightmost bit that is set
+            </summary>
+            <param name="value">the value to look at</param>
+            <returns>an integer with the rightmost bit set</returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.MostSigBitSet(System.Int32)">
+            <summary>
+            Returns the Leftmost bit that is set
+            </summary>
+            <param name="value">the value to look at</param>
+            <returns>an integer with the leftmost bit set</returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.GetLeadingZeros(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.GetTrailingZeros(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.MathUtil.GetMaxBits(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="i"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Hack.io.Utility.StreamUtil">
+            <summary>
+            A static class for stream helper functions
+            </summary>
+        </member>
+        <member name="P:Hack.io.Utility.StreamUtil.ShiftJIS">
+            <summary>
+            Shortcut to Encoding.GetEncoding("Shift-JIS")
+            </summary>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.GetCurrentEndian">
+            <summary>
+            Gets the current Endian setting.
+            </summary>
+            <returns>TRUE if "Big Endian" is active.<para/>FALSE if "LIttle Endian" is active.</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.SetEndian(System.Boolean)">
+            <summary>
+            Sets the current Endian
+            </summary>
+            <param name="Endian">The endian to use:<para/>TRUE = "Big Endian"<para/>FALSE = "LIttle Endian"</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.SetEndianBig">
+            <summary>
+            Sets the current Endian to "Big Endian"
+            </summary>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.SetEndianLittle">
+            <summary>
+            Sets the current Endian to "Little Endian"
+            </summary>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ApplyEndian``1(System.Span{``0},System.Boolean)">
+            <summary>
+            Converts the endian bytes to the desired endian.
+            </summary>
+            <param name="data">The span of bytes to switch</param>
+            <param name="Invert">If TRUE, the data will come out in the opposite endian</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadEndian(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads a set amount of bytes from memory into an array. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="Count">The number of bytes to read<para/>MAX 8</param>
+            <returns>a byte[] with the read data.</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.IOException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadInt8(System.IO.Stream)">
+            <summary>
+            An alternative to <see cref="M:System.IO.Stream.ReadByte"/>
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting byte</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadUInt8(System.IO.Stream)">
+            <summary>
+            An alternative to <see cref="M:System.IO.Stream.ReadByte"/>
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting byte</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadInt16(System.IO.Stream)">
+            <summary>
+            Reads an Int16 from the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting Int16 from the file</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadUInt16(System.IO.Stream)">
+            <summary>
+            Reads an UInt16 from the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting UInt16 from the file</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadInt32(System.IO.Stream)">
+            <summary>
+            Reads an Int32 from the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting Int32 from the file</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadUInt32(System.IO.Stream)">
+            <summary>
+            Reads an UInt32 from the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting UInt32 from the file</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.IOException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadInt64(System.IO.Stream)">
+            <summary>
+            Reads an Int64 from the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting Int64 from the file</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadUInt64(System.IO.Stream)">
+            <summary>
+            Reads an UInt64 from the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting UInt64 from the file</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadHalf(System.IO.Stream)">
+            <summary>
+            Reads a Half from the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting Half from the file</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadSingle(System.IO.Stream)">
+            <summary>
+            Reads a Single from the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting Single from the file</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadDouble(System.IO.Stream)">
+            <summary>
+            Reads a Double from the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting Double from the file</returns>
+            <exception cref="T:System.ArgumentException"/>
+            <exception cref="T:System.IO.IOException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadEnum``2(System.IO.Stream,System.Func{System.IO.Stream,``1})">
+            <summary>
+            Reads a value as an Enum instead of the type defined in T
+            </summary>
+            <typeparam name="E">The Enum to return</typeparam>
+            <typeparam name="T">The Datatype to read from the file</typeparam>
+            <param name="Strm">The stream to read from</param>
+            <param name="Reader">The function to read a single instance of T from the file.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMulti``1(System.IO.Stream,System.Int32,System.Func{System.IO.Stream,``0})">
+            <summary>
+            Reads multiple of the same data type.<para/>Example:<para/>-
+            <example>MyStream.ReadMulti(3, StreamUtil.ReadSingle);</example>
+            </summary>
+            <typeparam name="T">Needs to be one of the supported Read types.</typeparam>
+            <param name="Strm">The stream to read from</param>
+            <param name="EntryCount">The number of items of type T to read.</param>
+            <param name="Reader">The function to read a single instance of T from the file.</param>
+            <returns>An array of T</returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiInt16(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads multiple Int16
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="EntryCount">The number of Int16 to read.</param>
+            <returns>A short[] of length <paramref name="EntryCount"/></returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiUInt16(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads multiple UInt16
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="EntryCount">The number of UInt16 to read.</param>
+            <returns>A ushort[] of length <paramref name="EntryCount"/></returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiInt32(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads multiple Int32
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="EntryCount">The number of Int32 to read.</param>
+            <returns>A int[] of length <paramref name="EntryCount"/></returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiUInt32(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads multiple UInt32
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="EntryCount">The number of UInt32 to read.</param>
+            <returns>A uint[] of length <paramref name="EntryCount"/></returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiInt64(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads multiple Int64
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="EntryCount">The number of Int64 to read.</param>
+            <returns>A long[] of length <paramref name="EntryCount"/></returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiUInt64(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads multiple UInt64
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="EntryCount">The number of UInt64 to read.</param>
+            <returns>A ulong[] of length <paramref name="EntryCount"/></returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiHalf(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads multiple Half
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="EntryCount">The number of Half to read.</param>
+            <returns>A Half[] of length <paramref name="EntryCount"/></returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiSingle(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads multiple Single
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="EntryCount">The number of Single to read.</param>
+            <returns>A float[] of length <paramref name="EntryCount"/></returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiDouble(System.IO.Stream,System.Int32)">
+            <summary>
+            Reads multiple Double
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="EntryCount">The number of Double to read.</param>
+            <returns>A double[] of length <paramref name="EntryCount"/></returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadFromOffset``2(System.IO.Stream,System.Func{System.IO.Stream,``0},System.Int64,System.Func{System.IO.Stream,``1})">
+            <summary>
+            !!ADVANCED USERS ONLY!!<para/>
+            Reads an offset from the current position, jumps to that offset, reads a value there, then jumps back to just after reading the offset.
+            </summary>
+            <typeparam name="T">Needs to be one of the supported Read types.</typeparam>
+            <typeparam name="Tout">Needs to be one of the supported Read types.</typeparam>
+            <param name="Strm">The stream to read from</param>
+            <param name="OffsetReader">The function that will read the offset value</param>
+            <param name="RelativeToPosition">The offset to uses as a base position</param>
+            <param name="Reader">The function that will read the value at the offset</param>
+            <returns>The value at the offset</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiFromOffset``2(System.IO.Stream,System.Func{System.IO.Stream,``0},System.Int64,System.Func{System.IO.Stream,System.Int32,``1[]},System.Int32)">
+            <summary>
+            !!ADVANCED USERS ONLY!!<para/>
+            Reads an offset from the current position, jumps to that offset, reads multiple values there, then jumps back to just after reading the offset.
+            </summary>
+            <typeparam name="T">Needs to be one of the supported Read types.</typeparam>
+            <typeparam name="Tout">Needs to be one of the supported Read types.</typeparam>
+            <param name="Strm">The stream to read from</param>
+            <param name="OffsetReader">The function that will read the offset value</param>
+            <param name="RelativeToPosition">The offset to uses as a base position</param>
+            <param name="MultiReader">The function that will read the values at the offset</param>
+            <param name="EntryCount">The number of values to read</param>
+            <returns>An array of values at the offset</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadFromOffsetMulti``2(System.IO.Stream,System.Func{System.IO.Stream,``0},System.Int32,System.Int64,System.Func{System.IO.Stream,``1})">
+            <summary>
+            !!ADVANCED USERS ONLY!!<para/>
+            Reads an offset from the current position, jumps to that offset, reads a value there, then jumps back to just after reading the offset.<para/>
+            This is repeated "<paramref name="OffsetCount"/>" times
+            </summary>
+            <typeparam name="T">Needs to be one of the supported Read types.</typeparam>
+            <typeparam name="Tout">Needs to be one of the supported Read types.</typeparam>
+            <param name="Strm">The stream to read from</param>
+            <param name="OffsetReader">The function that will read the offset value</param>
+            <param name="OffsetCount">The number of offsets to read</param>
+            <param name="RelativeToPosition">The offset to uses as a base position</param>
+            <param name="Reader">The function that will read the value at the offset</param>
+            <returns>An array containing the value at each offset</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiFromOffsetMulti``2(System.IO.Stream,System.Func{System.IO.Stream,``0},System.Int32,System.Int64,System.Func{System.IO.Stream,System.Int32,``1[]},System.Int32)">
+            <summary>
+            !!ADVANCED USERS ONLY!!<para/>
+            Reads an offset from the current position, jumps to that offset, reads multiple values there, then jumps back to just after reading the offset.<para/>
+            This is repeated "<paramref name="OffsetCount"/>" times
+            </summary>
+            <typeparam name="T">Needs to be one of the supported Read types.</typeparam>
+            <typeparam name="Tout">Needs to be one of the supported Read types.</typeparam>
+            <param name="Strm">The stream to read from</param>
+            <param name="OffsetReader">The function that will read the offset value</param>
+            <param name="OffsetCount">The number of offsets to read</param>
+            <param name="RelativeToPosition">The offset to uses as a base position</param>
+            <param name="MultiReader">The function that will read the values at the offset</param>
+            <param name="EntryCount">The number of values to read</param>
+            <returns>An array of arrays that contain the values at the offsets</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadAtOffset``1(System.IO.Stream,System.Int64,System.Func{System.IO.Stream,``0})">
+            <summary>
+            Reads a value at the given absolute offset.<param/>Does not put the Stream Position back where it came from.
+            </summary>
+            <typeparam name="Tout">The type to return</typeparam>
+            <param name="Strm">The stream to read</param>
+            <param name="Offset">The position in the stream to read from</param>
+            <param name="Reader">The function to use to read</param>
+            <returns>the read value</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadMultiAtOffset``1(System.IO.Stream,System.Int64,System.Func{System.IO.Stream,System.Int32,``0[]},System.Int32)">
+            <summary>
+            Reads multiple values at the given absolute offset.<param/>Does not put the Stream Position back where it came from.
+            </summary>
+            <typeparam name="Tout"></typeparam>
+            <param name="Strm">The stream to read</param>
+            <param name="Offset">The position in the stream to read from</param>
+            <param name="MultiReader">The function that will read the values at the offset</param>
+            <param name="EntryCount">The number of values to read</param>
+            <returns>An array of values at the offset</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadVariableLength(System.IO.Stream)">
+            <summary>
+            Reads a value that has varying length. Maxes out at 28 bits read.
+            </summary>
+            <param name="Strm"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadString(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Reads a string from the Stream that's NULL terminated.<para/>This method is faster for single byte encodings
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="Enc">The encoding to use. Should only be 1 byte per character.</param>
+            <returns>The resulting string</returns>
+            <exception cref="T:System.IO.EndOfStreamException"></exception>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadString(System.IO.Stream,System.Text.Encoding,System.Int32)">
+            <summary>
+            Reads a string from the Stream that's NULL terminated.<para/>This method is for multi-byte encodings
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="Enc">The encoding to use.</param>
+            <param name="ByteCount">The stride of the Encoding. Variable Length not supported</param>
+            <returns>The resulting string</returns>
+            <exception cref="T:System.IO.EndOfStreamException"></exception>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadString(System.IO.Stream,System.Int32,System.Text.Encoding)">
+            <summary>
+            Reads a string from the Stream that's fixed in size.<para/>This method is faster for single byte encodings
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="Enc">The encoding to use. Should only be 1 byte per character.</param>
+            <param name="StringLength">The number of characters to read</param>
+            <returns>The resulting string</returns>
+            <exception cref="T:System.IO.IOException"></exception>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadString(System.IO.Stream,System.Int32,System.Text.Encoding,System.Int32)">
+            <summary>
+            Reads a string from the Stream that's fixed in size.<para/>This method is for multi-byte encodings
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <param name="Enc">The encoding to use.</param>
+            <param name="StringLength">The number of characters to read</param>
+            <param name="ByteCount">The stride of the Encoding. Variable Length not supported</param>
+            <returns>The resulting string</returns>
+            <exception cref="T:System.IO.IOException"></exception>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadStringJIS(System.IO.Stream)">
+            <summary>
+            Reads a "SHIFT-JIS" string from the Stream that's NULL terminated.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting string</returns>
+            <exception cref="T:System.IO.EndOfStreamException"></exception>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ReadStringASCII(System.IO.Stream)">
+            <summary>
+            Reads an "ASCII" string from the Stream that's NULL terminated.
+            </summary>
+            <param name="Strm">The stream to read from</param>
+            <returns>The resulting string</returns>
+            <exception cref="T:System.IO.EndOfStreamException"></exception>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.IsMagicMatch(System.IO.Stream,System.ReadOnlySpan{System.Byte})">
+            <summary>
+            Checks the stream for a given Magic identifier.<para/>Advances the Stream's Position forwards by Magic.Length
+            </summary>
+            <param name="Strm">The stream to read</param>
+            <param name="Magic">The magic to check</param>
+            <returns>TRUE if the next bytes match the magic, FALSE otherwise.</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.IsMagicMatch(System.IO.Stream,System.ReadOnlySpan{System.Char})">
+            <inheritdoc cref="M:Hack.io.Utility.StreamUtil.IsMagicMatch(System.IO.Stream,System.ReadOnlySpan{System.Byte})"/>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.IsMagicMatch(System.IO.Stream,System.ReadOnlySpan{System.Char},System.Text.Encoding)">
+            <summary>
+            Checks the stream for a given Magic identifier.<para/>Advances the Stream's Position forwards by Magic.Length
+            </summary>
+            <param name="Strm">The stream to read</param>
+            <param name="Magic">The magic to check</param>
+            <param name="Enc">The encoding that should be used when reading the file</param>
+            <returns>TRUE if the next bytes match the magic, FALSE otherwise.</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteEndian(System.IO.Stream,System.Byte[])">
+            <summary>
+            Writes a set of bytes to the stream
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Data">The data to write</param>
+            <exception cref="T:System.ArgumentException"></exception>"
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteInt8(System.IO.Stream,System.SByte)">
+            <summary>
+            An alternative to <see cref="M:System.IO.Stream.WriteByte(System.Byte)"/>
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteUInt8(System.IO.Stream,System.Byte)">
+            <summary>
+            An alternative to <see cref="M:System.IO.Stream.WriteByte(System.Byte)"/>
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteInt16(System.IO.Stream,System.Int16)">
+            <summary>
+            Writes an Int16 to the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteUInt16(System.IO.Stream,System.UInt16)">
+            <summary>
+            Writes an UInt16 to the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteInt32(System.IO.Stream,System.Int32)">
+            <summary>
+            Writes an Int32 to the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteUInt32(System.IO.Stream,System.UInt32)">
+            <summary>
+            Writes an UInt32 to the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteInt64(System.IO.Stream,System.Int64)">
+            <summary>
+            Writes an Int64 to the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteUInt64(System.IO.Stream,System.UInt64)">
+            <summary>
+            Writes an UInt64 to the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteHalf(System.IO.Stream,System.Half)">
+            <summary>
+            Writes a Half to the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteSingle(System.IO.Stream,System.Single)">
+            <summary>
+            Writes a single to the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteDouble(System.IO.Stream,System.Double)">
+            <summary>
+            Writes a double to the stream. Respects Endian.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteEnum``2(System.IO.Stream,``0,System.Action{System.IO.Stream,``1})">
+            <summary>
+            Writes a value as an Enum instead of the type defined in T
+            </summary>
+            <typeparam name="E">The Enum to write</typeparam>
+            <typeparam name="T">The Datatype to write to the file</typeparam>
+            <param name="Strm">The stream to write to</param>
+            <param name="Value">The value to write</param>
+            <param name="Writer">The action to write a single instance of T to the file.</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteMulti``1(System.IO.Stream,System.Collections.Generic.IList{``0},System.Action{System.IO.Stream,``0})">
+            <summary>
+            Writes multiple of the same data type.<para/>Example:<para/>-
+            <example>MyStream.WriteMulti(MyFloatArray, StreamUtil.WriteSingle);</example> 
+            </summary>
+            <typeparam name="T">Needs to be one of the supported Write types.</typeparam>
+            <param name="Strm">The stream to write to</param>
+            <param name="Values">The array of values to write</param>
+            <param name="Writer">The action to write a single instance of T to the file.</param>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteMultiInt16(System.IO.Stream,System.Collections.Generic.IList{System.Int16})">
+            <summary>
+            Writes multiple Int16
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Values">The Int16 values to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteMultiUInt16(System.IO.Stream,System.Collections.Generic.IList{System.UInt16})">
+            <summary>
+            Writes multiple UInt16
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Values">The UInt16 values to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteMultiInt32(System.IO.Stream,System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            Writes multiple Int32
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Values">The Int32 values to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteMultiUInt32(System.IO.Stream,System.Collections.Generic.IList{System.UInt32})">
+            <summary>
+            Writes multiple UInt32
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Values">The UInt32 values to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteMultiInt64(System.IO.Stream,System.Collections.Generic.IList{System.Int64})">
+            <summary>
+            Writes multiple Int64
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Values">The Int64 values to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteMultiUInt64(System.IO.Stream,System.Collections.Generic.IList{System.UInt64})">
+            <summary>
+            Writes multiple UInt64
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Values">The UInt64 values to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteMultiHalf(System.IO.Stream,System.Collections.Generic.IList{System.Half})">
+            <summary>
+            Writes multiple Half
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Values">The Half values to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteMultiSingle(System.IO.Stream,System.Collections.Generic.IList{System.Single})">
+            <summary>
+            Writes multiple Single
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Values">The Single values to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteMultiDouble(System.IO.Stream,System.Collections.Generic.IList{System.Double})">
+            <summary>
+            Writes multiple Double
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="Values">The Double values to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteVariableLength(System.IO.Stream,System.Int32)">
+            <summary>
+            Writes a value that has varying length.
+            </summary>
+            <param name="Strm"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteString(System.IO.Stream,System.String,System.Text.Encoding,System.Nullable{System.Byte})">
+            <summary>
+            Writes a string to the Stream that can be NULL terminated.<para/>This method is faster for single byte encodings
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="String">The string to write</param>
+            <param name="Enc">The encoding to write the string in</param>
+            <param name="Terminator">The terminator byte. Set to NULL to dsiable termination (for MAGICs and whatnot)</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteString(System.IO.Stream,System.String,System.Text.Encoding,System.Int32,System.Nullable{System.Byte})">
+            <summary>
+            Writes a string to the Stream that can be NULL terminated.<para/>This method is for multi-byte encodings
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="String">The string to write</param>
+            <param name="Enc">The encoding to write the string in</param>
+            <param name="ByteCount">The stride of the encoding. Variable Length not supported</param>
+            <param name="Terminator">The byte to use for the Terminator. Set to NULL to dsiable termination (for MAGICs and whatnot)</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WriteStringJIS(System.IO.Stream,System.String,System.Nullable{System.Byte})">
+            <summary>
+            Writes a "SHIFT-JIS" string to the Stream that's be NULL terminated.
+            </summary>
+            <param name="Strm">The stream to write to</param>
+            <param name="String">the string to write</param>
+            <param name="Terminator">The byte to use for the Terminator. Set to NULL to dsiable termination (for MAGICs and whatnot)</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.ToArray(System.IO.Stream)">
+            <summary>
+            Reads out all the bytes from a stream.
+            </summary>
+            <param name="Strm">The stream to read out.<para/>If this is a MemoryStream, <see cref="M:System.IO.MemoryStream.ToArray"/> is called instead.</param>
+            <returns>A byte[] of the streams contents.</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.PeekByte(System.IO.Stream)">
+            <summary>
+            Peek the next byte
+            </summary>
+            <param name="Strm">The Stream to peek</param>
+            <returns>The next byte to be read</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.Peek``1(System.IO.Stream,System.Func{System.IO.Stream,``0})">
+            <summary>
+            Peeks the value at the position of the stream.<para/>The stream position is not advanced
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="Strm">The stream to read</param>
+            <param name="Reader">The function that determines what gets read</param>
+            <returns>the value at the position of the stream.</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.CreateStreamSlice(System.IO.Stream,System.Int64,System.Int64)">
+            <summary>
+            Creates a slice of a MemoryStream. This does make a copy of the data.
+            </summary>
+            <param name="Strm">The stream to slice from</param>
+            <param name="StartPosition">The starting point to slice</param>
+            <param name="Length">The length of the slice</param>
+            <returns>a MemoryStream containing the data in the slice</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.PadTo(System.IO.Stream,System.Int32,System.Byte)">
+            <summary>
+            Adds padding to the current position in the provided stream
+            </summary>
+            <param name="Strm">The Stream to add padding to</param>
+            <param name="Multiple">The byte multiple to pad to</param>
+            <param name="Padding">The byte to use as padding</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.PadTo(System.IO.Stream,System.Int32,System.String)">
+            <summary>
+            Adds padding to the current position in the provided stream
+            </summary>
+            <param name="Strm">The Stream to add padding to</param>
+            <param name="Multiple">The byte multiple to pad to</param>
+            <param name="PadString">The string to use as padding</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.CalculatePaddingLength(System.Int64,System.Int32)">
+            <summary>
+            Calculates how much padding is actually needed
+            </summary>
+            <param name="StrmPos">The number to calculate padding from</param>
+            <param name="Multiple">The number to calculate padding to</param>
+            <returns>The number to calculated padding</returns>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WritePlaceholder(System.IO.Stream,System.Int32)">
+            <summary>
+            Writes filler data to the stream.<para/>Easily identifiable with 0xDD.
+            </summary>
+            <param name="Strm">The Stream to write to</param>
+            <param name="ByteCount">The number of placeholder bytes to write</param>
+        </member>
+        <member name="M:Hack.io.Utility.StreamUtil.WritePlaceholderMulti(System.IO.Stream,System.Int32,System.Int32)">
+            <summary>
+            Writes multiple instances of filler data to the stream.Easily identifiable with 0xDD.
+            </summary>
+            <param name="Strm">The Stream to write to</param>
+            <param name="ByteCount">The number of placeholder bytes to write</param>
+            <param name="ElementCount">The number of elements to write placeholders for</param>
+        </member>
+        <member name="T:Hack.io.Utility.StringUtil">
+            <summary>
+            A static class for string helper functions
+            </summary>
+        </member>
+        <member name="M:Hack.io.Utility.StringUtil.WildCardToRegex(System.String)">
+            <summary>
+            Converts a WildCard expression to a RegularExpression
+            </summary>
+            <param name="Value">The WildCard expression</param>
+            <returns>a RegularExpression version of the WildCard</returns>
+        </member>
+    </members>
+</doc>

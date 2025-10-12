@@ -1,0 +1,14 @@
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/bin/Debug/net8.0/Hack.io.deps.json
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/bin/Debug/net8.0/Hack.io.dll
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/bin/Debug/net8.0/Hack.io.pdb
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/bin/Debug/net8.0/Hack.io.xml
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/obj/Debug/net8.0/Hack.io.GeneratedMSBuildEditorConfig.editorconfig
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/obj/Debug/net8.0/Hack.io.AssemblyInfoInputs.cache
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/obj/Debug/net8.0/Hack.io.AssemblyInfo.cs
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/obj/Debug/net8.0/Hack.io.csproj.CoreCompileInputs.cache
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/obj/Debug/net8.0/Hack.io.dll
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/obj/Debug/net8.0/refint/Hack.io.dll
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/obj/Debug/net8.0/Hack.io.xml
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/obj/Debug/net8.0/Hack.io.pdb
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/obj/Debug/net8.0/ref/Hack.io.dll
+/home/anto/Documenti/Cutscene-Maker-main/Hack.io/Hack.io/obj/Debug/net8.0/Hack.io.sourcelink.json

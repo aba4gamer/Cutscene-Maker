@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Hack.io.YAZ0</name>
+    </assembly>
+    <members>
+        <member name="T:Hack.io.YAZ0.YAZ0">
+            <summary>
+            Class containing methods to compress and decompress Data into Yaz0
+            </summary>
+        </member>
+        <member name="F:Hack.io.YAZ0.YAZ0.MAGIC">
+            <inheritdoc cref="F:Hack.io.Interface.DocGen.DOC_MAGIC"/>
+        </member>
+        <member name="M:Hack.io.YAZ0.YAZ0.Check(System.IO.Stream)">
+            <summary>
+            Checks the data for Yaz0 Encoding
+            </summary>
+            <param name="Data">The stream of data to check</param>
+            <returns>TRUE if the stream is Yaz0 encoded</returns>
+        </member>
+        <member name="M:Hack.io.YAZ0.YAZ0.Decompress(System.Byte[])">
+            <summary>
+            Attempts to decompress the given data as YAZ0.
+            </summary>
+            <param name="Data">The data to decode</param>
+            <returns>The byte[] of decoded data. Will be the same as the input if it is not YAZ0 encoded</returns>
+        </member>
+        <member name="M:Hack.io.YAZ0.YAZ0.Compress(System.Byte[],System.ComponentModel.BackgroundWorker,System.Boolean)">
+            <summary>
+            Encodes the given data as Yaz0.<para/>- Note: Don't double Yaz0 encode data, it doesn't save any space
+            </summary>
+            <param name="Data">The data to encode</param>
+            <param name="BGW">A <see cref="T:System.ComponentModel.BackgroundWorker"/> that will report the percentage complete out of 100.<para/>Set to NULL to disable</param>
+            <param name="UseQuick">If TRUE, will use a different, faster encoding.</param>
+            <returns>The byte[] of encoded data.</returns>
+        </member>
+        <member name="M:Hack.io.YAZ0.YAZ0.Compress(System.Byte[])">
+            <summary>
+            Encodes the given data as Yaz0.<para/>Use this if you indent to use <see cref="M:Hack.io.Utility.FileUtil.RunForFileBytes(System.String,System.Func{System.Byte[],System.Byte[]})"/> (and don't care about strength or progress reporting)
+            </summary>
+            <param name="Data">The data to encode</param>
+            <returns>The byte[] of encoded data.</returns>
+        </member>
+    </members>
+</doc>
