@@ -14,7 +14,7 @@ To do:
 - ~~Add that when you click on `Save As` the name of the file appears instead of `DemoMyCutscene.arc`~~ *Done*
 - ~~Add support for creating arcs~~ *Done*
 - ~~Add the ability to move parts before or after other parts in the timeline~~ *Done*
-~~- Add zoom functionality in the timeline~~ *Done*
+- ~~Add zoom functionality in the timeline~~ *Done*
 - ~~Add optimization to the timeline~~ *Done*
 - Add some cool icons (if I can do them cool lel)
 - Add some context menus because people like them
