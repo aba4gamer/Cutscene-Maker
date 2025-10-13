@@ -12,9 +12,9 @@ To do:
 - ~~Fix the SubPart box in timeline to make it match the part line~~ *Done*
 - ~~Add support for exporting with Yaz0~~ *Done*
 - ~~Add that when you click on `Save As` the name of the file appears instead of `DemoMyCutscene.arc`~~ *Done*
+- ~~Add support for creating arcs~~ *Done*
 - Add some cool icons (if I can do them cool lel)
 - Add some context menus because people like them
-- Add support for creating arcs
 - Add ComboBox for CastName, ActionType and other things
 - Add zoom functionality in the timeline
 - Add icons to the timeline part

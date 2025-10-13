@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -155,10 +156,51 @@ public partial class MainWindow : Window
 	// ============================
 	// New Archive & Open Archive
 
-	private void OnClickNewArchive(object? sender, RoutedEventArgs e)
+	private async void OnClickNewArchive(object? sender, RoutedEventArgs e)
 	{
-		// TODO: This.
-		Console.WriteLine("New Archive TODO");
+		// Before creating a new archive let's check if the user has another archive open.
+		// If they have, we'll ask if they want to discard the changes.
+		if (Core.HasArchiveOpen() && !await AskDiscardChanges())
+		{
+			StatusText.Text = "New archive aborted.";
+			return;
+		}
+
+		// Ask the user where to save the file.
+		// If the string is null it means that the user aborted the saving
+		string? filePath = await MsgBox.AskSaveArcFile(StorageProvider, "DemoMyCoolCutscene.arc");
+		if (filePath == null)
+		{
+			StatusText.Text = $"New archive aborted";
+			return;
+		}
+
+		// Copying the arc template to the new location
+		File.Copy("./Templates/TemplateDemo.arc", filePath);
+
+		// Open the archive.
+		// And check for errors.
+		CutsceneArchiveReadWrapper archiveWrapper = CutsceneArchive.LoadArchive(filePath);
+		if (archiveWrapper.IsError)
+		{
+			await MsgBox.SendMessage(this, "Error while creating the .arc file", $"Couldn't open the newly made '{filePath}' file because of an error:\n\n{archiveWrapper.GetErrorMessage()}", ButtonEnum.Ok);
+			StatusText.Text = $"Failed to create '{filePath}'.";
+			return;
+		}
+		Core.LoadArchive(archiveWrapper.GetResult());
+
+		// Update the menu buttons & update the UI
+		ArchiveUI = new();
+		ArchiveUI.Click = OnSelectCutscene;
+		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
+
+		BtnsLayer_ArchiveOpen();
+		MainMenu.Children.Clear();
+		MainMenu.Children.Add(ArchiveUI);
+
+		// Update the status & set the title.
+		StatusText.Text = $"Successfully created '{filePath}'!";
+		Title = $"CutsceneMaker - [{filePath}]";
 	}
 
 	private async void OnClickOpenArchive(object? sender, RoutedEventArgs e)

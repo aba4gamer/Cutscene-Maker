@@ -7,7 +7,7 @@
 	<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="7">
 		<TextBlock HorizontalAlignment="Center">You haven't open any cutscene arc file!</TextBlock>
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="5">
-			<Button Name="NewArchiveBtn" ToolTip.Tip="Creates a new .arc archive file for cutscenes">New Archive (TODO)</Button>
+			<Button Name="NewArchiveBtn" ToolTip.Tip="Creates a new .arc archive file for cutscenes">New Archive</Button>
 			<Button Name="OpenArchiveBtn" ToolTip.Tip="Opens an existing .arc archive file for cutscenes">Open Archive</Button>
 		</StackPanel>
 	</StackPanel>

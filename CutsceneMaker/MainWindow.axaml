@@ -11,7 +11,7 @@
 	<DockPanel>
 		<Menu DockPanel.Dock="Top" VerticalAlignment="Top">
 			<MenuItem Header="_File">
-				<MenuItem Header="_New Archive (TODO)" Click="OnClickNewArchive" InputGesture="Ctrl+N" HotKey="Ctrl+N" ToolTip.Tip="Creates a new .arc archive file for cutscenes" />
+				<MenuItem Header="_New Archive" Click="OnClickNewArchive" InputGesture="Ctrl+N" HotKey="Ctrl+N" ToolTip.Tip="Creates a new .arc archive file for cutscenes" />
 				<MenuItem Header="_Open Archive" Click="OnClickOpenArchive" InputGesture="Ctrl+O" HotKey="Ctrl+O" ToolTip.Tip="Opens an existing .arc archive file for cutscenes" />
 				<Separator />
 				<MenuItem Name="SaveBtn" Header="_Save" Click="OnClickSave" InputGesture="Ctrl+S" HotKey="Ctrl+S" ToolTip.Tip="Saves the changes overwriting the existing .arc archive file" />
