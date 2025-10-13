@@ -14,9 +14,10 @@ public partial class TimelineStep : UserControl
 		InitializeComponent();
 	}
 
-	public TimelineStep(int i)
+	public TimelineStep(int i, int size)
 	{
 		InitializeComponent();
 		StepCountLabel.Content = i;
+		Main.Width = size;
 	}
 }

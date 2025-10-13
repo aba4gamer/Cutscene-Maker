@@ -464,7 +464,7 @@ public partial class MainWindow : Window
 		Core.SetSelectedSubPart(subPartName);
 
 		// Re-render the parts, update the steps & set the new part as selected
-		ArchiveUI.CutsceneUI.TimelineUI.RenderSubParts(Core.GetStepUntilSelectedPart(), Core.GetSelectedSubPart());
+		ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), Core.GetSelectedSubPart());
 		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
 		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedSubPart(subPartName);
 
@@ -527,7 +527,7 @@ public partial class MainWindow : Window
 
 		// Re-render the parts, update the steps & set the new part as selected
 		Cutscene.Part part = Core.GetSelectedPart();
-		ArchiveUI.CutsceneUI.TimelineUI.RenderSubParts(Core.GetStepUntilSelectedPart(), Core.GetSelectedSubPart());
+		ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), Core.GetSelectedSubPart());
 		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
 		ArchiveUI.CutsceneUI.TimelineUI.SetSubPartsComboBox(part.SubPartEntries!);
 		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedSubPart(subPartName);
@@ -588,7 +588,7 @@ public partial class MainWindow : Window
 		part.SubPartEntries!.Remove(subPart);
 
 		// Re-render the parts, update the steps & set the new part as selected
-		ArchiveUI.CutsceneUI.TimelineUI.RenderSubParts(Core.GetStepUntilSelectedPart(), null);
+		ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), null);
 		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
 		ArchiveUI.CutsceneUI.TimelineUI.SetSubPartsComboBox(part.SubPartEntries!);
 
@@ -627,6 +627,12 @@ public partial class MainWindow : Window
 		};
 		ArchiveUI.CutsceneUI.TimelineUI.RequestPartStep = () => {
 			return Core.GetStepUntilSelectedPart();
+		};
+		ArchiveUI.CutsceneUI.TimelineUI.RequestReRender = () => {
+			ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps(), true);
+			ArchiveUI.CutsceneUI.TimelineUI.RenderParts(Core.GetArchive().GetLoadedCutscene().Parts);
+			if (Core.HasSubPartSelected())
+				ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), Core.GetSelectedSubPart());
 		};
 
 		// Update the status & set the title.

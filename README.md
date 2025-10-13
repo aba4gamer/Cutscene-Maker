@@ -14,10 +14,11 @@ To do:
 - ~~Add that when you click on `Save As` the name of the file appears instead of `DemoMyCutscene.arc`~~ *Done*
 - ~~Add support for creating arcs~~ *Done*
 - ~~Add the ability to move parts before or after other parts in the timeline~~ *Done*
+~~- Add zoom functionality in the timeline~~ *Done*
+- ~~Add optimization to the timeline~~ *Done*
 - Add some cool icons (if I can do them cool lel)
 - Add some context menus because people like them
 - Add ComboBox for CastName, ActionType and other things
-- Add zoom functionality in the timeline
 - Add icons to the timeline part
 - Add a proper "button" to the cutscenes in the cutscene sidebar & make the sidebar resizable
 - Add a better warning for unsaved progress

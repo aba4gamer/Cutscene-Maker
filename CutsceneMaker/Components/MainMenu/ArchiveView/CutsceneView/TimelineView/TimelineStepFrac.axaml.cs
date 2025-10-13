@@ -13,4 +13,10 @@ public partial class TimelineStepFrac : UserControl
 	{
 		InitializeComponent();
 	}
+
+	public TimelineStepFrac(int size)
+	{
+		InitializeComponent();
+		Main.Width = size;
+	}
 }

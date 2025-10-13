@@ -5,15 +5,21 @@
 			 xmlns:views="using:CutsceneMakerUI"
 			 x:Class="CutsceneMakerUI.TimelineView">
 	<Grid RowDefinitions="40, 1*">
-		<StackPanel Grid.Row="0" Spacing="5" Margin="3">
-			<StackPanel Orientation="Horizontal" Spacing="3">
-				<Label VerticalAlignment="Center">SubPart:</Label>
-				<ComboBox Name="SubPartComboBox" ToolTip.Tip="Select a SubPart of the selected part"></ComboBox>
-				<Label VerticalAlignment="Center">Move part:</Label>
-				<Button Name="MovePartBefore" Click="OnMovePartBeforeClick" ToolTip.Tip="Move the selected part before it's previous part">←</Button>
-				<Button Name="MovePartAfter" Click="OnMovePartAfterClick" ToolTip.Tip="Move the selected part after it's next part">→</Button>
+		<DockPanel Grid.Row="0" HorizontalAlignment="Stretch">
+			<ScrollViewer VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Auto">
+				<StackPanel Orientation="Horizontal" Spacing="5" Margin="3">
+					<Label VerticalAlignment="Center">SubPart:</Label>
+					<ComboBox Name="SubPartComboBox" ToolTip.Tip="Select a SubPart of the selected part"></ComboBox>
+					<Label VerticalAlignment="Center">Move part:</Label>
+					<Button Name="MovePartBefore" Click="OnMovePartBeforeClick" ToolTip.Tip="Move the selected part before it's previous part">←</Button>
+					<Button Name="MovePartAfter" Click="OnMovePartAfterClick" ToolTip.Tip="Move the selected part after it's next part">→</Button>
+				</StackPanel>
+			</ScrollViewer>
+			<StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="3" Orientation="Horizontal">
+				<Button Name="ZoomInBtn" Click="OnZoomInClick" ToolTip.Tip="Zoom In">Zoom In</Button>
+				<Button Name="ZoomOutBtn" Click="OnZoomOutClick" ToolTip.Tip="Zoom Out">Zoom Out</Button>
 			</StackPanel>
-		</StackPanel>
+		</DockPanel>
 		<DockPanel Grid.Row="1" VerticalAlignment="Stretch">
 			<views:TimelineDeco />
 			<ScrollViewer VerticalAlignment="Stretch" HorizontalScrollBarVisibility="Auto">

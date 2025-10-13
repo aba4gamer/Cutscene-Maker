@@ -4,7 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="CutsceneMakerUI.TimelineStep">
-	<DockPanel Width="40" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+	<DockPanel Name="Main" HorizontalAlignment="Left" VerticalAlignment="Stretch">
 		<Border BorderThickness="0, 0, 1, 0" BorderBrush="#8f8f8f" VerticalAlignment="Stretch">
 			<Label Name="StepCountLabel" FontSize="8" Foreground="#8f8f8f" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
 		</Border>

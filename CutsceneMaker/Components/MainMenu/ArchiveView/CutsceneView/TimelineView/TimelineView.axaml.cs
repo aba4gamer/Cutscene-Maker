@@ -17,6 +17,7 @@ public partial class TimelineView : UserControl
 	public Action<string> OnSelectPart = (string partName) => {};
 	public Action<string, string> OnSelectSubPart = (string partName, string subPartName) => {};
 	public Action<string, string> OnDeselectSubPart = (string partName, string subPartName) => {};
+	public System.Action RequestReRender = () => {};
 	public System.Action OnMovePartBefore = () => {};
 	public System.Action OnMovePartAfter = () => {};
 	public Func<string, string, SubPart>? RequestSubPart;
@@ -25,6 +26,7 @@ public partial class TimelineView : UserControl
 	private TimelinePart? SelectedTimelineSubPart = null;
 	private IDisposable? _SubPartBoxSubscription;
 	private bool _IsEditingSubPartIndex = false;
+	private int _ZoomTimeline = 2;
 
 
 	public TimelineView()
@@ -52,7 +54,7 @@ public partial class TimelineView : UserControl
 
 				string subPartName = GetContentFromComboBoxItem(i);
 				if (SelectedTimelinePart != null && RequestSubPart != null && RequestPartStep != null)
-					RenderSubParts(RequestPartStep(), RequestSubPart(SelectedTimelinePart.PartName, subPartName));
+					RenderSubPart(RequestPartStep(), RequestSubPart(SelectedTimelinePart.PartName, subPartName));
 			});
 	}
 
@@ -85,34 +87,72 @@ public partial class TimelineView : UserControl
 
 
 
-	public void UpdateSteps(double windowWidth, int totalSteps)
+	public void UpdateSteps(double windowWidth, int totalSteps, bool forced = false)
 	{
 		// Oh so good math, I won't even try to explain what this does, just know that it gets the job done.
-		int limit = totalSteps + 40;
-		int minWidth = ((int) (windowWidth * 0.125)) - 30;
-		if (limit < minWidth) limit = minWidth;
+		int zoom = _ZoomTimeline * 5;
+		int limit = totalSteps + zoom;
+		int minWidth = ((int) (windowWidth * (1 / ((double) _ZoomTimeline)))) - 30;
+		if (limit < minWidth)
+			limit = minWidth;
 		int diff = limit % 5;
 		limit -= diff - 1;
 
 		// For performance optimization, let's not draw 300+ elements each time
 		// someone resizes the window or opens a menu item (because according
 		// to Avalonia, that counts as a resize as well).
-		if (Math.Floor((limit * 0.1) * 2) == MainTimelineSteps.Children.Count)
+		int toAddChildren = (int) Math.Floor((limit * 0.1) * 2);
+		if (toAddChildren == MainTimelineSteps.Children.Count && !forced)
 			return;
 
-		MainTimelineSteps.Children.Clear();
-		SubTimelineSteps.Children.Clear();
+		if (forced)
+		{
+			MainTimelineSteps.Children.Clear();
+			SubTimelineSteps.Children.Clear();
+		}
 
+		if (toAddChildren > MainTimelineSteps.Children.Count || forced)
+		{
+			int count = MainTimelineSteps.Children.Count;
+			int child = 0;
 
-		for (int i = 1; i < limit; i++) {
-			if (i % 5 == 0 && i % 10 != 0) {
-				MainTimelineSteps.Children.Add(new TimelineStepFrac());
-				SubTimelineSteps.Children.Add(new TimelineStepFrac());
+			int half = (int) (5 * (8 / (double) _ZoomTimeline));
+			int full = (int) (10 * (8 / (double) _ZoomTimeline));
+
+			half -= half % 5;
+			full -= full % 10;
+			full -= full % 5;
+			for (int i = 1; i < limit; i++) {
+				if (i % half == 0 && i % full != 0) {
+					child++;
+
+					if (child <= count)
+						continue;
+
+					MainTimelineSteps.Children.Add(new TimelineStepFrac(40));
+					SubTimelineSteps.Children.Add(new TimelineStepFrac(40));
+				}
+
+				if (i % full == 0) {
+					child++;
+
+					if (child <= count)
+						continue;
+
+					MainTimelineSteps.Children.Add(new TimelineStep(i, 40));
+					SubTimelineSteps.Children.Add(new TimelineStep(i, 40));
+				}
 			}
+		}
 
-			if (i % 10 == 0) {
-				MainTimelineSteps.Children.Add(new TimelineStep(i));
-				SubTimelineSteps.Children.Add(new TimelineStep(i));
+		if (toAddChildren < MainTimelineSteps.Children.Count || forced)
+		{
+			int ii = MainTimelineSteps.Children.Count - 1;
+			while (toAddChildren <= ii)
+			{
+				MainTimelineSteps.Children.RemoveAt(ii);
+				SubTimelineSteps.Children.RemoveAt(ii);
+				ii--;
 			}
 		}
 	}
@@ -123,7 +163,8 @@ public partial class TimelineView : UserControl
 
 		foreach (Cutscene.Part part in parts)
 		{
-			TimelinePart timelinePart = new(part, part.PartName, part.TimeEntry.TotalStep, false);
+			int max = 8 / _ZoomTimeline;
+			TimelinePart timelinePart = new(part, part.PartName, Math.Max(part.TimeEntry.TotalStep, max), false, _ZoomTimeline);
 			timelinePart.Click = SelectedPart;
 			MainTimeline.Children.Add(timelinePart);
 		}
@@ -242,7 +283,7 @@ public partial class TimelineView : UserControl
 
 		string subPartName = GetContentFromComboBoxItem(1);
 		if (SelectedTimelinePart != null && RequestSubPart != null && RequestPartStep != null)
-			RenderSubParts(RequestPartStep(), RequestSubPart(SelectedTimelinePart.PartName, subPartName));
+			RenderSubPart(RequestPartStep(), RequestSubPart(SelectedTimelinePart.PartName, subPartName));
 	}
 
 	public void ResetSubPartComboBox()
@@ -258,7 +299,7 @@ public partial class TimelineView : UserControl
 		if (SelectedTimelinePart == null)
 			return;
 
-		SelectedTimelinePart.Border.Width = step * 8;
+		SelectedTimelinePart.Border.Width = step * _ZoomTimeline;
 	}
 
 	public void UpdateSelectedSubPartStep(int step)
@@ -266,7 +307,7 @@ public partial class TimelineView : UserControl
 		if (SelectedTimelineSubPart == null)
 			return;
 
-		SelectedTimelineSubPart.Border.Width = step * 8;
+		SelectedTimelineSubPart.Border.Width = step * _ZoomTimeline;
 	}
 
 	public void UpdateSelectedPartName(string name)
@@ -291,14 +332,15 @@ public partial class TimelineView : UserControl
 		_IsEditingSubPartIndex = false;
 	}
 
-	public void RenderSubParts(int space, SubPart? subPart)
+	public void RenderSubPart(int space, SubPart? subPart)
 	{
 		SubTimeline.Children.Clear();
 
 		if (subPart == null)
 			return;
-		SubTimeline.Children.Add(new TimelineSubPartSpacer((space + subPart.MainPartStep) * 8));
-		TimelinePart timelinePart = new(subPart, subPart.SubPartName, subPart.SubPartTotalStep, true);
+		SubTimeline.Children.Add(new TimelineSubPartSpacer((space + subPart.MainPartStep) * _ZoomTimeline));
+		int max = 8 / _ZoomTimeline;
+		TimelinePart timelinePart = new(subPart, subPart.SubPartName, Math.Max(subPart.SubPartTotalStep, max), true, _ZoomTimeline);
 		timelinePart.Click = SelectedSubPart;
 		SubTimeline.Children.Add(timelinePart);
 	}
@@ -326,5 +368,43 @@ public partial class TimelineView : UserControl
 	private void OnMovePartAfterClick(object sender, RoutedEventArgs e)
 	{
 		OnMovePartAfter();
+	}
+
+	private void OnZoomInClick(object sender, RoutedEventArgs e)
+	{
+		ZoomOutBtn.IsEnabled = true;
+		switch (_ZoomTimeline)
+		{
+			case 1:
+				_ZoomTimeline = 2;
+				break;
+			case 2:
+				_ZoomTimeline = 4;
+				break;
+			case 4:
+				_ZoomTimeline = 8;
+				ZoomInBtn.IsEnabled = false;
+				break;
+		}
+		RequestReRender();
+	}
+
+	private void OnZoomOutClick(object sender, RoutedEventArgs e)
+	{
+		ZoomInBtn.IsEnabled = true;
+		switch (_ZoomTimeline)
+		{
+			case 8:
+				_ZoomTimeline = 4;
+				break;
+			case 4:
+				_ZoomTimeline = 2;
+				break;
+			case 2:
+				_ZoomTimeline = 1;
+				ZoomOutBtn.IsEnabled = false;
+				break;
+		}
+		RequestReRender();
 	}
 }

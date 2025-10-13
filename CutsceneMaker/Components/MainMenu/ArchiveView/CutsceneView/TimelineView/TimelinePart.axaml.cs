@@ -24,12 +24,12 @@ public partial class TimelinePart : UserControl
 		InitializeComponent();
 	}
 
-	public TimelinePart(ICommonEntries part, string partName, int totalStep, bool isSubPart)
+	public TimelinePart(ICommonEntries part, string partName, int totalStep, bool isSubPart, int zoom)
 	{
 		InitializeComponent();
 		NameLabel.Content = PartName = partName;
 
-		Border.Width = totalStep * 8;
+		Border.Width = totalStep * zoom;
 		Border.AddHandler(PointerPressedEvent, OnClick, RoutingStrategies.Tunnel);
 		ToolTip.SetTip(Border, partName);
 
