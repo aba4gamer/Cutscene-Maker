@@ -65,14 +65,6 @@ class MsgBox
 		return await MessageBoxManager.GetMessageBoxStandard(title, body, btnType).ShowWindowDialogAsync(win);
 	}
 
-// 	public static async Task<string?> AskBCSVName(MainWindow Win, string DefaultName)
-// 	{
-// 		CutsceneNameDialog CNDialog = new(DefaultName);
-// 		await CNDialog.ShowDialog(Win);
-//
-// 		return CNDialog.CutsceneName;
-// 	}
-
 	public static async Task<string?> AskName(MainWindow win, string title, string body, string? watermark, string? defaultName, List<string>? disabledNames, string? disabledNameMesage)
 	{
 		CutsceneNameDialog cnd = new(title, body, watermark, defaultName, disabledNames, disabledNameMesage);

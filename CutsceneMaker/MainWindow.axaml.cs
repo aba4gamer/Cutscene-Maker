@@ -561,6 +561,9 @@ public partial class MainWindow : Window
 		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(cutscene.Parts);
 		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, cutscene.GetMaxTotalSteps());
 
+		// De-select the part
+		ArchiveUI.CutsceneUI.LoadPart(null);
+
 		// Update the status
 		StatusText.Text = $"Successfully removed the part to '{part.PartName}'!";
 	}

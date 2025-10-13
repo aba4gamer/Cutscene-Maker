@@ -38,10 +38,18 @@ public partial class CutsceneView : UserControl
 		Main.Children.Add(work);
 	}
 
-	public void LoadPart(Cutscene.Part part)
+	public void LoadPart(Cutscene.Part? part)
 	{
 		if (WorkstationUI == null)
 			return;
+
+		if (part == null)
+		{
+			CutsceneWorkstationEmpty emptyWork = new();
+			Main.Children.Clear();
+			Main.Children.Add(emptyWork);
+			return;
+		}
 
 		Main.Children.Clear();
 
