@@ -9,6 +9,9 @@
 			<StackPanel Orientation="Horizontal" Spacing="3">
 				<Label VerticalAlignment="Center">SubPart:</Label>
 				<ComboBox Name="SubPartComboBox" ToolTip.Tip="Select a SubPart of the selected part"></ComboBox>
+				<Label VerticalAlignment="Center">Move part:</Label>
+				<Button Name="MovePartBefore" Click="OnMovePartBeforeClick">←</Button>
+				<Button Name="MovePartAfter" Click="OnMovePartAfterClick">→</Button>
 			</StackPanel>
 		</StackPanel>
 		<DockPanel Grid.Row="1" VerticalAlignment="Stretch">

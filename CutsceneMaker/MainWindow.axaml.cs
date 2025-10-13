@@ -664,6 +664,8 @@ public partial class MainWindow : Window
 		ArchiveUI.CutsceneUI.LoadPart(part);
 		ArchiveUI.CutsceneUI.TimelineUI.OnSelectSubPart = OnSelectSubPart;
 		ArchiveUI.CutsceneUI.TimelineUI.OnDeselectSubPart = OnDeselectSubPart;
+		ArchiveUI.CutsceneUI.TimelineUI.OnMovePartBefore = OnMovePartBefore;
+		ArchiveUI.CutsceneUI.TimelineUI.OnMovePartAfter = OnMovePartAfter;
 
 		// Update the buttons
 		BtnsLayer_CutscenePartSelected();
@@ -718,6 +720,38 @@ public partial class MainWindow : Window
 		// Re-select the part
 		Core.SetSelectedPart(partName);
 		ArchiveUI.CutsceneUI.LoadPart(Core.GetSelectedPart());
+	}
+
+	private void OnMovePartBefore()
+	{
+		if (!Core.HasPartSelected() || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
+			return;
+
+		Cutscene cutscene = Core.GetArchive().GetLoadedCutscene();
+		Cutscene.Part part = Core.GetSelectedPart();
+
+		int i = cutscene.Parts.IndexOf(part);
+		cutscene.Parts.Remove(part);
+		cutscene.Parts.Insert(i-1, part);
+
+		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(cutscene.Parts);
+		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedPart(part.PartName);
+	}
+
+	private void OnMovePartAfter()
+	{
+		if (!Core.HasPartSelected() || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
+			return;
+
+		Cutscene cutscene = Core.GetArchive().GetLoadedCutscene();
+		Cutscene.Part part = Core.GetSelectedPart();
+
+		int i = cutscene.Parts.IndexOf(part);
+		cutscene.Parts.Remove(part);
+		cutscene.Parts.Insert(i+1, part);
+
+		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(cutscene.Parts);
+		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedPart(part.PartName);
 	}
 	#endregion ActionHandlers
 

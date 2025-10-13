@@ -17,6 +17,8 @@ public partial class TimelineView : UserControl
 	public Action<string> OnSelectPart = (string partName) => {};
 	public Action<string, string> OnSelectSubPart = (string partName, string subPartName) => {};
 	public Action<string, string> OnDeselectSubPart = (string partName, string subPartName) => {};
+	public System.Action OnMovePartBefore = () => {};
+	public System.Action OnMovePartAfter = () => {};
 	public Func<string, string, SubPart>? RequestSubPart;
 	public Func<int>? RequestPartStep;
 	private TimelinePart? SelectedTimelinePart = null;
@@ -29,6 +31,9 @@ public partial class TimelineView : UserControl
 	{
 		InitializeComponent();
 		ResetSubPartComboBox();
+
+		MovePartBefore.IsEnabled = false;
+		MovePartAfter.IsEnabled = false;
 
 		_SubPartBoxSubscription?.Dispose();
 		_SubPartBoxSubscription = SubPartComboBox.GetObservable(ComboBox.SelectedIndexProperty)
@@ -153,6 +158,22 @@ public partial class TimelineView : UserControl
 		ActivateAllParts();
 		timelinePart.Select(true);
 		SelectedTimelinePart = timelinePart;
+
+		object? timelinePartParentObj = timelinePart.Parent;
+		if (timelinePartParentObj != null && timelinePartParentObj is DockPanel timelinePartParent)
+		{
+			int i = timelinePartParent.Children.IndexOf(timelinePart);
+			int max = timelinePartParent.Children.Count - 1;
+
+			MovePartBefore.IsEnabled = true;
+			MovePartAfter.IsEnabled = true;
+
+			if (i == 0)
+				MovePartBefore.IsEnabled = false;
+			if (i == max)
+				MovePartAfter.IsEnabled = false;
+		}
+
 		OnSelectPart(timelinePart.PartName);
 	}
 
@@ -295,5 +316,15 @@ public partial class TimelineView : UserControl
 	private void OnDeselectSubpart(object? obj, RoutedEventArgs e)
 	{
 		DeselectSubPart();
+	}
+
+	private void OnMovePartBeforeClick(object sender, RoutedEventArgs e)
+	{
+		OnMovePartBefore();
+	}
+
+	private void OnMovePartAfterClick(object sender, RoutedEventArgs e)
+	{
+		OnMovePartAfter();
 	}
 }
