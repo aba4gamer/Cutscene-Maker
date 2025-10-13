@@ -36,17 +36,10 @@ class MsgBox
 
 	public static async Task<string?> AskSaveArcFile(IStorageProvider sp, string? folderPath)
 	{
-		// IReadOnlyList<IStorageFolder> folderPaths;
-		// if (!string.IsNullOrEmpty(folderPath)) {
-		// 	folderPaths = await sp.OpenFolderPickerAsync(new FolderPickerOpenOptions { AllowMultiple = false, SuggestedStartLocation = await sp.TryGetFolderFromPathAsync(folderPath) });
-		// } else {
-		// 	folderPaths = await sp.OpenFolderPickerAsync(new FolderPickerOpenOptions { AllowMultiple = false });
-		// }
-
 		IStorageFile? file = await sp.SaveFilePickerAsync(new FilePickerSaveOptions
 		{
 			Title = "Save Demo .arc file",
-			SuggestedFileName = "DemoMyCutscene.arc",
+			SuggestedFileName = folderPath,
 			DefaultExtension = ".arc",
 			ShowOverwritePrompt = true
 		});

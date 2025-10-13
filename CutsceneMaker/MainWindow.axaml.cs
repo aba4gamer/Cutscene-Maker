@@ -219,13 +219,13 @@ public partial class MainWindow : Window
 	private async void OnClickSaveAs(object? sender, RoutedEventArgs e)
 	{
 		// If we have an archive already opened, set it as a default destination
-		string? defaultFilePath = null;
-		if (Core.HasArchiveOpen())
-			defaultFilePath = Core.GetArchive().FilePath;
+		// string? defaultFilePath = null;
+		// if (Core.HasArchiveOpen())
+		// 	defaultFilePath = Core.GetArchive().FilePath;
 
 		// Finally ask the user where to save the file.
 		// If the string is null it means that the user aborted the saving
-		string? filePath = await MsgBox.AskSaveArcFile(StorageProvider, defaultFilePath);
+		string? filePath = await MsgBox.AskSaveArcFile(StorageProvider, Core.GetArchive().FilePath);
 		if (filePath == null)
 		{
 			StatusText.Text = $"Save aborted!";
@@ -1353,8 +1353,8 @@ public partial class MainWindow : Window
 	//     }
 	// }
 
-	private void ExpandTrees(TreeViewItem parent) {
-		// TO DO: When you rename a part it will close the tree so the idea is to avoid that.
-	}
+	// private void ExpandTrees(TreeViewItem parent) {
+	// 	// TO DO: When you rename a part it will close the tree so the idea is to avoid that.
+	// }
 
 }
