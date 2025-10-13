@@ -32,19 +32,33 @@ public partial class CutsceneView : UserControl
 		Main.Children.Clear();
 
 		TimelineUI = new();
-		CutsceneWorkstationEmpty work = new();
-
 		Timeline.Children.Add(TimelineUI);
-		Main.Children.Add(work);
+
+		if (cutscene.Parts.Count < 1)
+		{
+			CutsceneWorkstationEmptyPart emptyWorkPart = new();
+			Main.Children.Add(emptyWorkPart);
+			return;
+		}
+
+		CutsceneWorkstationEmpty workEmpty = new();
+		Main.Children.Add(workEmpty);
 	}
 
-	public void LoadPart(Cutscene.Part? part)
+	public void LoadPart(Cutscene.Part? part, int parts)
 	{
 		if (WorkstationUI == null)
 			return;
 
 		if (part == null)
 		{
+			if (parts < 1)
+			{
+				CutsceneWorkstationEmptyPart emptyWorkPart = new();
+				Main.Children.Clear();
+				Main.Children.Add(emptyWorkPart);
+				return;
+			}
 			CutsceneWorkstationEmpty emptyWork = new();
 			Main.Children.Clear();
 			Main.Children.Add(emptyWork);

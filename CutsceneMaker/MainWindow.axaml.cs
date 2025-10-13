@@ -562,7 +562,7 @@ public partial class MainWindow : Window
 		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, cutscene.GetMaxTotalSteps());
 
 		// De-select the part
-		ArchiveUI.CutsceneUI.LoadPart(null);
+		ArchiveUI.CutsceneUI.LoadPart(null, Core.GetCutscene().Parts.Count);
 
 		// Update the status
 		StatusText.Text = $"Successfully removed the part to '{part.PartName}'!";
@@ -670,7 +670,7 @@ public partial class MainWindow : Window
 		{
 			Core.SetSelectedPart(name);
 		};
-		ArchiveUI.CutsceneUI.LoadPart(part);
+		ArchiveUI.CutsceneUI.LoadPart(part, Core.GetCutscene().Parts.Count);
 		ArchiveUI.CutsceneUI.TimelineUI.OnSelectSubPart = OnSelectSubPart;
 		ArchiveUI.CutsceneUI.TimelineUI.OnDeselectSubPart = OnDeselectSubPart;
 		ArchiveUI.CutsceneUI.TimelineUI.OnMovePartBefore = OnMovePartBefore;
@@ -728,7 +728,7 @@ public partial class MainWindow : Window
 
 		// Re-select the part
 		Core.SetSelectedPart(partName);
-		ArchiveUI.CutsceneUI.LoadPart(Core.GetSelectedPart());
+		ArchiveUI.CutsceneUI.LoadPart(Core.GetSelectedPart(), Core.GetCutscene().Parts.Count);
 	}
 
 	private void OnMovePartBefore()
