@@ -7,8 +7,8 @@ To do:
 - ~~Fix the warning spam when building~~ *Done*
 - ~~"Fix" the menu buttons to make them work~~ *Done*
 - ~~Move the RARC handlers in Abacus~~ *Done*
-- ~~Add resizable timeline~~
-- Fix the SubPart box in timeline to make it match the part line
+- ~~Add resizable timeline~~ *Done*
+- ~~Fix the SubPart box in timeline to make it match the part line~~ *Done*
 - Add some cool icons (if I can do them cool lel)
 - Add some context menus because people like them
 - Add support for creating arcs
@@ -18,7 +18,7 @@ To do:
 - Add icons to the timeline part
 - Add the ability to move parts before or after other parts in the timeline
 - Add that when you click on `Save As` the name of the file appears instead of `DemoMyCutscene.arc`
-- Add a proper "button" to the cutscenes in the cutscene sidebar
+- Add a proper "button" to the cutscenes in the cutscene sidebar & make the sidebar resizable
 - Add a better warning for unsaved progress
 - Add an empty cutscene screen (cutscene without part saying how to create a new part)
 

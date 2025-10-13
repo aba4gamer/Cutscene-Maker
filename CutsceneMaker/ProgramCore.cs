@@ -134,6 +134,20 @@ public class CutsceneCore
 
 		return names;
 	}
+
+	public int GetStepUntilSelectedPart()
+	{
+		int step = 0;
+
+		foreach (Cutscene.Part part in GetArchive().GetLoadedCutscene().Parts)
+		{
+			if (part.PartName == GetSelectedPartName())
+				break;
+			step += part.TimeEntry.TotalStep;
+		}
+
+		return step;
+	}
 	#endregion
 
 

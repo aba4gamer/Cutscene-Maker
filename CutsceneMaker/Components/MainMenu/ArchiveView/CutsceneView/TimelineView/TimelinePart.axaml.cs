@@ -24,7 +24,7 @@ public partial class TimelinePart : UserControl
 		InitializeComponent();
 	}
 
-	public TimelinePart(ICommonEntries part, string partName, int totalStep, bool isSubPart, int mainTotalStep)
+	public TimelinePart(ICommonEntries part, string partName, int totalStep, bool isSubPart)
 	{
 		InitializeComponent();
 		NameLabel.Content = PartName = partName;

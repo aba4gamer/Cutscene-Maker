@@ -17,7 +17,8 @@ public partial class TimelineView : UserControl
 	public Action<string> OnSelectPart = (string partName) => {};
 	public Action<string, string> OnSelectSubPart = (string partName, string subPartName) => {};
 	public Action<string, string> OnDeselectSubPart = (string partName, string subPartName) => {};
-	public Func<string, string, List<SubPart>>? RequestSubParts;
+	public Func<string, string, SubPart>? RequestSubPart;
+	public Func<int>? RequestPartStep;
 	private TimelinePart? SelectedTimelinePart = null;
 	private TimelinePart? SelectedTimelineSubPart = null;
 	private IDisposable? _SubPartBoxSubscription;
@@ -44,12 +45,9 @@ public partial class TimelineView : UserControl
 					return;
 				}
 
-
-
-
-				string subPartName = GetContentFromComboBoxItem(i); // (string) (((ComboBoxItem) SubPartComboBox.Items[i]).Content);
-				if (SelectedTimelinePart != null && RequestSubParts != null)
-					RenderSubParts(RequestSubParts(SelectedTimelinePart.PartName, subPartName));
+				string subPartName = GetContentFromComboBoxItem(i);
+				if (SelectedTimelinePart != null && RequestSubPart != null && RequestPartStep != null)
+					RenderSubParts(RequestPartStep(), RequestSubPart(SelectedTimelinePart.PartName, subPartName));
 			});
 	}
 
@@ -120,7 +118,7 @@ public partial class TimelineView : UserControl
 
 		foreach (Cutscene.Part part in parts)
 		{
-			TimelinePart timelinePart = new(part, part.PartName, part.TimeEntry.TotalStep, false, 0);
+			TimelinePart timelinePart = new(part, part.PartName, part.TimeEntry.TotalStep, false);
 			timelinePart.Click = SelectedPart;
 			MainTimeline.Children.Add(timelinePart);
 		}
@@ -222,8 +220,8 @@ public partial class TimelineView : UserControl
 		SubPartComboBox.SelectedIndex = 1;
 
 		string subPartName = GetContentFromComboBoxItem(1);
-		if (SelectedTimelinePart != null && RequestSubParts != null)
-			RenderSubParts(RequestSubParts(SelectedTimelinePart.PartName, subPartName));
+		if (SelectedTimelinePart != null && RequestSubPart != null && RequestPartStep != null)
+			RenderSubParts(RequestPartStep(), RequestSubPart(SelectedTimelinePart.PartName, subPartName));
 	}
 
 	public void ResetSubPartComboBox()
@@ -272,16 +270,16 @@ public partial class TimelineView : UserControl
 		_IsEditingSubPartIndex = false;
 	}
 
-	public void RenderSubParts(List<SubPart> subParts)
+	public void RenderSubParts(int space, SubPart? subPart)
 	{
 		SubTimeline.Children.Clear();
 
-		foreach (SubPart subPart in subParts)
-		{
-			TimelinePart timelinePart = new(subPart, subPart.SubPartName, subPart.SubPartTotalStep, true, subPart.MainPartStep);
-			timelinePart.Click = SelectedSubPart;
-			SubTimeline.Children.Add(timelinePart);
-		}
+		if (subPart == null)
+			return;
+		SubTimeline.Children.Add(new TimelineSubPartSpacer((space + subPart.MainPartStep) * 8));
+		TimelinePart timelinePart = new(subPart, subPart.SubPartName, subPart.SubPartTotalStep, true);
+		timelinePart.Click = SelectedSubPart;
+		SubTimeline.Children.Add(timelinePart);
 	}
 
 	public void DeselectSubPart()
