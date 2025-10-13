@@ -1,4 +1,5 @@
 # Custcene Maker
+Tool that helps you making cutscene for Super Mario Galaxy 2.
 README in progress. If you can't run the app install .NET 9 but I think actually it's not mandatory.
 
 To do:
@@ -9,10 +10,10 @@ To do:
 - ~~Move the RARC handlers in Abacus~~ *Done*
 - ~~Add resizable timeline~~ *Done*
 - ~~Fix the SubPart box in timeline to make it match the part line~~ *Done*
+- ~~Add support for exporting with Yaz0~~ *Done*
 - Add some cool icons (if I can do them cool lel)
 - Add some context menus because people like them
 - Add support for creating arcs
-- Add support for exporting with Yaz0
 - Add ComboBox for CastName, ActionType and other things
 - Add zoom functionality in the timeline
 - Add icons to the timeline part

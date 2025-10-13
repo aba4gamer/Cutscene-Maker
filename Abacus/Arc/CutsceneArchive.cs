@@ -199,9 +199,14 @@ public class CutsceneArchive {
 			cutscene.SaveAll(_rarc);
 		}
 
+		StreamUtil.SetEndianBig();
 		FileStream stream = File.OpenWrite(FilePath);
 		_rarc.Save(stream);
 		stream.Close();
+
+		byte[] savedArc = File.ReadAllBytes(FilePath);
+		byte[] compressedArc = YAZ0.Compress(savedArc);
+		File.WriteAllBytes(FilePath, compressedArc);
 	}
 
 	public void SaveTo(string path)
@@ -217,5 +222,9 @@ public class CutsceneArchive {
 		FileStream stream = File.OpenWrite(path);
 		_rarc.Save(stream);
 		stream.Close();
+
+		byte[] savedArc = File.ReadAllBytes(path);
+		byte[] compressedArc = YAZ0.Compress(savedArc);
+		File.WriteAllBytes(path, compressedArc);
 	}
 }
