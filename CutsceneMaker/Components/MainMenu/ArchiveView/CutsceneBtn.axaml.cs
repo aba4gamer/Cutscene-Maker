@@ -23,8 +23,8 @@ public partial class CutsceneBtn : UserControl
 	public CutsceneBtn(string cutsceneName)
 	{
 		InitializeComponent();
-		CutsceneNameLabel.Content = CutsceneName = cutsceneName;
-		ToolTip.SetTip(MainBtn, CutsceneName);
+		CutsceneNameTxt.Text = CutsceneName = cutsceneName;
+		ToolTip.SetTip(ToolTipPanel, CutsceneName);
 	}
 
 

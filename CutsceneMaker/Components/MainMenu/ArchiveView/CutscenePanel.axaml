@@ -5,6 +5,6 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="CutsceneMakerUI.CutscenePanel">
 	<ScrollViewer>
-		<StackPanel Name="CutsceneBtns" HorizontalAlignment="Center" Margin="5" Spacing="5"></StackPanel>
+		<StackPanel Name="CutsceneBtns" HorizontalAlignment="Stretch" Margin="5" Spacing="5"></StackPanel>
 	</ScrollViewer>
 </UserControl>
