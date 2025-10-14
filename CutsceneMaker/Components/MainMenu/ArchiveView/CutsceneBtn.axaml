@@ -4,7 +4,8 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="CutsceneMakerUI.CutsceneBtn">
-	<DockPanel Name="ToolTipPanel" HorizontalAlignment="Stretch">
+	<Grid Name="ToolTipPanel">
+		<Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" />
 		<Button Name="MainBtn" HorizontalAlignment="Stretch" Click="OnClickCutscene">
 			<StackPanel Margin="4">
 				<DockPanel VerticalAlignment="Center">
@@ -13,5 +14,5 @@
 				</DockPanel>
 			</StackPanel>
 		</Button>
-	</DockPanel>
+	</Grid>
 </UserControl>

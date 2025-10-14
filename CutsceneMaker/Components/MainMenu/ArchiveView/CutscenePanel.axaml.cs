@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Avalonia;
@@ -12,11 +13,18 @@ namespace CutsceneMakerUI;
 public partial class CutscenePanel : UserControl
 {
 	public Action<string> Click { get; set; } = (string name) => {};
+	public ContextMenu? CtxMenu;
+	public ContextMenu? PanelCtxMenu;
 
 
 	public CutscenePanel()
 	{
 		InitializeComponent();
+	}
+
+	public void LoadPanelCtxMenu()
+	{
+		Scroller.ContextMenu = PanelCtxMenu;
 	}
 
 	public void LoadCutsceneList(List<string> cutsceneNames)
@@ -25,8 +33,10 @@ public partial class CutscenePanel : UserControl
 
 		foreach(string name in cutsceneNames)
 		{
-			CutsceneBtn btn = new(name);
+			CutsceneBtn btn = new();
 			btn.Click = CutsceneSelected;
+			btn.CtxMenu = CtxMenu;
+			btn.LoadName(name);
 
 			CutsceneBtns.Children.Add(btn);
 		}
@@ -38,8 +48,10 @@ public partial class CutscenePanel : UserControl
 
 		foreach(string name in cutsceneNames)
 		{
-			CutsceneBtn btn = new(name);
+			CutsceneBtn btn = new();
 			btn.Click = CutsceneSelected;
+			btn.CtxMenu = CtxMenu;
+			btn.LoadName(name);
 
 			CutsceneBtns.Children.Add(btn);
 

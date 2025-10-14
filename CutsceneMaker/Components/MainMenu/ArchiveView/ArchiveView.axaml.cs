@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Abacus;
@@ -12,8 +13,16 @@ namespace CutsceneMakerUI;
 
 public partial class ArchiveView : UserControl
 {
-	public Action<string> Click { get; set; } = (string name) => {};
+	public Action<string> Click = (string name) => {};
+	public ContextMenu? CtxMenu;
+	public ContextMenu? PanelCtxMenu;
 	public CutsceneView? CutsceneUI { get; private set; } = null;
+
+	public ContextMenu? PartCtx = null;
+	public ContextMenu? SubPartCtx = null;
+	public ContextMenu? PartEditCtx = null;
+	public ContextMenu? SubPartEditCtx = null;
+
 
 	public ArchiveView()
 	{
@@ -30,12 +39,19 @@ public partial class ArchiveView : UserControl
 
 		if (cutsceneNames.Count < 1)
 		{
-			Sidebar.Children.Add(new CutscenePanelEmpty());
+			CutscenePanelEmpty empty = new();
+			empty.Ctx = PanelCtxMenu;
+			empty.LoadContextMenu();
+
+			Sidebar.Children.Add(empty);
 			return;
 		}
 
 		CutscenePanel panel = new();
 		panel.Click = Click;
+		panel.CtxMenu = CtxMenu;
+		panel.PanelCtxMenu = PanelCtxMenu;
+		panel.LoadPanelCtxMenu();
 		panel.LoadCutsceneList(cutsceneNames);
 		Sidebar.Children.Add(panel);
 	}
@@ -48,12 +64,19 @@ public partial class ArchiveView : UserControl
 
 		if (cutsceneNames.Count < 1)
 		{
-			Sidebar.Children.Add(new CutscenePanelEmpty());
+			CutscenePanelEmpty empty = new();
+			empty.Ctx = PanelCtxMenu;
+			empty.LoadContextMenu();
+
+			Sidebar.Children.Add(empty);
 			return;
 		}
 
 		CutscenePanel panel = new();
 		panel.Click = Click;
+		panel.CtxMenu = CtxMenu;
+		panel.PanelCtxMenu = PanelCtxMenu;
+		panel.LoadPanelCtxMenu();
 		panel.LoadCutsceneListAndSelect(cutsceneNames, selectedCutsceneName);
 		Sidebar.Children.Add(panel);
 	}
@@ -62,6 +85,11 @@ public partial class ArchiveView : UserControl
 	{
 		Main.Children.Clear();
 		CutsceneUI = new();
+		CutsceneUI.PartCtx = PartCtx;
+		CutsceneUI.PartEditCtx = PartEditCtx;
+		CutsceneUI.SubPartCtx = SubPartCtx;
+		CutsceneUI.SubPartEditCtx = SubPartEditCtx;
+
 		CutsceneUI.LoadCutscene(cutscene);
 		Main.Children.Add(CutsceneUI);
 	}

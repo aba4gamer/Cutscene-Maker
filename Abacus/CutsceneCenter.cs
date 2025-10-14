@@ -428,10 +428,29 @@ public class Cutscene
 	/// <returns></returns>
 	public Part GetPartByName(string partName) {
 		foreach (Part part in Parts) {
-			if (part.PartName == partName) return part;
+			if (part.PartName == partName)
+				return part;
 		}
 
 		throw new Exception($"No part with name '{partName}'!");
+	}
+
+	/// <summary>
+	/// Gets the sub part by name
+	/// </summary>
+	/// <returns></returns>
+	public SubPart GetSubPartByName(string subPartName)
+	{
+		foreach (Part part in Parts) {
+
+			foreach (SubPart subPart in part.SubPartEntries ?? [])
+			{
+				if (subPart.SubPartName == subPartName)
+					return subPart;
+			}
+		}
+
+		throw new Exception($"No sub part with name '{subPartName}'!");
 	}
 
 	/// <summary>

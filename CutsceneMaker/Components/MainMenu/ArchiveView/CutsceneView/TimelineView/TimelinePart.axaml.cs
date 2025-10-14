@@ -17,6 +17,7 @@ public partial class TimelinePart : UserControl
 	public string PartName { get; private set; } = "";
 	public bool Selected { get; private set; } = false;
 	public bool IsSubPart { get; private set; } = false;
+	public ContextMenu? Ctx;
 
 
 	public TimelinePart()
@@ -36,6 +37,11 @@ public partial class TimelinePart : UserControl
 		IsSubPart = isSubPart;
 
 		// TODO: Add icons for what's enabled in this part.
+	}
+
+	public void LoadContextMenus()
+	{
+		Border.ContextMenu = Ctx;
 	}
 
 	public void Select(bool select)

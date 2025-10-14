@@ -4,7 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="CutsceneMakerUI.CutscenePanel">
-	<ScrollViewer>
+	<ScrollViewer Name="Scroller">
 		<StackPanel Name="CutsceneBtns" HorizontalAlignment="Stretch" Margin="5" Spacing="5"></StackPanel>
 	</ScrollViewer>
 </UserControl>

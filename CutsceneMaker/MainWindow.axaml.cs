@@ -192,6 +192,8 @@ public partial class MainWindow : Window
 		// Update the menu buttons & update the UI
 		ArchiveUI = new();
 		ArchiveUI.Click = OnSelectCutscene;
+		ArchiveUI.CtxMenu = this.FindResource("CutsceneMenuCtx")! as ContextMenu;
+		ArchiveUI.PanelCtxMenu = this.FindResource("CutscenePanelCtx")! as ContextMenu;
 		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
 
 		BtnsLayer_ArchiveOpen();
@@ -236,6 +238,8 @@ public partial class MainWindow : Window
 		// Update the menu buttons & update the UI
 		ArchiveUI = new();
 		ArchiveUI.Click = OnSelectCutscene;
+		ArchiveUI.CtxMenu = this.FindResource("CutsceneMenuCtx")! as ContextMenu;
+		ArchiveUI.PanelCtxMenu = this.FindResource("CutscenePanelCtx")! as ContextMenu;
 		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
 
 		BtnsLayer_ArchiveOpen();
@@ -278,325 +282,80 @@ public partial class MainWindow : Window
 		StatusText.Text = $"Successfully saved the archive to {filePath}!";
 	}
 
-	private async void OnReloadArchive(object? sender, RoutedEventArgs e)
+	private void OnReloadArchive(object? sender, RoutedEventArgs e)
 	{
-		// Only run this if we have an archive open
-		if (!Core.HasArchiveOpen())
-			return;
-
-		if (!await AskDiscardChanges())
-		{
-			StatusText.Text = "Reload aborted.";
-			return;
-		}
-		// (Re)Open the archive.
-		// And check for errors.
-		string filePath = Core.GetArchive().FilePath;
-		CutsceneArchiveReadWrapper archiveWrapper = CutsceneArchive.LoadArchive(filePath);
-		if (archiveWrapper.IsError)
-		{
-			await MsgBox.SendMessage(this, "Error while reloading the .arc file", $"Couldn't open '{filePath}' file because of an error:\n\n{archiveWrapper.GetErrorMessage()}", ButtonEnum.Ok);
-			StatusText.Text = $"Failed to open '{filePath}'.";
-			return;
-		}
-
-		// (Re)Load the archive
-		Core.LoadArchive(archiveWrapper.GetResult());
-
-		// Update the menu buttons & update the UI
-		ArchiveUI = new();
-		ArchiveUI.Click = OnSelectCutscene;
-		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
-
-		BtnsLayer_ArchiveOpen();
-		MainMenu.Children.Clear();
-		MainMenu.Children.Add(ArchiveUI);
-
-		// Update the status & set the title.
-		StatusText.Text = $"Successfully reloaded '{filePath}'!";
-		Title = $"CutsceneMaker - [{filePath}]";
+		ReloadArchive();
 	}
 
-	private async void OnCreateNewCutscene(object? sender, RoutedEventArgs e)
+	private void OnCreateNewCutscene(object? sender, RoutedEventArgs e)
 	{
-		// Only run this if we have an archive open
-		if (!Core.HasArchiveOpen() || ArchiveUI == null)
-			return;
-
-		// Ask for a cutscene name
-		// And also send a list of already existing cutscenes name so we avoid replacing cutscenes
-		string? cutsceneName = await MsgBox.AskName(this, "New Cutscene", "Type a name of your new cutscene", "DemoMyCoolCutscene", null, Core.GetArchive().CutsceneNames, "A cutscene with this name already exists!");
-		// If this value is null it means that the user aborted
-		if (cutsceneName == null)
-		{
-			StatusText.Text = $"Aborted new cutscene.";
-			return;
-		}
-
-		// Create the new cutscene with name
-		Core.GetArchive().CreateNewCutscene(cutsceneName);
-
-		// Reload the cutscene list & select the cutscene
-		ArchiveUI.LoadCutsceneListAndSelect(Core.GetArchive().CutsceneNames, cutsceneName);
-
-
-		// Update the status & set the title.
-		StatusText.Text = $"Successfully created new cutscene with name '{cutsceneName}'!";
+		CreateNewCutscene();
 	}
 
 	private async void OnRenameCutscene(object? sender, RoutedEventArgs e)
 	{
-		// Only run this if we have an archive & a cutscene open
+		// Only run this if we have a cutscene selected
 		if (!Core.HasCutsceneSelected() || ArchiveUI == null)
 			return;
 
-		// Get the selected cutscene name
-		string cutsceneName = Core.GetArchive().GetSelectedCutsceneName();
-
-		// Ask for the new cutscene name
-		// And also send a list of already existing cutscenes name so we avoid replacing cutscenes
-		string? newCutsceneName = await MsgBox.AskName(this, "New Cutscene", $"Type a new name for the cutscene '{cutsceneName}'", cutsceneName, cutsceneName, Core.GetArchive().CutsceneNames, "A cutscene with this name already exists!");
-		// If this value is null it means that the user aborted
-		if (newCutsceneName == null)
-		{
-			StatusText.Text = $"Aborted rename cutscene.";
-			return;
-		}
-
 		// Rename the cutscene
-		Core.GetArchive().RenameSelectedCutscene(newCutsceneName);
-
-		// Reload the cutscene list
-		ArchiveUI.LoadCutsceneListAndSelect(Core.GetArchive().CutsceneNames, newCutsceneName);
-
-		// Update the status & set the title.
-		StatusText.Text = $"Successfully renamed the cutscene to '{newCutsceneName}'!";
+		await RenameCutscene(Core.GetCutscene().CutsceneName);
 	}
 
-	private async void OnDeleteCutscene(object? sender, RoutedEventArgs e)
+	private void OnDeleteCutscene(object? sender, RoutedEventArgs e)
 	{
 		// Only run this if we have an archive & a cutscene open
 		if (!Core.HasCutsceneSelected()  || ArchiveUI == null)
 			return;
 
-		// Get the cutscene name
-		string cutsceneName = Core.GetArchive().GetSelectedCutsceneName();
-
-		// Ask the user if they really want to delete the cutscene
-		if (await MsgBox.SendMessage(this, "Cutscene deletion confirm", $"Are you sure you want to delete the cutscene '{cutsceneName}'?\nThis operation can't be undone!!", ButtonEnum.YesNo) == ButtonResult.No)
-		{
-			// If not, abort
-			StatusText.Text = $"Abort cutscene deletion.";
-			return;
-		}
-
 		// Delete the cutscene
-		Core.GetArchive().DeleteSelectedCutscene();
-
-		// Reload the cutscene list
-		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
-
-
-		// Update the status & set the title.
-		StatusText.Text = $"Successfully deleted the cutscene with name '{cutsceneName}'!";
+		DeleteCutscene(Core.GetArchive().GetSelectedCutsceneName());
 	}
 
-	private async void OnNewPart(object? sender, RoutedEventArgs e)
+	private void OnNewPart(object? sender, RoutedEventArgs e)
 	{
-		// Only run this if we have an archive & a cutscene open
-		if (!Core.HasCutsceneSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
-			return;
-
-		// Ask the user the name of the part
-		// Also send a list of all part names so we avoid replacing parts
-		string? partName = await MsgBox.AskName(this, "New Part", "Type a name of your new part", "MyCoolPart", null, Core.GetAllPartNames(), "A part/subpart with this name already exists!");
-		// If this value is null it means that the user aborted
-		if (partName == null)
-		{
-			StatusText.Text = $"Aborted new part.";
-			return;
-		}
-
-		// Add the part
-		Cutscene.Part part = new Cutscene.Part(partName);
-		part.TimeEntry.TotalStep = 40;
-		Core.GetArchive().GetLoadedCutscene().Parts.Add(part);
-
-		// Set selected
-		Core.SetSelectedPart(partName);
-
-		// Re-render the parts, update the steps & set the new part as selected
-		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(Core.GetArchive().GetLoadedCutscene().Parts);
-		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
-		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedPart(partName);
-
-		// Update the status
-		StatusText.Text = $"Successfully created a new part named '{partName}'!";
+		NewPart();
 	}
 
-	private async void OnNewSubPart(object? sender, RoutedEventArgs e)
+	private void OnRenamePart(object? sender, RoutedEventArgs e)
 	{
 		// Only run this if we have an archive & a cutscene open
 		if (!Core.HasPartSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
 			return;
 
-		// Ask the user the name of the part
-		// Also send a list of all part names so we avoid replacing parts
-		string? subPartName = await MsgBox.AskName(this, "New SubPart", "Type a name of your new sub part", "MyCoolSubPart", null, Core.GetAllPartNames(), "A part/subpart with this name already exists!");
-		// If this value is null it means that the user aborted
-		if (subPartName == null)
-		{
-			StatusText.Text = $"Aborted new sub part.";
-			return;
-		}
-
-		// Get the part
-		Cutscene.Part part = Core.GetSelectedPart();
-
-		// Add the sub part
-		SubPart subPart = new SubPart(subPartName);
-		subPart.SubPartTotalStep = 40;
-		if (part.SubPartEntries == null)
-			part.SubPartEntries = new List<SubPart>();
-		part.SubPartEntries.Add(subPart);
-
-		// Set selected
-		Core.SetSelectedSubPart(subPartName);
-
-		// Re-render the parts, update the steps & set the new part as selected
-		ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), Core.GetSelectedSubPart());
-		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
-		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedSubPart(subPartName);
-
-		// Update the status
-		StatusText.Text = $"Successfully created a new sub part named '{subPartName}'!";
+		RenamePart(Core.GetSelectedPart().PartName);
 	}
 
-	private async void OnRenamePart(object? sender, RoutedEventArgs e)
+	private void OnDeletePart(object? sender, RoutedEventArgs e)
 	{
 		// Only run this if we have an archive & a cutscene open
 		if (!Core.HasPartSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
 			return;
 
-		// Get selected part
-		Cutscene.Part part = Core.GetSelectedPart();
-
-		// Ask the user the name of the part
-		// Also send a list of all part names so we avoid replacing parts
-		string? partName = await MsgBox.AskName(this, "Rename SubPart", $"Type a new name for the part '{part.PartName}'", part.PartName, part.PartName, Core.GetAllPartNames(), "A part/subpart with this name already exists!");
-		// If this value is null it means that the user aborted
-		if (partName == null)
-		{
-			StatusText.Text = $"Aborted rename part.";
-			return;
-		}
-
-		// Rename the part
-		part.PartName = partName;
-
-		// Re-render the parts, update the steps & set the new part as selected
-		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(Core.GetArchive().GetLoadedCutscene().Parts);
-		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
-		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedPart(partName);
-
-		// Update the status
-		StatusText.Text = $"Successfully renamed the part to '{partName}'!";
+		DeletePart(Core.GetSelectedPart().PartName);
 	}
 
-	private async void OnRenameSubPart(object? sender, RoutedEventArgs e)
+	private void OnNewSubPart(object? sender, RoutedEventArgs e)
+	{
+		NewSubPart();
+	}
+
+	private void OnRenameSubPart(object? sender, RoutedEventArgs e)
 	{
 		// Only run this if we have an archive & a cutscene open
 		if (!Core.HasSubPartSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
 			return;
 
-		// Get selected part
-		SubPart subPart = Core.GetSelectedSubPart();
-
-		// Ask the user the name of the part
-		// Also send a list of all part names so we avoid replacing parts
-		string? subPartName = await MsgBox.AskName(this, "Rename SubPart", $"Type a new name for the sub part '{subPart.SubPartName}'", subPart.SubPartName, subPart.SubPartName, Core.GetAllPartNames(), "A part/subpart with this name already exists!");
-		// If this value is null it means that the user aborted
-		if (subPartName == null)
-		{
-			StatusText.Text = $"Aborted rename sub part.";
-			return;
-		}
-
-		// Rename the part
-		subPart.SubPartName = subPartName;
-
-		// Re-render the parts, update the steps & set the new part as selected
-		Cutscene.Part part = Core.GetSelectedPart();
-		ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), Core.GetSelectedSubPart());
-		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
-		ArchiveUI.CutsceneUI.TimelineUI.SetSubPartsComboBox(part.SubPartEntries!);
-		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedSubPart(subPartName);
-
-		// Update the status
-		StatusText.Text = $"Successfully renamed the sub part to '{subPartName}'!";
+		RenameSubPart(Core.GetSelectedSubPart().SubPartName);
 	}
 
-	private async void OnDeletePart(object? sender, RoutedEventArgs e)
-	{
-		// Only run this if we have an archive & a cutscene open
-		if (!Core.HasPartSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
-			return;
-
-		// Get the selected part
-		Cutscene.Part part = Core.GetSelectedPart();
-
-		// Ask the user if they really want to delete the part
-		if (await MsgBox.SendMessage(this, "Part deletion confirm", $"Are you sure you want to delete the part '{part.PartName}'?\nThis operation can't be undone!!", ButtonEnum.YesNo) == ButtonResult.No)
-		{
-			// If not, abort
-			StatusText.Text = $"Abort part deletion.";
-			return;
-		}
-
-		// Remove the part
-		Cutscene cutscene = Core.GetCutscene();
-		cutscene.Parts.Remove(part);
-
-		// Re-render the parts, update the steps & set the new part as selected
-		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(cutscene.Parts);
-		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, cutscene.GetMaxTotalSteps());
-
-		// De-select the part
-		ArchiveUI.CutsceneUI.LoadPart(null, Core.GetCutscene().Parts.Count);
-
-		// Update the status
-		StatusText.Text = $"Successfully removed the part to '{part.PartName}'!";
-	}
-
-	private async void OnDeleteSubPart(object? sender, RoutedEventArgs e)
+	private void OnDeleteSubPart(object? sender, RoutedEventArgs e)
 	{
 		// Only run this if we have an archive & a cutscene open
 		if (!Core.HasSubPartSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
 			return;
 
-		// Get the selected sub part
-		SubPart subPart = Core.GetSelectedSubPart();
-		string subPartName = subPart.SubPartName;
-
-		// Ask the user if they really want to delete the sub part
-		if (await MsgBox.SendMessage(this, "SubPart deletion confirm", $"Are you sure you want to delete the sub part '{subPartName}'?\nThis operation can't be undone!!", ButtonEnum.YesNo) == ButtonResult.No)
-		{
-			// If not, abort
-			StatusText.Text = $"Abort sub part deletion.";
-			return;
-		}
-
-		// Remove the sub part
-		Cutscene.Part part = Core.GetSelectedPart();
-		part.SubPartEntries!.Remove(subPart);
-
-		// Re-render the parts, update the steps & set the new part as selected
-		ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), null);
-		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
-		ArchiveUI.CutsceneUI.TimelineUI.SetSubPartsComboBox(part.SubPartEntries!);
-
-		// Update the status
-		StatusText.Text = $"Successfully removed the sub part to '{subPartName}'!";
+		DeleteSubPart(Core.GetSelectedSubPart().SubPartName);
 	}
 	#endregion ActionFunctions
 
@@ -613,9 +372,15 @@ public partial class MainWindow : Window
 
 		// Update the menu buttons & update the UI
 		BtnsLayer_CutsceneOpen();
+		ArchiveUI.PartCtx = this.FindResource("PartPanelCtx")! as ContextMenu;
+		ArchiveUI.SubPartCtx = this.FindResource("SubPartPanelCtx")! as ContextMenu;
+		ArchiveUI.PartEditCtx = this.FindResource("PartMenuCtx")! as ContextMenu;
+		ArchiveUI.SubPartEditCtx = this.FindResource("SubPartMenuCtx")! as ContextMenu;
+
 		ArchiveUI.LoadCutscene(Core.GetArchive().GetLoadedCutscene());
 		if (ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
 			return;
+
 		ArchiveUI.CutsceneUI.TimelineUI.OnSelectPart = OnSelectPart;
 		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
 		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(Core.GetArchive().GetLoadedCutscene().Parts);
@@ -763,6 +528,490 @@ public partial class MainWindow : Window
 		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedPart(part.PartName);
 	}
 	#endregion ActionHandlers
+
+
+
+	#region OutsideActions
+	private async void OnRenameCutsceneContext(object? sender, RoutedEventArgs e)
+	{
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		if (sender != null && sender is MenuItem btnItem)
+		{
+			if (btnItem.Parent!.Parent!.Parent!.Parent! is CutsceneBtn btn)
+			{
+				await RenameCutscene(btn.CutsceneName);
+			}
+		}
+	}
+
+	private void OnDeleteCutsceneContext(object? sender, RoutedEventArgs e)
+	{
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		if (sender != null && sender is MenuItem btnItem)
+		{
+			if (btnItem.Parent!.Parent!.Parent!.Parent! is CutsceneBtn btn)
+			{
+				DeleteCutscene(btn.CutsceneName);
+			}
+		}
+	}
+
+	private void OnNewCutsceneContext(object? sender, RoutedEventArgs e)
+	{
+		CreateNewCutscene();
+	}
+
+	private void OnReloadCutsceneContext(object? sender, RoutedEventArgs e)
+	{
+		ReloadArchive();
+	}
+
+	private void OnNewPartContext(object? sender, RoutedEventArgs e)
+	{
+		NewPart();
+	}
+
+	private void OnRenamePartContext(object? sender, RoutedEventArgs e)
+	{
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		if (sender != null && sender is MenuItem partItem)
+		{
+			if (partItem.Parent!.Parent!.Parent!.Parent! is TimelinePart part)
+			{
+				RenamePart(part.PartName);
+			}
+		}
+	}
+
+	private void OnDeletePartContext(object? sender, RoutedEventArgs e)
+	{
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		if (sender != null && sender is MenuItem partItem)
+		{
+			if (partItem.Parent!.Parent!.Parent!.Parent! is TimelinePart part)
+			{
+				DeletePart(part.PartName);
+			}
+		}
+	}
+
+	private void OnNewSubPartContext(object? sender, RoutedEventArgs e)
+	{
+		NewSubPart();
+	}
+
+	private void OnRenameSubPartContext(object? sender, RoutedEventArgs e)
+	{
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		if (sender != null && sender is MenuItem partItem)
+		{
+			if (partItem.Parent!.Parent!.Parent!.Parent! is TimelinePart part)
+			{
+				RenameSubPart(part.PartName);
+			}
+		}
+	}
+
+	private void OnDeleteSubPartContext(object? sender, RoutedEventArgs e)
+	{
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		if (sender != null && sender is MenuItem partItem)
+		{
+			if (partItem.Parent!.Parent!.Parent!.Parent! is TimelinePart part)
+			{
+				DeleteSubPart(part.PartName);
+			}
+		}
+	}
+	#endregion
+
+
+
+	#region ActionHelpers
+	private async Task<string?> RenameCutscene(string cutsceneName)
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return null;
+
+		string? selectedCutsceneName = null;
+		if (Core.HasCutsceneSelected())
+			selectedCutsceneName = Core.GetArchive().GetSelectedCutsceneName();
+
+		// Ask for the new cutscene name
+		// And also send a list of already existing cutscenes name so we avoid replacing cutscenes
+		string? newCutsceneName = await MsgBox.AskName(this, "Rename Cutscene", $"Type a new name for the cutscene '{cutsceneName}'", cutsceneName, cutsceneName, Core.GetArchive().CutsceneNames, "A cutscene with this name already exists!");
+		// If this value is null it means that the user aborted
+		if (newCutsceneName == null)
+		{
+			StatusText.Text = $"Aborted rename cutscene.";
+			return null;
+		}
+
+		// Rename the cutscene
+		Core.GetArchive().RenameCutscene(cutsceneName, newCutsceneName);
+
+		// Reload the cutscene list
+		if (selectedCutsceneName != null && selectedCutsceneName == cutsceneName)
+			ArchiveUI.LoadCutsceneListAndSelect(Core.GetArchive().CutsceneNames, newCutsceneName);
+		else if (selectedCutsceneName != null && selectedCutsceneName != cutsceneName)
+			ArchiveUI.LoadCutsceneListAndSelect(Core.GetArchive().CutsceneNames, selectedCutsceneName);
+		else
+			ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
+
+		// Update the status & set the title.
+		StatusText.Text = $"Successfully renamed the cutscene '{cutsceneName}' to '{newCutsceneName}'!";
+
+		return newCutsceneName;
+	}
+
+	private async void DeleteCutscene(string cutsceneName)
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		string? selectedCutsceneName = null;
+		if (Core.HasCutsceneSelected())
+			selectedCutsceneName = Core.GetArchive().GetSelectedCutsceneName();
+
+		// Ask the user if they really want to delete the cutscene
+		if (await MsgBox.SendMessage(this, "Cutscene deletion confirm", $"Are you sure you want to delete the cutscene '{cutsceneName}'?\nThis operation can't be undone!!", ButtonEnum.YesNo) == ButtonResult.No)
+		{
+			// If not, abort
+			StatusText.Text = $"Abort cutscene deletion.";
+			return;
+		}
+
+		// Delete the cutscene
+		Core.GetArchive().DeleteCutscene(cutsceneName);
+
+		// Reload the cutscene list
+		if (selectedCutsceneName != null && selectedCutsceneName != cutsceneName)
+			ArchiveUI.LoadCutsceneListAndSelect(Core.GetArchive().CutsceneNames, selectedCutsceneName);
+		else
+		{
+			ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
+			BtnsLayer_ArchiveOpen();
+		}
+
+
+		// Update the status & set the title.
+		StatusText.Text = $"Successfully deleted the cutscene with name '{cutsceneName}'!";
+	}
+
+	private async void CreateNewCutscene()
+	{
+		// Only run this if we have an archive open
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		// Ask for a cutscene name
+		// And also send a list of already existing cutscenes name so we avoid replacing cutscenes
+		string? cutsceneName = await MsgBox.AskName(this, "New Cutscene", "Type a name of your new cutscene", "DemoMyCoolCutscene", null, Core.GetArchive().CutsceneNames, "A cutscene with this name already exists!");
+		// If this value is null it means that the user aborted
+		if (cutsceneName == null)
+		{
+			StatusText.Text = $"Aborted new cutscene.";
+			return;
+		}
+
+		// Create the new cutscene with name
+		Core.GetArchive().CreateNewCutscene(cutsceneName);
+
+		if (ArchiveUI.CutsceneUI != null)
+		{
+			ArchiveUI.CutsceneUI.PartCtx = this.FindResource("PartPanelCtx")! as ContextMenu;
+			ArchiveUI.CutsceneUI.SubPartCtx = this.FindResource("SubPartPanelCtx")! as ContextMenu;
+			ArchiveUI.CutsceneUI.PartEditCtx = this.FindResource("PartMenuCtx")! as ContextMenu;
+			ArchiveUI.CutsceneUI.SubPartEditCtx = this.FindResource("SubPartMenuCtx")! as ContextMenu;
+		}
+
+		// Reload the cutscene list & select the cutscene
+		ArchiveUI.LoadCutsceneListAndSelect(Core.GetArchive().CutsceneNames, cutsceneName);
+
+
+		// Update the status & set the title.
+		StatusText.Text = $"Successfully created new cutscene with name '{cutsceneName}'!";
+	}
+
+	private async void ReloadArchive()
+	{
+		// Only run this if we have an archive open
+		if (!Core.HasArchiveOpen())
+			return;
+
+		if (!await AskDiscardChanges())
+		{
+			StatusText.Text = "Reload aborted.";
+			return;
+		}
+		// (Re)Open the archive.
+		// And check for errors.
+		string filePath = Core.GetArchive().FilePath;
+		CutsceneArchiveReadWrapper archiveWrapper = CutsceneArchive.LoadArchive(filePath);
+		if (archiveWrapper.IsError)
+		{
+			await MsgBox.SendMessage(this, "Error while reloading the .arc file", $"Couldn't open '{filePath}' file because of an error:\n\n{archiveWrapper.GetErrorMessage()}", ButtonEnum.Ok);
+			StatusText.Text = $"Failed to open '{filePath}'.";
+			return;
+		}
+
+		// (Re)Load the archive
+		Core.LoadArchive(archiveWrapper.GetResult());
+
+		// Update the menu buttons & update the UI
+		ArchiveUI = new();
+		ArchiveUI.Click = OnSelectCutscene;
+		ArchiveUI.CtxMenu = this.FindResource("CutsceneMenuCtx")! as ContextMenu;
+		ArchiveUI.PanelCtxMenu = this.FindResource("CutscenePanelCtx")! as ContextMenu;
+		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
+
+		BtnsLayer_ArchiveOpen();
+		MainMenu.Children.Clear();
+		MainMenu.Children.Add(ArchiveUI);
+
+		// Update the status & set the title.
+		StatusText.Text = $"Successfully reloaded '{filePath}'!";
+		Title = $"CutsceneMaker - [{filePath}]";
+	}
+
+	private async void NewPart()
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasCutsceneSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
+			return;
+
+		// Ask the user the name of the part
+		// Also send a list of all part names so we avoid replacing parts
+		string? partName = await MsgBox.AskName(this, "New Part", "Type a name of your new part", "MyCoolPart", null, Core.GetAllPartNames(), "A part/subpart with this name already exists!");
+		// If this value is null it means that the user aborted
+		if (partName == null)
+		{
+			StatusText.Text = $"Aborted new part.";
+			return;
+		}
+
+		// Add the part
+		Cutscene.Part part = new Cutscene.Part(partName);
+		part.TimeEntry.TotalStep = 40;
+		Core.GetArchive().GetLoadedCutscene().Parts.Add(part);
+
+		// Set selected
+		Core.SetSelectedPart(partName);
+
+		// Re-render the parts, update the steps & set the new part as selected
+		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(Core.GetArchive().GetLoadedCutscene().Parts);
+		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
+		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedPart(partName);
+
+		// Update the status
+		StatusText.Text = $"Successfully created a new part named '{partName}'!";
+	}
+
+	public async void RenamePart(string oldPartName)
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasCutsceneSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
+			return;
+
+		// Get part
+		Cutscene.Part part = Core.GetArchive().GetLoadedCutscene().GetPartByName(oldPartName);
+
+		string? selectedPartName = null;
+		if (Core.HasPartSelected())
+			selectedPartName = Core.GetSelectedPart().PartName;
+
+		// Ask the user the name of the part
+		// Also send a list of all part names so we avoid replacing parts
+		string? partName = await MsgBox.AskName(this, "Rename SubPart", $"Type a new name for the part '{part.PartName}'", part.PartName, part.PartName, Core.GetAllPartNames(), "A part/subpart with this name already exists!");
+		// If this value is null it means that the user aborted
+		if (partName == null)
+		{
+			StatusText.Text = $"Aborted rename part.";
+			return;
+		}
+
+		// Rename the part
+		part.PartName = partName;
+
+		// Re-render the parts, update the steps & set the new part as selected
+		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(Core.GetArchive().GetLoadedCutscene().Parts);
+		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
+
+		if (selectedPartName == oldPartName)
+			ArchiveUI.CutsceneUI.TimelineUI.SetSelectedPart(partName);
+
+		// Update the status
+		StatusText.Text = $"Successfully renamed the part to '{partName}'!";
+	}
+
+	public async void DeletePart(string partName)
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasCutsceneSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
+			return;
+
+		// Get part
+		Cutscene.Part part = Core.GetArchive().GetLoadedCutscene().GetPartByName(partName);
+
+		string? selectedPartName = null;
+		if (Core.HasPartSelected())
+			selectedPartName = Core.GetSelectedPart().PartName;
+
+		// Ask the user if they really want to delete the part
+		if (await MsgBox.SendMessage(this, "Part deletion confirm", $"Are you sure you want to delete the part '{part.PartName}'?\nThis operation can't be undone!!", ButtonEnum.YesNo) == ButtonResult.No)
+		{
+			// If not, abort
+			StatusText.Text = $"Abort part deletion.";
+			return;
+		}
+
+		// Remove the part
+		Cutscene cutscene = Core.GetCutscene();
+		cutscene.Parts.Remove(part);
+
+		// Re-render the parts, update the steps & set the new part as selected
+		ArchiveUI.CutsceneUI.TimelineUI.RenderParts(cutscene.Parts);
+		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, cutscene.GetMaxTotalSteps());
+
+		// De-select the part
+		if (selectedPartName == partName)
+			ArchiveUI.CutsceneUI.LoadPart(null, Core.GetCutscene().Parts.Count);
+
+		// Update the status
+		StatusText.Text = $"Successfully removed the part to '{part.PartName}'!";
+	}
+
+	public async void NewSubPart()
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasCutsceneSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
+			return;
+
+		// Ask the user the name of the part
+		// Also send a list of all part names so we avoid replacing parts
+		string? subPartName = await MsgBox.AskName(this, "New SubPart", "Type a name of your new sub part", "MyCoolSubPart", null, Core.GetAllPartNames(), "A part/subpart with this name already exists!");
+		// If this value is null it means that the user aborted
+		if (subPartName == null)
+		{
+			StatusText.Text = $"Aborted new sub part.";
+			return;
+		}
+
+		// Get the part
+		Cutscene.Part part = Core.GetSelectedPart();
+
+		// Add the sub part
+		SubPart subPart = new SubPart(subPartName);
+		subPart.SubPartTotalStep = 40;
+		if (part.SubPartEntries == null)
+			part.SubPartEntries = new List<SubPart>();
+		part.SubPartEntries.Add(subPart);
+
+		// Set selected
+		Core.SetSelectedSubPart(subPartName);
+
+		// Re-render the parts, update the steps & set the new part as selected
+		ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), Core.GetSelectedSubPart());
+		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
+		ArchiveUI.CutsceneUI.TimelineUI.SetSelectedSubPart(subPartName);
+
+		// Update the status
+		StatusText.Text = $"Successfully created a new sub part named '{subPartName}'!";
+	}
+
+	public async void RenameSubPart(string oldSubPartName)
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasPartSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
+			return;
+
+		// Get part
+		SubPart subPart = Core.GetCutscene().GetSubPartByName(oldSubPartName);
+
+		string? selectedSubPartName = null;
+		if (Core.HasPartSelected())
+			selectedSubPartName = Core.GetSelectedSubPart().SubPartName;
+
+		// Ask the user the name of the part
+		// Also send a list of all part names so we avoid replacing parts
+		string? subPartName = await MsgBox.AskName(this, "Rename SubPart", $"Type a new name for the sub part '{subPart.SubPartName}'", subPart.SubPartName, subPart.SubPartName, Core.GetAllPartNames(), "A part/subpart with this name already exists!");
+		// If this value is null it means that the user aborted
+		if (subPartName == null)
+		{
+			StatusText.Text = $"Aborted rename sub part.";
+			return;
+		}
+
+		// Rename the part
+		subPart.SubPartName = subPartName;
+
+		// Re-render the parts, update the steps & set the new part as selected
+		Cutscene.Part part = Core.GetSelectedPart();
+		ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), subPart);
+		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
+		ArchiveUI.CutsceneUI.TimelineUI.SetSubPartsComboBox(part.SubPartEntries!);
+
+		if (selectedSubPartName == oldSubPartName)
+			ArchiveUI.CutsceneUI.TimelineUI.SetSelectedSubPart(subPartName);
+
+		// Update the status
+		StatusText.Text = $"Successfully renamed the sub part to '{subPartName}'!";
+	}
+
+	public async void DeleteSubPart(string subPartName)
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasPartSelected()  || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
+			return;
+
+		// Get the selected sub part
+		SubPart subPart = Core.GetCutscene().GetSubPartByName(subPartName);
+
+		string? selectedSubPartName = null;
+		if (Core.HasPartSelected())
+			selectedSubPartName = Core.GetSelectedSubPart().SubPartName;
+
+		// Ask the user if they really want to delete the sub part
+		if (await MsgBox.SendMessage(this, "SubPart deletion confirm", $"Are you sure you want to delete the sub part '{subPartName}'?\nThis operation can't be undone!!", ButtonEnum.YesNo) == ButtonResult.No)
+		{
+			// If not, abort
+			StatusText.Text = $"Abort sub part deletion.";
+			return;
+		}
+
+		// Remove the sub part
+		Cutscene.Part part = Core.GetSelectedPart();
+		part.SubPartEntries!.Remove(subPart);
+
+		// Re-render the parts, update the steps & set the new part as selected
+		if (selectedSubPartName == subPartName)
+			ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), null);
+		else if (selectedSubPartName != null)
+			ArchiveUI.CutsceneUI.TimelineUI.RenderSubPart(Core.GetStepUntilSelectedPart(), Core.GetSelectedSubPart());
+		ArchiveUI.CutsceneUI.TimelineUI.UpdateSteps(Width, Core.GetCutscene().GetMaxTotalSteps());
+		ArchiveUI.CutsceneUI.TimelineUI.SetSubPartsComboBox(part.SubPartEntries!);
+
+		if (selectedSubPartName == subPartName)
+			ArchiveUI.CutsceneUI.TimelineUI.SetSelectedSubPart(subPartName);
+
+		// Update the status
+		StatusText.Text = $"Successfully removed the sub part to '{subPartName}'!";
+	}
+	#endregion
 
 
 

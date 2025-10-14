@@ -44,13 +44,37 @@
 
 
 		<!-- Body -->
-		<Grid Name="MainMenu" ColumnDefinitions="1*"></Grid>
+		<Grid Name="MainMenu" ColumnDefinitions="1*" />
 	</DockPanel>
-	<!--<Window.Resources>
-		<MenuFlyout x:Key="PartsFlyout" Opened="CheckPart">
-			<MenuItem Header="Rename" Click="OnRename"/>
-			<MenuItem Header="Delete" Click="OnDelete"/>
-			<MenuItem Name="AddSubPartButton" Header="Add SubPart" Click="OnAddSubPart"/>
-		</MenuFlyout>
-	</Window.Resources>-->
+	<Window.Resources>
+		<ContextMenu x:Key="CutsceneMenuCtx">
+			<MenuItem Header="Rename" Click="OnRenameCutsceneContext"/>
+			<MenuItem Header="Delete" Click="OnDeleteCutsceneContext"/>
+			<Separator />
+			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext"/>
+			<MenuItem Header="Reload" Click="OnReloadCutsceneContext"/>
+		</ContextMenu>
+		<ContextMenu x:Key="CutscenePanelCtx">
+			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext"/>
+			<MenuItem Header="Reload Archive" Click="OnReloadCutsceneContext"/>
+		</ContextMenu>
+		<ContextMenu x:Key="PartMenuCtx">
+			<MenuItem Header="Rename" Click="OnRenamePartContext"/>
+			<MenuItem Header="Delete" Click="OnDeletePartContext"/>
+			<Separator />
+			<MenuItem Header="New Part" Click="OnNewPartContext"/>
+		</ContextMenu>
+		<ContextMenu x:Key="PartPanelCtx">
+			<MenuItem Header="New Part" Click="OnNewPartContext"/>
+		</ContextMenu>
+		<ContextMenu x:Key="SubPartMenuCtx">
+			<MenuItem Header="Rename" Click="OnRenameSubPartContext"/>
+			<MenuItem Header="Delete" Click="OnDeleteSubPartContext"/>
+			<Separator />
+			<MenuItem Header="New SubPart" Click="OnNewSubPartContext"/>
+		</ContextMenu>
+		<ContextMenu x:Key="SubPartPanelCtx">
+			<MenuItem Header="New SubPart" Click="OnNewSubPartContext"/>
+		</ContextMenu>
+	</Window.Resources>
 </Window>

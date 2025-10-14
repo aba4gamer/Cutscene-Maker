@@ -22,6 +22,10 @@ public partial class TimelineView : UserControl
 	public System.Action OnMovePartAfter = () => {};
 	public Func<string, string, SubPart>? RequestSubPart;
 	public Func<int>? RequestPartStep;
+	public ContextMenu? PartCtx = null;
+	public ContextMenu? SubPartCtx = null;
+	public ContextMenu? PartEditCtx = null;
+	public ContextMenu? SubPartEditCtx = null;
 	private TimelinePart? SelectedTimelinePart = null;
 	private TimelinePart? SelectedTimelineSubPart = null;
 	private IDisposable? _SubPartBoxSubscription;
@@ -56,6 +60,16 @@ public partial class TimelineView : UserControl
 				if (SelectedTimelinePart != null && RequestSubPart != null && RequestPartStep != null)
 					RenderSubPart(RequestPartStep(), RequestSubPart(SelectedTimelinePart.PartName, subPartName));
 			});
+	}
+
+	public void LoadContextMenus()
+	{
+		if (PartCtx != null)
+			MainTimeline.ContextMenu = PartCtx;
+		if (SubPartCtx != null && SelectedTimelinePart != null)
+			SubTimeline.ContextMenu = SubPartCtx;
+		else
+			SubTimeline.ContextMenu = null;
 	}
 
 	private string GetContentFromComboBoxItem(int i)
@@ -166,6 +180,8 @@ public partial class TimelineView : UserControl
 			int max = 8 / _ZoomTimeline;
 			TimelinePart timelinePart = new(part, part.PartName, Math.Max(part.TimeEntry.TotalStep, max), false, _ZoomTimeline);
 			timelinePart.Click = SelectedPart;
+			timelinePart.Ctx = PartEditCtx;
+			timelinePart.LoadContextMenus();
 			MainTimeline.Children.Add(timelinePart);
 		}
 	}
@@ -215,7 +231,18 @@ public partial class TimelineView : UserControl
 				MovePartAfter.IsEnabled = false;
 		}
 
+		LoadContextMenus();
 		OnSelectPart(timelinePart.PartName);
+	}
+
+	public void DeselectPart()
+	{
+		if (SelectedTimelinePart != null)
+		{
+			SelectedTimelinePart.Select(false);
+			SelectedTimelinePart = null;
+		}
+		LoadContextMenus();
 	}
 
 	private void SelectedSubPart(TimelinePart timelinePart)
@@ -342,6 +369,8 @@ public partial class TimelineView : UserControl
 		int max = 8 / _ZoomTimeline;
 		TimelinePart timelinePart = new(subPart, subPart.SubPartName, Math.Max(subPart.SubPartTotalStep, max), true, _ZoomTimeline);
 		timelinePart.Click = SelectedSubPart;
+		timelinePart.Ctx = SubPartEditCtx;
+		timelinePart.LoadContextMenus();
 		SubTimeline.Children.Add(timelinePart);
 	}
 

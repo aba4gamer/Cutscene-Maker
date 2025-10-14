@@ -9,9 +9,17 @@ namespace CutsceneMakerUI;
 
 public partial class CutscenePanelEmpty : UserControl
 {
+	public ContextMenu? Ctx = null;
+
 
 	public CutscenePanelEmpty()
 	{
 		InitializeComponent();
+	}
+
+
+	public void LoadContextMenu()
+	{
+		CtxHolder.ContextMenu = Ctx;
 	}
 }

@@ -14,6 +14,11 @@ public partial class CutsceneView : UserControl
 	public TimelineView TimelineUI { get; private set; } = new();
 	public CutsceneWorkstation? WorkstationUI { get; private set; } = new();
 
+	public ContextMenu? PartCtx = null;
+	public ContextMenu? SubPartCtx = null;
+	public ContextMenu? PartEditCtx = null;
+	public ContextMenu? SubPartEditCtx = null;
+
 	public Action<int> Part_TotalStep = (int step) => {};
 	public Action<int> SubPart_TotalStep = (int step) => {};
 	public Action<string> Part_UpdateName = (string name) => {};
@@ -32,6 +37,11 @@ public partial class CutsceneView : UserControl
 		Main.Children.Clear();
 
 		TimelineUI = new();
+		TimelineUI.PartCtx = PartCtx;
+		TimelineUI.PartEditCtx = PartEditCtx;
+		TimelineUI.SubPartCtx = SubPartCtx;
+		TimelineUI.SubPartEditCtx = SubPartEditCtx;
+		TimelineUI.LoadContextMenus();
 		Timeline.Children.Add(TimelineUI);
 
 		if (cutscene.Parts.Count < 1)
@@ -52,6 +62,7 @@ public partial class CutsceneView : UserControl
 
 		if (part == null)
 		{
+			TimelineUI.DeselectPart();
 			if (parts < 1)
 			{
 				CutsceneWorkstationEmptyPart emptyWorkPart = new();
