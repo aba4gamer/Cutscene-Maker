@@ -24,7 +24,7 @@ README in progress. If you can't run the app install .NET 9 but I think actually
 - Add icons to the timeline part
 - Add a better warning for unsaved progress
 
-# Auto completion support:
+### Auto completion support:
 
 * From **Action:** ~~`CastName`~~, ~~`CastType`~~, `AnimName` (I might not know how to add this);
 * From **Player:** ~~`BckName`~~;
