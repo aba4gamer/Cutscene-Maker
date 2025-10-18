@@ -235,6 +235,9 @@ public partial class MainWindow : Window
 		}
 		Core.LoadArchive(archiveWrapper.GetResult());
 
+		// Load other archives for auto completion
+		Program.Utility.LoadRarcs(arcPathName);
+
 		// Update the menu buttons & update the UI
 		ArchiveUI = new();
 		ArchiveUI.Click = OnSelectCutscene;
@@ -368,7 +371,7 @@ public partial class MainWindow : Window
 			return;
 
 		// Load the selected cutscene
-		Core.GetArchive().LoadCutscene(cutsceneName);
+		Core.LoadCutscene(cutsceneName);
 
 		// Update the menu buttons & update the UI
 		BtnsLayer_CutsceneOpen();

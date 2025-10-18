@@ -7,6 +7,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
+using CutsceneMaker;
+
 
 
 
@@ -26,12 +28,13 @@ public partial class CutscenePlayer : UserControl
 	public CutscenePlayer(ICommonEntries part)
 	{
 		InitializeComponent();
+		BckName.AutoCompletion = Program.Utility.MarioAnimeList;
 
 		if (part.PlayerEntry != null)
 		{
 			IsPlayerEnabled.IsChecked = true;
 			PosName.Text = part.PlayerEntry.PosName;
-			BckName.Text = part.PlayerEntry.BckName;
+			BckName.Main.Text = part.PlayerEntry.BckName;
 			Visible.IsChecked = part.PlayerEntry.Visible == 1;
 
 			SubscribeToChanges(part);
@@ -45,7 +48,7 @@ public partial class CutscenePlayer : UserControl
 				SetControlsEnabled(true);
 
 				part.PlayerEntry.PosName = PosName.Text ?? string.Empty;
-				part.PlayerEntry.BckName = BckName.Text ?? string.Empty;
+				part.PlayerEntry.BckName = BckName.Main.Text ?? string.Empty;
 				part.PlayerEntry.Visible = Visible.IsChecked == true ? 1 : 0;
 
 				SubscribeToChanges(part);
@@ -77,7 +80,7 @@ public partial class CutscenePlayer : UserControl
 		_posNameSubscription = PosName.GetObservable(TextBox.TextProperty)
 			.Subscribe(text => PlayerEntry.PosName = text ?? "");
 
-		_bckNameSubscription = BckName.GetObservable(TextBox.TextProperty)
+		_bckNameSubscription = BckName.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text => PlayerEntry.BckName = text ?? "");
 
 		_visibleSubscription = Visible.GetObservable(CheckBox.IsCheckedProperty)

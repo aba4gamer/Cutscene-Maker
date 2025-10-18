@@ -17,7 +17,7 @@ namespace Abacus;
 public class CutsceneArchive {
 
 	public List<string> CutsceneNames { get; private set; } = [];
-	public Dictionary<string, Cutscene> LoadedCutscenes { get; private set; } = new Dictionary<string, Cutscene>();
+	public Dictionary<string, Cutscene> LoadedCutscenes { get; private set; } = new();
 	public string? SelectedCutsceneName { get; private set; } = null;
 	public string FilePath { get; private set; } = "";
 	public bool IsYazCompressed { get; private set; } = true;

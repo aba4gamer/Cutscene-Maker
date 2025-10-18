@@ -6,6 +6,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
+using CutsceneMaker;
+
 
 
 
@@ -28,11 +30,12 @@ public partial class CutsceneSound : UserControl
 	public CutsceneSound(ICommonEntries part)
 	{
 		InitializeComponent();
+		BGM.AutoCompletion = Program.Utility.MusicList;
 
 		if (part.SoundEntry != null)
 		{
 			IsSoundEnabled.IsChecked = true;
-			BGM.Text = part.SoundEntry.Bgm;
+			BGM.Main.Text = part.SoundEntry.Bgm;
 			SystemSe.Text = part.SoundEntry.SystemSe;
 			ActionSe.Text = part.SoundEntry.ActionSe;
 			ReturnBgm.IsChecked = part.SoundEntry.ReturnBgm != 0;
@@ -49,7 +52,7 @@ public partial class CutsceneSound : UserControl
 				part.SoundEntry ??= new Abacus.Sound();
 				SetControlsEnabled(true);
 
-				part.SoundEntry.Bgm = BGM.Text ?? string.Empty;
+				part.SoundEntry.Bgm = BGM.Main.Text ?? "";
 				part.SoundEntry.SystemSe = SystemSe.Text ?? string.Empty;
 				part.SoundEntry.ActionSe = ActionSe.Text ?? string.Empty;
 				part.SoundEntry.ReturnBgm = ReturnBgm.IsChecked == true ? 1 : 0;
@@ -82,8 +85,8 @@ public partial class CutsceneSound : UserControl
 	{
 		DisposeSubscriptions();
 
-		_bgmSubscription = BGM.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => part.SoundEntry!.Bgm = text ?? string.Empty);
+		_bgmSubscription = BGM.Main.GetObservable(TextBox.TextProperty)
+			.Subscribe(text => part.SoundEntry!.Bgm = text ?? "");
 
 		_systemSeSubscription = SystemSe.GetObservable(TextBox.TextProperty)
 			.Subscribe(text => part.SoundEntry!.SystemSe = text ?? string.Empty);

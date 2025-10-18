@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 x:Class="CutsceneMakerUI.AutoTextBox">
+	<TextBox Name="Main">
+		<FlyoutBase.AttachedFlyout>
+			<Flyout>
+				<ScrollViewer MaxHeight="300" HorizontalAlignment="Stretch">
+					<StackPanel Name="FlyoutStackPanel" HorizontalAlignment="Stretch" />
+				</ScrollViewer>
+			</Flyout>
+		</FlyoutBase.AttachedFlyout>
+	</TextBox>
+</UserControl>

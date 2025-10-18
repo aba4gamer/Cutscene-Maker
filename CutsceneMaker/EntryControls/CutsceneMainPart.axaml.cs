@@ -4,6 +4,7 @@ using System.Reactive;
 using Abacus;
 
 using Avalonia;
+using Avalonia.Input;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Interactivity;
@@ -77,5 +78,19 @@ public partial class CutsceneMainPart : UserControl
 
 		Part.PartName = PartName.Text;
 		PartNameChange(PartName.Text);
+	}
+
+	private void PartName_OnKeyDown(object? sender, RoutedEventArgs e)
+	{
+		if (Part == null || PartName.Text == null)
+			return;
+
+		switch (((KeyEventArgs) e).Key)
+		{
+			case Key.Enter:
+				Part.PartName = PartName.Text;
+				PartNameChange(PartName.Text);
+				break;
+		}
 	}
 }

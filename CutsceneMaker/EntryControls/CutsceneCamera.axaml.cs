@@ -3,8 +3,10 @@ using System;
 using Abacus;
 
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Controls;
+
+using CutsceneMaker;
 
 
 
@@ -28,11 +30,12 @@ public partial class CutsceneCamera : UserControl
 	public CutsceneCamera(ICommonEntries part)
 	{
 		InitializeComponent();
+		CameraTargetName.AutoCompletion = Program.Utility.ObjDataTableEnglishNames;
 
 		if (part.CameraEntry != null)
 		{
 			IsCameraEnabled.IsChecked = true;
-			CameraTargetName.Text = part.CameraEntry.CameraTargetName;
+			CameraTargetName.Main.Text = Program.Utility.ObjDataTableList.ContainsValue(part.CameraEntry.CameraTargetName) ? Program.Utility.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName] : part.CameraEntry.CameraTargetName;
 			CameraTargetCastID.Value = part.CameraEntry.CameraTargetCastID;
 			AnimCameraName.Text = part.CameraEntry.AnimCameraName;
 			AnimCameraStartFrame.Value = part.CameraEntry.AnimCameraStartFrame;
@@ -49,7 +52,7 @@ public partial class CutsceneCamera : UserControl
 				part.CameraEntry ??= new Abacus.Camera();
 				SetControlsEnabled(true);
 
-				part.CameraEntry.CameraTargetName = CameraTargetName.Text ?? string.Empty;
+				part.CameraEntry.CameraTargetName = CameraTargetName.Main.Text != null ? Program.Utility.ObjDataTableList.ContainsKey(CameraTargetName.Main.Text) ? Program.Utility.ObjDataTableList[CameraTargetName.Main.Text] : CameraTargetName.Main.Text : "";
 				part.CameraEntry.CameraTargetCastID = CameraTargetCastID.Value.HasValue ? (int)CameraTargetCastID.Value.Value : -1;
 				part.CameraEntry.AnimCameraName = AnimCameraName.Text ?? string.Empty;
 				part.CameraEntry.AnimCameraStartFrame = AnimCameraStartFrame.Value.HasValue ? (int)AnimCameraStartFrame.Value.Value : -1;
@@ -83,7 +86,7 @@ public partial class CutsceneCamera : UserControl
 		DisposeSubscriptions();
 
 		_cameraTargetNameSubscription = CameraTargetName.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => part.CameraEntry!.CameraTargetName = text ?? string.Empty);
+			.Subscribe(text => part.CameraEntry!.CameraTargetName = text != null ? Program.Utility.ObjDataTableList.ContainsKey(text) ? Program.Utility.ObjDataTableList[text] : text : "");
 
 		_cameraTargetCastIDSubscription = CameraTargetCastID.GetObservable(NumericUpDown.ValueProperty)
 			.Subscribe(value => part.CameraEntry!.CameraTargetCastID = value.HasValue ? (int)value.Value : -1);

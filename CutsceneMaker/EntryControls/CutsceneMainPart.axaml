@@ -4,21 +4,21 @@
 			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			x:Class="CutsceneMakerUI.CutsceneMainPart">
-	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto" ColumnDefinitions="Auto,150">
+	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto" ColumnDefinitions="Auto,250">
 
 		<TextBlock Text="Part Name" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<StackPanel Grid.Row="0" Grid.Column="1"  Orientation="Horizontal" VerticalAlignment="Center" Margin="5" Spacing="3">
-			<TextBox Name="PartName" />
+			<TextBox Name="PartName" KeyDown="PartName_OnKeyDown" />
 			<Button Click="OnPartNameChange">Apply Part Name</Button>
 		</StackPanel>
 
 		<TextBlock Text="TotalStep" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<NumericUpDown Name="TotalStep" Grid.Row="1" Grid.Column="1" Width="150" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="1"/>
+		<NumericUpDown Name="TotalStep" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="1"/>
 
 		<TextBlock Text="SuspendFlag" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<CheckBox Name="SuspendFlag" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
+		<CheckBox Name="SuspendFlag" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="WaitUserInputFlag" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<CheckBox Name="WaitUserInputFlag" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
+		<CheckBox Name="WaitUserInputFlag" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 	</Grid>
 </UserControl>

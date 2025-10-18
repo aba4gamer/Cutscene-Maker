@@ -1,18 +1,16 @@
 <UserControl xmlns="https://github.com/avaloniaui"
 			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			xmlns:views="using:CutsceneMakerUI"
 			x:Class="CutsceneMakerUI.CutscenePlayer">
-	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,150">
+	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,250">
 		<TextBlock Text="Enabled?" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<CheckBox Name="IsPlayerEnabled" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="PosName" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<TextBox Name="PosName" Grid.Row="2" Grid.Column="1" Width="150" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+		<TextBox Name="PosName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="BckName" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<TextBox Name="BckName" Grid.Row="3" Grid.Column="1" Width="150" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="BckName" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="Visible" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<CheckBox Name="Visible" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>

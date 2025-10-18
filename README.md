@@ -19,8 +19,8 @@ To do:
 - ~~Add an empty cutscene screen (cutscene without part saying how to create a new part)~~ *Done*
 - ~~Add a proper "button" to the cutscenes in the cutscene sidebar~~ *Done*
 - ~~Add some context menus because people like them~~ *Done*
+- ~~Add ComboBox for CastName, ActionType and other things~~ *Done (kinda)*
 - Add some cool icons (if I can do them cool lel)
-- Add ComboBox for CastName, ActionType and other things
 - Add icons to the timeline part
 - Add a better warning for unsaved progress
 
@@ -34,3 +34,4 @@ To build use:
 ## Credits
 - [Hack.io](https://github.com/SuperHackio/Hack.io) libraries by [Super Hackio](https://github.com/SuperHackio)
 - [MessageBox.Avalonia](https://github.com/AvaloniaCommunity/MessageBox.Avalonia) by [CreateLab](https://github.com/CreateLab)
+- [BidirectionalDictionary](https://github.com/iiKuzmychov/BidirectionalDictionary) by [iikuzmychov](https://github.com/iikuzmychov)

@@ -1,5 +1,6 @@
 using System;
 using System.Reactive;
+using System.Collections.Generic;
 
 using Abacus;
 
@@ -19,6 +20,18 @@ public partial class CutsceneWipe : UserControl
 	private IDisposable? _typeSubscription;
 	private IDisposable? _frameSubscription;
 
+	public static BidirectionalDictionary<string, string> WipeTypes = new()
+	{
+		["Circle Wipe"] = "円ワイプ",
+		["Black Fade"] = "フェードワイプ",
+		["White Fade"] = "白フェードワイプ",
+		["Game Over"] = "ゲームオーバー",
+		["Bowser Face"] = "クッパ"
+	};
+
+	public static List<string> WipeTypesList = ["Circle Wipe", "Black Fade", "White Fade", "Game Over", "Bowser Face"];
+
+
 	public CutsceneWipe()
 	{
 		InitializeComponent();
@@ -28,11 +41,12 @@ public partial class CutsceneWipe : UserControl
 	{
 		InitializeComponent();
 
+		WipeName.AutoCompletion = WipeTypesList;
 		if (part.WipeEntry != null)
 		{
 			IsWipeEnabled.IsChecked = true;
-			WipeName.Text = part.WipeEntry.WipeName;
-			WipeType.Value = part.WipeEntry.WipeType;
+			WipeName.Main.Text = WipeTypes.ContainsValue(part.WipeEntry.WipeName) ? WipeTypes.Inverse[part.WipeEntry.WipeName] : part.WipeEntry.WipeName;
+			WipeType.SelectedIndex = part.WipeEntry.WipeType;
 			WipeFrame.Value = part.WipeEntry.WipeFrame;
 
 			SubscribeToChanges(part);
@@ -44,8 +58,8 @@ public partial class CutsceneWipe : UserControl
 				part.WipeEntry ??= new Abacus.Wipe();
 				SetControlsEnabled(true);
 
-				part.WipeEntry.WipeName = WipeName.Text ?? string.Empty;
-				part.WipeEntry.WipeType = WipeType.Value.HasValue ? (int)WipeType.Value.Value : -1;
+				part.WipeEntry.WipeName = WipeName.Main.Text != null ? WipeTypes.ContainsKey(WipeName.Main.Text) ? WipeTypes[WipeName.Main.Text] : WipeName.Main.Text : "";
+				part.WipeEntry.WipeType = WipeType.SelectedIndex;
 				part.WipeEntry.WipeFrame = WipeFrame.Value.HasValue ? (int)WipeFrame.Value.Value : -1;
 
 				SubscribeToChanges(part);
@@ -70,11 +84,11 @@ public partial class CutsceneWipe : UserControl
 	private void SubscribeToChanges(ICommonEntries part)
 	{
 		DisposeSubscriptions();
-		_nameSubscription = WipeName.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => part.WipeEntry!.WipeName = text ?? string.Empty);
+		_nameSubscription = WipeName.Main.GetObservable(TextBox.TextProperty)
+			.Subscribe(text => part.WipeEntry!.WipeName = text != null ? WipeTypes.ContainsKey(text) ? WipeTypes[text] : text : "");
 
-		_typeSubscription = WipeType.GetObservable(NumericUpDown.ValueProperty)
-			.Subscribe(value => part.WipeEntry!.WipeType = value.HasValue ? (int)value.Value : -1);
+		_typeSubscription = WipeType.GetObservable(ComboBox.SelectedIndexProperty)
+			.Subscribe(value => part.WipeEntry!.WipeType = value);
 
 		_frameSubscription = WipeFrame.GetObservable(NumericUpDown.ValueProperty)
 			.Subscribe(value => part.WipeEntry!.WipeFrame = value.HasValue ? (int)value.Value : -1);

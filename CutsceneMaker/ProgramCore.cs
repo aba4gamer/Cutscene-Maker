@@ -96,6 +96,13 @@ public class CutsceneCore
 
 
 	#region Cutscene
+	public void LoadCutscene(string cutsceneName)
+	{
+		Core.GetArchive().LoadCutscene(cutsceneName);
+		Core.SetSelectedPartName(null);
+		Core.SetSelectedSubPartName(null);
+	}
+
 	public bool PartNameAlreadyExists(string partName)
 	{
 		foreach (Cutscene.Part part in Core.GetArchive().GetLoadedCutscene().Parts)

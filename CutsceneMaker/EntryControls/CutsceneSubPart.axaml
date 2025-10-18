@@ -8,7 +8,7 @@
 
 		<TextBlock Text="SubPart Name" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<StackPanel Grid.Row="0" Grid.Column="1"  Orientation="Horizontal" VerticalAlignment="Center" Margin="5" Spacing="3">
-			<TextBox Name="SubPartName" />
+			<TextBox Name="SubPartName" KeyDown="PartName_OnKeyDown" />
 			<Button Click="OnSubPartNameChange">Apply SubPart Name</Button>
 		</StackPanel>
 
