@@ -2,7 +2,7 @@
 Tool that helps you making cutscene for Super Mario Galaxy 2.
 README in progress. If you can't run the app install .NET 9 but I think actually it's not mandatory.
 
-To do:
+## To do:
 
 - ~~Update the README.md~~ *Done*
 - ~~Fix the warning spam when building~~ *Done*
@@ -23,6 +23,14 @@ To do:
 - Add some cool icons (if I can do them cool lel)
 - Add icons to the timeline part
 - Add a better warning for unsaved progress
+
+# Auto completion support:
+
+* From **Action:** ~~`CastName`~~, ~~`CastType`~~, `AnimName` (I might not know how to add this);
+* From **Player:** ~~`BckName`~~;
+* From **Camera:** ~~`CameraTargetName`~~, `AnimCameraName`;
+* From **Sound:** ~~`Bgm`~~, `SystemSe`, `ActionSe`;
+* From **Wipe:** ~~`WipeName`~~, ~~`WipeType`~~;
 
 ## Building
 To build use:
