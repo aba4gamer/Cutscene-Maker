@@ -14,6 +14,7 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 
 using CutsceneMaker;
+using System.Diagnostics;
 
 
 
@@ -360,12 +361,16 @@ public partial class MainWindow : Window
 
 		DeleteSubPart(Core.GetSelectedSubPart().SubPartName);
 	}
+
+	private void OnGitHub(object? sender, RoutedEventArgs e)
+	{
+        Process.Start(new ProcessStartInfo("https://github.com/aba4gamer/Cutscene-Maker") {UseShellExecute = true} );
+    }
 	#endregion ActionFunctions
 
 
-
-	#region ActionHandlers
-	private void OnSelectCutscene(string cutsceneName)
+    #region ActionHandlers
+    private void OnSelectCutscene(string cutsceneName)
 	{
 		if (!Core.HasArchiveOpen() || ArchiveUI == null)
 			return;
