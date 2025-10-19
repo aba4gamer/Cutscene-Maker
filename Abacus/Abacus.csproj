@@ -15,7 +15,7 @@
 		<ProjectReference Include="../Hack.io/Hack.io.RARC/Hack.io.RARC.csproj" />
 		<ProjectReference Include="../Hack.io/Hack.io.YAZ0/Hack.io.YAZ0.csproj" />
 		<PackageReference Include="BidirectionalDictionary" Version="1.3.0" />
-		<Content Include="Templates\**">
+		<Content Include="Templates/**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>

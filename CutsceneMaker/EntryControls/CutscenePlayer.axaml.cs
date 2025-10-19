@@ -29,11 +29,13 @@ public partial class CutscenePlayer : UserControl
 	{
 		InitializeComponent();
 		BckName.AutoCompletion = Program.Utility.MarioAnimeList;
+		PosName.AutoCompletion = Program.Utility.GeneralPosList;
+
 
 		if (part.PlayerEntry != null)
 		{
 			IsPlayerEnabled.IsChecked = true;
-			PosName.Text = part.PlayerEntry.PosName;
+			PosName.Main.Text = part.PlayerEntry.PosName;
 			BckName.Main.Text = part.PlayerEntry.BckName;
 			Visible.IsChecked = part.PlayerEntry.Visible == 1;
 
@@ -47,7 +49,7 @@ public partial class CutscenePlayer : UserControl
 				part.PlayerEntry ??= new Abacus.Player();
 				SetControlsEnabled(true);
 
-				part.PlayerEntry.PosName = PosName.Text ?? string.Empty;
+				part.PlayerEntry.PosName = PosName.Main.Text ?? string.Empty;
 				part.PlayerEntry.BckName = BckName.Main.Text ?? string.Empty;
 				part.PlayerEntry.Visible = Visible.IsChecked == true ? 1 : 0;
 
@@ -77,7 +79,7 @@ public partial class CutscenePlayer : UserControl
 
 		DisposeSubscriptions();
 
-		_posNameSubscription = PosName.GetObservable(TextBox.TextProperty)
+		_posNameSubscription = PosName.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text => PlayerEntry.PosName = text ?? "");
 
 		_bckNameSubscription = BckName.Main.GetObservable(TextBox.TextProperty)

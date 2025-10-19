@@ -7,7 +7,7 @@
 		<CheckBox Name="IsPlayerEnabled" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="PosName" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<TextBox Name="PosName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="PosName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="BckName" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<views:AutoTextBox Name="BckName" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>

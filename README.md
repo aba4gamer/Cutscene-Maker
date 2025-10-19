@@ -19,18 +19,18 @@ README in progress. If you can't run the app install .NET 9 but I think actually
 - ~~Add an empty cutscene screen (cutscene without part saying how to create a new part)~~ *Done*
 - ~~Add a proper "button" to the cutscenes in the cutscene sidebar~~ *Done*
 - ~~Add some context menus because people like them~~ *Done*
-- ~~Add ComboBox for CastName, ActionType and other things~~ *Done (kinda)*
+- ~~Add ComboBox for CastName, ActionType and other things~~ *In progress of being added*
 - Add some cool icons (if I can do them cool lel)
 - Add icons to the timeline part
 - Add a better warning for unsaved progress
 
-### Auto completion support (the one with support are ~~like this~~):
+### Auto completion support:
 
-* From **Action:** ~~`CastName`~~, ~~`CastType`~~, `AnimName` (I might not know how to add this);
-* From **Player:** ~~`BckName`~~;
-* From **Camera:** ~~`CameraTargetName`~~, `AnimCameraName`;
-* From **Sound:** ~~`Bgm`~~, `SystemSe`, `ActionSe`;
-* From **Wipe:** ~~`WipeName`~~, ~~`WipeType`~~;
+* From **Action:** `CastName` (**yes**), `CastType` (**yes**), `AnimName` (**no**. I might not know how to add this);
+* From **Player:** `PosName` (**yes**) `BckName` (**yes**);
+* From **Camera:** `CameraTargetName` (**yes**), `AnimCameraName` (**no**);
+* From **Sound:** `Bgm` (**yes**), `SystemSe` (**no**), `ActionSe` (**no**);
+* From **Wipe:** `WipeName` (**yes**), `WipeType` (**yes**);
 
 ## Building
 To build use:
