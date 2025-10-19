@@ -34,10 +34,11 @@ public partial class CutsceneAction : UserControl
 	{
 		InitializeComponent();
 
+		PosName.AutoCompletion = Program.Utility.GeneralPosList;
 		CastNameBox.AutoCompletion = Program.Utility.ObjDataTableEnglishNames;
 		if (part.ActionEntry != null)
 		{
-			if (Program.Utility.ObjDataTableList.ContainsValue(part.ActionEntry.CastName) && Program.Utility.LoadedObject != Program.Utility.ObjDataTableList.Inverse[part.ActionEntry.CastName])
+			if (Program.Utility.ObjDataTableList.ContainsValue(part.ActionEntry.CastName) && Program.Utility.LoadedAnimObject != Program.Utility.ObjDataTableList.Inverse[part.ActionEntry.CastName])
 			{
 				Program.Utility.LoadRarc_ObjectAnim(Program.Utility.ObjDataTableList.Inverse[part.ActionEntry.CastName]);
 				AnimName.AutoCompletion = Program.Utility.ObjectAnimList;
@@ -48,7 +49,7 @@ public partial class CutsceneAction : UserControl
 			CastNameBox.Main.Text = Program.Utility.ObjDataTableList.ContainsValue(part.ActionEntry.CastName) ? Program.Utility.ObjDataTableList.Inverse[part.ActionEntry.CastName] : part.ActionEntry.CastName;
 			CastID.Value = part.ActionEntry.CastID;
 			ActionType.SelectedIndex = part.ActionEntry.ActionType;
-			PosName.Text = part.ActionEntry.PosName;
+			PosName.Main.Text = part.ActionEntry.PosName;
 			AnimName.Main.Text = part.ActionEntry.AnimName;
 
 			SubscribeToChanges(part);
@@ -66,7 +67,7 @@ public partial class CutsceneAction : UserControl
 				part.ActionEntry.CastName = CastNameBox.Main.Text != null ? Program.Utility.ObjDataTableList.ContainsKey(CastNameBox.Main.Text) ? Program.Utility.ObjDataTableList[CastNameBox.Main.Text] : CastNameBox.Main.Text : "";
 				part.ActionEntry.CastID = CastID.Value.HasValue ? (int)CastID.Value.Value : -1;
 				part.ActionEntry.ActionType = ActionType.SelectedIndex;
-				part.ActionEntry.PosName = PosName.Text ?? string.Empty;
+				part.ActionEntry.PosName = PosName.Main.Text ?? string.Empty;
 				part.ActionEntry.AnimName = AnimName.Main.Text ?? string.Empty;
 
 				SubscribeToChanges(part);
@@ -97,13 +98,8 @@ public partial class CutsceneAction : UserControl
 		_castNameBoxSubscription = CastNameBox.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text =>
 			{
-				if (text != null && Program.Utility.LoadedObject != text)
-				{
-					Program.Utility.LoadRarc_ObjectAnim(text);
-					AnimName.AutoCompletion = Program.Utility.ObjectAnimList;
-				}
-				else
-					AnimName.AutoCompletion = [];
+				Program.Utility.LoadRarc_ObjectAnim(text);
+				AnimName.AutoCompletion = Program.Utility.ObjectAnimList;
 
 				part.ActionEntry!.CastName = text != null ? Program.Utility.ObjDataTableList.ContainsKey(text) ? Program.Utility.ObjDataTableList[text] : text : "";
 			});
@@ -114,7 +110,7 @@ public partial class CutsceneAction : UserControl
 		_actionTypeSubscription = ActionType.GetObservable(ComboBox.SelectedIndexProperty)
 			.Subscribe(value => part.ActionEntry!.ActionType = ActionType.SelectedIndex);
 
-		_posNameSubscription = PosName.GetObservable(TextBox.TextProperty)
+		_posNameSubscription = PosName.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text => part.ActionEntry!.PosName = text ?? string.Empty);
 
 		_animNameSubscription = AnimName.Main.GetObservable(TextBox.TextProperty)

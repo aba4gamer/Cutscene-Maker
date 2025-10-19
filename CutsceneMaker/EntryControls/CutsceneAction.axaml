@@ -40,7 +40,7 @@
 		</ComboBox>
 
 		<TextBlock Text="PosName" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<TextBox Name="PosName" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="PosName" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="AnimName" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<views:AutoTextBox Name="AnimName" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>

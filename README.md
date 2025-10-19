@@ -26,11 +26,13 @@ README in progress. If you can't run the app install .NET 9 but I think actually
 
 ### Auto completion support:
 
-* From **Action:** `CastName` (**yes**), `CastType` (**yes**), `AnimName` (**no**. I might not know how to add this);
+* From **Action:** `CastName` (**yes**), `ActionType` (**yes**), `PosName` (**yes**), `AnimName` (**yes**[^1]);
 * From **Player:** `PosName` (**yes**) `BckName` (**yes**);
-* From **Camera:** `CameraTargetName` (**yes**), `AnimCameraName` (**no**);
+* From **Camera:** `CameraTargetName` (**yes**), `AnimCameraName` (**yes**[^1]);
 * From **Sound:** `Bgm` (**yes**), `SystemSe` (**no**), `ActionSe` (**no**);
 * From **Wipe:** `WipeName` (**yes**), `WipeType` (**yes**);
+
+[^1]: Antonio225 still didn't understand how to convert ObjNameTable english entries to link to **.arc**s filenames so... Support for it might not work properly.
 
 ## Building
 To build use:

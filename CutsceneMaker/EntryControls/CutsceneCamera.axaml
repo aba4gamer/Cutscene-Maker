@@ -14,7 +14,7 @@
 		<NumericUpDown Name="CameraTargetCastID" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>
 
 		<TextBlock Text="AnimCameraName" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<TextBox Name="AnimCameraName" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="AnimCameraName" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="AnimCameraStartFrame" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<NumericUpDown Name="AnimCameraStartFrame" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>

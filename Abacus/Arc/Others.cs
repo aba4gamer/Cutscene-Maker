@@ -28,7 +28,8 @@ public class OtherUtility
 
 	public string GamePath { get; private set; } = "";
 	public string GalaxyPath { get; private set; } = "";
-	public string LoadedObject { get; private set; } = "";
+	public string LoadedAnimObject { get; private set; } = "";
+	public string LoadedCanmObject { get; private set; } = "";
 
 	public BidirectionalDictionary<string, string> ObjDataTableList { get; private set; } = new();
 	public List<string> ObjDataTableEnglishNames { get; private set; } = [];
@@ -39,6 +40,7 @@ public class OtherUtility
 	public List<string> MarioAnimeList { get; private set; } = [];
 
 	public List<string> ObjectAnimList { get; private set; } = [];
+	public List<string> ObjectCanmList { get; private set; } = [];
 
 	public List<string> GeneralPosList { get; private set; } = [];
 
@@ -199,9 +201,12 @@ public class OtherUtility
 		}
 	}
 
-	public void LoadRarc_ObjectAnim(string objectName)
+	public void LoadRarc_ObjectAnim(string? objectName)
 	{
 		ObjectAnimList = [];
+
+		if (objectName == null)
+			return;
 
 		string path = Path.Combine(GamePath, "ObjectData", objectName + ".arc");
 		string animPath = Path.Combine(GamePath, "ObjectData", objectName + "Anim.arc");
@@ -226,7 +231,7 @@ public class OtherUtility
 		}
 
 
-		LoadedObject = objectName;
+		LoadedAnimObject = objectName;
 		if (!File.Exists(animPath))
 			return;
 
@@ -300,5 +305,56 @@ public class OtherUtility
 
 
 		LoadGeneralPos_LoadAllBCSVFromRarc(map);
+	}
+
+	public void LoadRarc_ObjectCanm(string? objectName)
+	{
+		ObjectCanmList = [];
+
+		if (objectName == null)
+			return;
+
+		string path = Path.Combine(GamePath, "ObjectData", objectName + ".arc");
+		string animPath = Path.Combine(GamePath, "ObjectData", objectName + "Anim.arc");
+
+		if (!File.Exists(path))
+			return;
+
+		RARC? ObjectArc = TryLoadRarcYAZ0(path);
+		if (ObjectArc == null)
+			return;
+
+		foreach (string filePath in ObjectArc.Root!.Items.Keys)
+		{
+			if (ObjectArc.Root[filePath]! is RARC.File && filePath.EndsWith(".canm"))
+			{
+				string name = filePath.Split(".")[0];
+				if (!ObjectCanmList.Contains(name))
+				{
+					ObjectCanmList.Add(name);
+				}
+			}
+		}
+
+
+		LoadedCanmObject = objectName;
+		if (!File.Exists(animPath))
+			return;
+
+		RARC? ObjectAnim = TryLoadRarcYAZ0(animPath);
+		if (ObjectAnim == null)
+			return;
+
+		foreach (string filePath in ObjectAnim.Root!.Items.Keys)
+		{
+			if (ObjectAnim.Root[filePath]! is RARC.File && filePath.EndsWith(".canm"))
+			{
+				string name = filePath.Split(".")[0];
+				if (!ObjectCanmList.Contains(name))
+				{
+					ObjectCanmList.Add(name);
+				}
+			}
+		}
 	}
 }
