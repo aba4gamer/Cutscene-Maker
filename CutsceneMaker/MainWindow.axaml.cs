@@ -368,6 +368,11 @@ public partial class MainWindow : Window
     }
 	#endregion ActionFunctions
 
+	private void OnWiki(object? sender, RoutedEventArgs e)
+	{
+		Process.Start(new ProcessStartInfo("https://lumasworkshop.com/wiki/Cutscenes") {UseShellExecute = true} );
+
+    }
 
     #region ActionHandlers
     private void OnSelectCutscene(string cutsceneName)
