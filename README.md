@@ -19,7 +19,7 @@ README in progress. If you can't run the app install .NET 9 but I think actually
 - ~~Add an empty cutscene screen (cutscene without part saying how to create a new part)~~ *Done*
 - ~~Add a proper "button" to the cutscenes in the cutscene sidebar~~ *Done*
 - ~~Add some context menus because people like them~~ *Done*
-- ~~Add ComboBox for CastName, ActionType and other things~~ *In progress of being added*
+- ~~Add ComboBox for CastName, ActionType and other things~~ *I (Antonio225) believe that it's done.*
 - Add some cool icons (if I can do them cool lel)
 - Add icons to the timeline part
 - Add a better warning for unsaved progress
@@ -29,7 +29,7 @@ README in progress. If you can't run the app install .NET 9 but I think actually
 * From **Action:** `CastName` (**yes**), `ActionType` (**yes**), `PosName` (**yes**), `AnimName` (**yes**[^1]);
 * From **Player:** `PosName` (**yes**) `BckName` (**yes**);
 * From **Camera:** `CameraTargetName` (**yes**), `AnimCameraName` (**yes**[^1]);
-* From **Sound:** `Bgm` (**yes**), `SystemSe` (**no**), `ActionSe` (**no**);
+* From **Sound:** `Bgm` (**yes**), `SystemSe` (**yes**), `ActionSe` (**yes**);
 * From **Wipe:** `WipeName` (**yes**), `WipeType` (**yes**);
 
 [^1]: Antonio225 still didn't understand how to convert ObjNameTable english entries to link to **.arc**s filenames so... Support for it might not work properly.

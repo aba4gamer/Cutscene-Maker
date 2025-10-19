@@ -12,10 +12,10 @@
 		<views:AutoTextBox Name="BGM" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="SystemSe" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<TextBox Name="SystemSe" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="SystemSe" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="ActionSe" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<TextBox Name="ActionSe" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="ActionSe" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="ReturnBgm" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<CheckBox Name="ReturnBgm" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>

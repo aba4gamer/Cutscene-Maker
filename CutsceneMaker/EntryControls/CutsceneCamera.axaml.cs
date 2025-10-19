@@ -37,10 +37,6 @@ public partial class CutsceneCamera : UserControl
 			if (Program.Utility.ObjDataTableList.ContainsValue(part.CameraEntry.CameraTargetName) && Program.Utility.LoadedCanmObject != Program.Utility.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName])
 			{
 				Program.Utility.LoadRarc_ObjectCanm(Program.Utility.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName]);
-				foreach (string canm in Program.Utility.ObjectCanmList)
-				{
-					Console.WriteLine(canm);
-				}
 				AnimCameraName.AutoCompletion = Program.Utility.ObjectCanmList;
 			}
 

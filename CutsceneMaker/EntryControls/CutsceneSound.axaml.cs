@@ -31,16 +31,19 @@ public partial class CutsceneSound : UserControl
 	{
 		InitializeComponent();
 		BGM.AutoCompletion = Program.Utility.MusicList;
+		SystemSe.AutoCompletion = SoundEffectsList.PREFIX;
+		ActionSe.AutoCompletion = SoundEffectsList.PREFIX;
 
 		if (part.SoundEntry != null)
 		{
 			IsSoundEnabled.IsChecked = true;
 			BGM.Main.Text = part.SoundEntry.Bgm;
-			SystemSe.Text = part.SoundEntry.SystemSe;
-			ActionSe.Text = part.SoundEntry.ActionSe;
+			SystemSe.Main.Text = part.SoundEntry.SystemSe;
+			ActionSe.Main.Text = part.SoundEntry.ActionSe;
 			ReturnBgm.IsChecked = part.SoundEntry.ReturnBgm != 0;
 			BgmWipeOutFrame.Value = part.SoundEntry.WipeOutFrame;
 			AllSoundStopFrame.IsChecked = part.SoundEntry.AllSoundStopFrame == 1;
+
 
 			SubscribeToChanges(part);
 		}
@@ -53,8 +56,8 @@ public partial class CutsceneSound : UserControl
 				SetControlsEnabled(true);
 
 				part.SoundEntry.Bgm = BGM.Main.Text ?? "";
-				part.SoundEntry.SystemSe = SystemSe.Text ?? string.Empty;
-				part.SoundEntry.ActionSe = ActionSe.Text ?? string.Empty;
+				part.SoundEntry.SystemSe = SystemSe.Main.Text ?? string.Empty;
+				part.SoundEntry.ActionSe = ActionSe.Main.Text ?? string.Empty;
 				part.SoundEntry.ReturnBgm = ReturnBgm.IsChecked == true ? 1 : 0;
 				part.SoundEntry.WipeOutFrame = BgmWipeOutFrame.Value.HasValue ? (int)BgmWipeOutFrame.Value.Value : -1;
 				part.SoundEntry.AllSoundStopFrame = AllSoundStopFrame.IsChecked == true ? 1 : 0;
@@ -88,11 +91,85 @@ public partial class CutsceneSound : UserControl
 		_bgmSubscription = BGM.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text => part.SoundEntry!.Bgm = text ?? "");
 
-		_systemSeSubscription = SystemSe.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => part.SoundEntry!.SystemSe = text ?? string.Empty);
+		_systemSeSubscription = SystemSe.Main.GetObservable(TextBox.TextProperty)
+			.Subscribe(text =>
+			{
+				if (text != null)
+				{
+					if (text.StartsWith(SoundEffectsList.PREFIX[0]))
+						SystemSe.AutoCompletion = SoundEffectsList.SYSTEM;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[1]))
+						SystemSe.AutoCompletion = SoundEffectsList.PLAYER_VOICE;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[2]))
+						SystemSe.AutoCompletion = SoundEffectsList.PLAYER_MOTION;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[3]))
+						SystemSe.AutoCompletion = SoundEffectsList.BOSS_VOICE;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[4]))
+						SystemSe.AutoCompletion = SoundEffectsList.BOSS_MOTION;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[5]))
+						SystemSe.AutoCompletion = SoundEffectsList.OBJECT;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[6]))
+						SystemSe.AutoCompletion = SoundEffectsList.ATMOSPHERE;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[7]))
+						SystemSe.AutoCompletion = SoundEffectsList.DEMO;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[8]))
+						SystemSe.AutoCompletion = SoundEffectsList.ENEMY_VOICE;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[9]))
+						SystemSe.AutoCompletion = SoundEffectsList.ENEMY_MOTION;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[10]))
+						SystemSe.AutoCompletion = SoundEffectsList.SUPPORTER_VOICE;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[11]))
+						SystemSe.AutoCompletion = SoundEffectsList.SUPPORTER_MOTION;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[12]))
+						SystemSe.AutoCompletion = SoundEffectsList.REMIX_SEQ;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[13]))
+						SystemSe.AutoCompletion = SoundEffectsList.HOME_BUTTON_MENU;
+					else
+						SystemSe.AutoCompletion = SoundEffectsList.PREFIX;
+				}
 
-		_actionSeSubscription = ActionSe.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => part.SoundEntry!.ActionSe = text ?? string.Empty);
+				part.SoundEntry!.SystemSe = text ?? string.Empty;
+			});
+
+		_actionSeSubscription = ActionSe.Main.GetObservable(TextBox.TextProperty)
+			.Subscribe(text =>
+			{
+				if (text != null)
+				{
+					if (text.StartsWith(SoundEffectsList.PREFIX[0]))
+						ActionSe.AutoCompletion = SoundEffectsList.SYSTEM;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[1]))
+						ActionSe.AutoCompletion = SoundEffectsList.PLAYER_VOICE;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[2]))
+						ActionSe.AutoCompletion = SoundEffectsList.PLAYER_MOTION;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[3]))
+						ActionSe.AutoCompletion = SoundEffectsList.BOSS_VOICE;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[4]))
+						ActionSe.AutoCompletion = SoundEffectsList.BOSS_MOTION;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[5]))
+						ActionSe.AutoCompletion = SoundEffectsList.OBJECT;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[6]))
+						ActionSe.AutoCompletion = SoundEffectsList.ATMOSPHERE;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[7]))
+						ActionSe.AutoCompletion = SoundEffectsList.DEMO;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[8]))
+						ActionSe.AutoCompletion = SoundEffectsList.ENEMY_VOICE;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[9]))
+						ActionSe.AutoCompletion = SoundEffectsList.ENEMY_MOTION;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[10]))
+						ActionSe.AutoCompletion = SoundEffectsList.SUPPORTER_VOICE;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[11]))
+						ActionSe.AutoCompletion = SoundEffectsList.SUPPORTER_MOTION;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[12]))
+						ActionSe.AutoCompletion = SoundEffectsList.REMIX_SEQ;
+					else if (text.StartsWith(SoundEffectsList.PREFIX[13]))
+						ActionSe.AutoCompletion = SoundEffectsList.HOME_BUTTON_MENU;
+					else
+						ActionSe.AutoCompletion = SoundEffectsList.PREFIX;
+				}
+
+				part.SoundEntry!.ActionSe = text ?? string.Empty;
+			});
 
 		_returnBgmSubscription = ReturnBgm.GetObservable(CheckBox.IsCheckedProperty)
 			.Subscribe(isChecked => part.SoundEntry!.ReturnBgm = isChecked == true ? 1 : 0);
