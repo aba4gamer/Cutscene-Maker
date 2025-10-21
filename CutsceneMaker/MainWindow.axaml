@@ -36,6 +36,18 @@
 				<MenuItem Name="RenameSubPartBtn" Header="_Rename SubPart" Click="OnRenameSubPart" InputGesture="Alt+Shift+R" HotKey="Alt+Shift+R" ToolTip.Tip="Renames the selected sub part in the selected part of the selected cutscene" />
 				<MenuItem Name="DeleteSubPartBtn" Header="_Delete SubPart" Click="OnDeleteSubPart" InputGesture="Alt+Shift+Delete" HotKey="Alt+Shift+Delete" ToolTip.Tip="Deletes the selected sub part in the selected part of the selected cutscene" />
 			</MenuItem>
+			<MenuItem Name="SettingsMenu" Header="_About">
+				<MenuItem Name="WikiBtn" Header="_Luma's Wiki" Click="OnWiki" ToolTip.Tip="More information about Cutscenes right here">
+					<MenuItem.Icon>
+						<Image Source="Assets/wiki-icon.png"/>
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Name= "GitHubBtn" Header="_GitHub" Click="OnGitHub" ToolTip.Tip="The CutsceneMaker GitHub repo">
+					<MenuItem.Icon>
+						<Image Source="Assets/github-mark-white.png"/>
+					</MenuItem.Icon>
+                </MenuItem>         
+			</MenuItem>
 		</Menu>
 
 		<Border DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Padding="5" BorderThickness="0, 1, 0, 0" BorderBrush="White">

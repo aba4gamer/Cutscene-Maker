@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Collections.Generic;
 
 using Abacus;
@@ -198,6 +199,20 @@ public partial class MainWindow : Window
 	private void OnReloadArchive(object? sender, RoutedEventArgs e)
 	{
 		Ask_ReloadArchive();
+	}
+
+
+	// ============================
+	// Wiki & Github
+
+	private void OnWiki(object? sender, RoutedEventArgs e)
+	{
+		Process.Start(new ProcessStartInfo("https://lumasworkshop.com/wiki/Cutscenes") {UseShellExecute = true} );
+	}
+
+	private void OnGitHub(object? sender, RoutedEventArgs e)
+	{
+		Process.Start(new ProcessStartInfo("https://github.com/aba4gamer/Cutscene-Maker") {UseShellExecute = true} );
 	}
 
 
@@ -1108,482 +1123,482 @@ public partial class MainWindow : Window
 
 
 
-// 		private void EnableSaveButtons(bool enabled) {
-// 			SaveButton.IsEnabled = enabled;
-// 			SaveAsButton.IsEnabled = enabled;
-// 		}
-//
-//
-//
-//
-//
-//
-// 		private async Task<bool> AskLoseUnsavedChanges() {
-// 			return await CMMsgBox.AskLoseUnsavedChanges(this);
-// 		}
-//
-//
-// 		private void OnClickNewArchive(object sender, RoutedEventArgs e) {
-// 			// TODO: Create a cutscene archive maker
-//
-// // 			if (hasDialogWindowOpen) return;
-// // 			if (!(await AskLoseUnsavedChanges())) return;
-// //
-// // 			hasDialogWindowOpen = true;
-// // 			string? CutsceneName = await CMMsgBox.AskBCSVName(this, null);
-// // 			hasDialogWindowOpen = false;
-// // 			if (string.IsNullOrEmpty(CutsceneName)) return;
-// //
-// // 			cutscene = Cutscene.NewCutsceneFromTemplate(CutsceneName);
-// // 			// LoadTree(cutscene);
-// //
-// // 			folderPath = null;
-// // 			fileName = CutsceneName;
-// //
-// // 			UpdateUILoad();
-// //
-// // 			MainWindowX.Title = $"CutsceneMaker - [New Cutscene \"{CutsceneName}\"]";
-// // 			StatusText.Text = $"New cutscene \"{CutsceneName}\" created!";
-// 		}
-//
-// // 		private async void OnClickOpen(object? sender, RoutedEventArgs e) {
-// // 			if (hasDialogWindowOpen) return;
-// // 			if (!(await AskLoseUnsavedChanges())) return;
-// //
-// // 			hasDialogWindowOpen = true;
-// // 			string? FilePath = await CMMsgBox.AskOpenBCSVTimeFile(StorageProvider);
-// // 			hasDialogWindowOpen = false;
-// // 			if (FilePath == null) {
-// // 				StatusText.Text = "Open aborted";
-// // 				return;
-// // 			}
-// //
-// // 			cutscene = Cutscene.NewCutsceneFromFiles(FilePath);
-// // 			// LoadTree(cutscene);
-// // 			folderPath = Path.GetDirectoryName(FilePath)!;
-// // 			fileName = FilePath.Substring(folderPath.Length, FilePath.Length - folderPath.Length - 9);
-// //
-// // 			UpdateUILoad();
-// //
-// // 			string TitleString = FilePath.Substring(0, FilePath.Length - 9);
-// //
-// // 			MainWindowX.Title = $"CutsceneMaker - [{TitleString}]";
-// // 			StatusText.Text = $"Loaded \"{TitleString}\" successfully!";
-// // 		}
-//
-// 		private async void OnClickOpenArchive(object? sender, RoutedEventArgs e) {
-// 			if (hasDialogWindowOpen) return;
-// 			// if (!(await AskLoseUnsavedChanges())) {
-// 			// 	StatusText.Text = $"Aborted Open";
-// 			// 	return;
-// 			// }
-//
-// 			hasDialogWindowOpen = true;
-// 			string? FilePath = await CMMsgBox.AskOpenArcFile(StorageProvider);
-// 			hasDialogWindowOpen = false;
-//
-// 			if (FilePath == null) {
-// 				StatusText.Text = $"Aborted Open";
-// 				return;
-// 			}
-//
-// 			CutsceneArchiveReadWrapper res = CutsceneArchive.LoadArchive(FilePath);
-// 			if (res.IsError()) {
-// 				await CMMsgBox.SendMessage(this, "Error", $"Couldn't open the file {FilePath} because of an error:\n\n{res.GetErrorMessage()}", ButtonEnum.Ok);
-// 				StatusText.Text = $"Failed opened \"{FilePath}\"!";
-// 				return;
-// 			}
-//
-// 			SelectCutscenePart(null);
-//
-// 			archive = res.GetResult();
-// 			PopulateArchiveSidebar();
-//
-// 			MainViewEmpty.IsVisible = false;
-// 			MainViewLoaded.IsVisible = true;
-//
-// 			CutscenePanelEmpty.IsVisible = true;
-// 			CutscenePanelPopulation.IsVisible = false;
-//
-// 			CutscenePanelNoParts.IsVisible = false;
-// 			CutscenePanelTabs.IsVisible = false;
-//
-// 			ArchiveMenu.IsEnabled = true;
-// 			CutsceneMenu.IsEnabled = false;
-//
-// 			// TODO: Select the first element. Might not going to add it tho.
-//
-// 			StatusText.Text = $"Successfully opened \"{FilePath}\"!";
-// 		}
-//
-// 		private void PopulateArchiveSidebar() {
-// 			// if (cutscene == null) return;
-// 			if (archive == null) return;
-//
-// 			ArchiveSidebarCutscenePool.Children.Clear();
-//
-// 			if (archive.CutsceneNames.Count() < 1) {
-// 				ArchiveSidebarEmpty.IsVisible = true;
-// 				ArchiveSidebarPopulation.IsVisible = false;
-// 				return;
-// 			}
-//
-// 			ArchiveSidebarEmpty.IsVisible = false;
-// 			ArchiveSidebarPopulation.IsVisible = true;
-//
-// 			foreach (string cutsceneName in archive.CutsceneNames) {
-//
-// 				ArchiveSidebarCutscenePool.Children.Add(BuildArchiveItem(cutsceneName));
-// 			}
-// 		}
-//
-// 		private Button BuildArchiveItem(string text) {
-//
-// 			Button btn = new();
-// 			btn.HorizontalAlignment = HorizontalAlignment.Stretch;
-// 			btn.Click += OnClickSelectCutsceneArchive;
-//
-// 			StackPanel stack = new StackPanel();
-// 			stack.Orientation = Orientation.Horizontal;
-// 			stack.VerticalAlignment = VerticalAlignment.Center;
-//
-// 			Image image = new Image();
-// 			image.Source = new Bitmap("Assets/placeholder.png");
-// 			image.Width = 14;
-// 			image.Height = 14;
-//
-// 			Label lbl = new Label();
-// 			lbl.FontSize = 12;
-// 			lbl.Content = text;
-//
-// 			stack.Children.Add(image);
-// 			stack.Children.Add(lbl);
-//
-// 			btn.Content = stack;
-//
-// 			return btn;
-// 		}
-//
-// 		private void EnableAllArchiveSidebarButtons() {
-// 			// if (cutscene == null) return;
-// 			if (!ArchiveSidebarCutscenePool.IsVisible) return;
-//
-// 			foreach (object control in ArchiveSidebarCutscenePool.Children) {
-// 				Button btn = (Button) control;
-// 				btn.IsEnabled = true;
-// 			}
-// 		}
-//
-// 		private void OnClickSelectCutsceneArchive(object? sender, RoutedEventArgs e) {
-// 			// if (cutscene == null) return;
-// 			if (archive == null || sender == null) return;
-//
-// 			Button btn = (Button) sender;
-// 			if (btn.Content == null) return;
-//
-// 			StackPanel stack = (StackPanel) btn.Content;
-// 			if (stack.Children[1] == null) return;
-//
-// 			Label label = (Label) stack.Children[1];
-// 			if (label.Content == null) return;
-//
-//
-// 			archive.LoadCutscene((string) label.Content);
-// 			SelectCutscenePart(null);
-//
-//
-// 			EnableAllArchiveSidebarButtons();
-// 			btn.IsEnabled = false;
-//
-// 			if (CutscenePanelPopulation.IsVisible == false) {
-// 				CutscenePanelEmpty.IsVisible = false;
-// 				CutscenePanelPopulation.IsVisible = true;
-// 			}
-// 			if (!CutsceneMenu.IsEnabled) CutsceneMenu.IsEnabled = true;
-//
-// 			RenderTimelineParts();
-//
-// 			CutscenePanelNoParts.IsVisible = true;
-// 			CutscenePanelTabs.IsVisible = false;
-//
-// 			StatusText.Text = $"Successfully selected \"{archive.SelectedCutsceneName}\"!";
-// 		}
-//
-// 		public void RenderTimelineParts() {
-// 			if (archive == null || archive.SelectedCutsceneName == null) return;
-//
-// 			CutsceneMainTimeline.Children.Clear();
-//
-// 			CreateTimelineSecondStamps();
-// 			foreach (Cutscene.Part part in archive.GetLoadedCutscene().Parts) {
-// 				// Console.WriteLine($"{part.PartName}: {part.TimeEntry.TotalStep}");
-// 				CutsceneMainTimeline.Children.Add(GenerateTimelinePartSection(part.TimeEntry.TotalStep, part.PartName));
-// 			}
-// 		}
-//
-// 		private void OnClickSave(object? sender, RoutedEventArgs e) {
-// // 			// if (cutscene == null) return;
-// // 			if (folderPath == null || fileName == null) {
-// // 				OnClickSaveAs(sender, e);
-// // 				return;
-// // 			}
-// //
-// // 			// cutscene.SaveAll(Path.Combine(folderPath, fileName));
-// //
-// // 			StatusText.Text = $"Saved to \"{folderPath}\" as \"{fileName}\" successfully!";
-// 		}
-//
-// 		private void OnClickSaveAs(object? sender, RoutedEventArgs e) {
-// // 			// if (cutscene == null) return;
-// //
-// // 			string? ReturnedFolderPath = await CMMsgBox.AskSaveBCSVFile(StorageProvider, folderPath);
-// // 			if (ReturnedFolderPath == null) return;
-// //
-// // 			// string FileName = "";
-// // 			// if (fileName != null) {
-// // 			// 	FileName = fileName;
-// // 			// }
-// // 			string? NewName = await CMMsgBox.AskBCSVName(this, FileName);
-// // 			if (string.IsNullOrEmpty(NewName)) {
-// // 				StatusText.Text = "Aborted saving.";
-// // 				return;
-// // 			}
-// //
-// // 			string CombinedPath = Path.Combine(ReturnedFolderPath, NewName);
-// // 			if (Path.Exists(Path.Join(CombinedPath, "Time.bcsv"))) {
-// // 				ButtonResult Choice = await CMMsgBox.SendMessage(this, "Overwrite", $"A cutscene with the name {NewName} already exists.\n\nDo you want to overwrite it?", ButtonEnum.YesNo);
-// // 				if (Choice == ButtonResult.No) {
-// // 					StatusText.Text = "Aborted saving.";
-// // 					return;
-// // 				}
-// // 			}
-// //
-// // 			// cutscene.SaveAll(CombinedPath);
-// //
-// // 			fileName = NewName;
-//
-// 			// MainWindowX.Title = $"CutsceneMaker - [{CombinedPath}]";
-// 			// StatusText.Text = $"Saved to \"{ReturnedFolderPath}\" as \"{NewName}\" successfully!";
-// 		}
-//
-// 		private void CreateTimelineSecondStamps() {
-// 			if (archive == null || archive.SelectedCutsceneName == null || !CutscenePanelPopulation.IsVisible) return;
-//
-// 			CutsceneMainTimelineTime.Children.Clear();
-// 			CutsceneSubTimelineTime.Children.Clear();
-//
-// 			int limit = archive.GetLoadedCutscene().GetMaxTotalSteps() + 40;
-// 			int minWidth = ((int) (MainWindowX.Width * 0.125)) - 30;
-// 			if (limit < minWidth) limit = minWidth;
-// 			int diff = limit % 5;
-// 			limit -= diff - 1;
-//
-// 			// Console.WriteLine("Limit: {0}", limit);
-//
-// 			for (int i = 1; i < limit; i++) {
-// 				if (i % 5 == 0 && i % 10 != 0) {
-// 					CutsceneMainTimelineTime.Children.Add(GenerateTimelineFractionSecondStampPanel());
-// 					CutsceneSubTimelineTime.Children.Add(GenerateTimelineFractionSecondStampPanel());
-// 				}
-//
-// 				if (i % 10 == 0) {
-// 					CutsceneMainTimelineTime.Children.Add(GenerateTimelineSecondStampPanel(i));
-// 					CutsceneSubTimelineTime.Children.Add(GenerateTimelineSecondStampPanel(i));
-// 				}
-// 			}
-// 		}
-//
-// 		public DockPanel GenerateTimelineSecondStampPanel(int second) {
-// 			// <DockPanel Width="40" Height="15" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-// 			// 	<Border BorderThickness="0, 0, 1, 0" BorderBrush="#8f8f8f">
-// 			// 		<Label FontSize="6" Foreground="#8f8f8f" HorizontalAlignment="Right" VerticalAlignment="Center">10</Label>
-// 			// 	</Border>
-// 			// 	</DockPanel>
-// 			// 	<DockPanel Width="40" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-// 			// 	<Border BorderThickness="0, 0, 1, 0" BorderBrush="#6f6f6f"></Border>
-// 			// </DockPanel>
-//
-// 			DockPanel panel = new();
-// 			panel.Width = 40;
-// 			panel.Height = 15;
-// 			panel.HorizontalAlignment = HorizontalAlignment.Left;
-// 			panel.VerticalAlignment = VerticalAlignment.Bottom;
-//
-// 			Border border = new();
-// 			border.BorderThickness = new Thickness(0.0, 0.0, 1.0, 0.0);
-// 			border.BorderBrush = Brush.Parse("#8f8f8f");
-//
-// 			Label label = new();
-// 			label.FontSize = 8;
-// 			label.Foreground = Brush.Parse("#8f8f8f");
-// 			label.HorizontalAlignment = HorizontalAlignment.Right;
-// 			label.VerticalAlignment = VerticalAlignment.Center;
-// 			label.Content = $"{second}";
-//
-// 			border.Child = label;
-// 			panel.Children.Add(border);
-//
-// 			return panel;
-// 		}
-//
-// 		public DockPanel GenerateTimelineFractionSecondStampPanel() {
-// 			// <DockPanel Width="40" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-// 			// 	<Border BorderThickness="0, 0, 1, 0" BorderBrush="#6f6f6f"></Border>
-// 			// </DockPanel>
-//
-// 			DockPanel panel = new();
-// 			panel.Width = 40;
-// 			panel.Height = 10;
-// 			panel.HorizontalAlignment = HorizontalAlignment.Left;
-// 			panel.VerticalAlignment = VerticalAlignment.Bottom;
-//
-// 			Border border = new();
-// 			border.BorderThickness = new Thickness(0.0, 0.0, 1.0, 0.0);
-// 			border.BorderBrush = Brush.Parse("#8f8f8f");
-//
-// 			panel.Children.Add(border);
-//
-// 			return panel;
-// 		}
-//
-// 		public Border GenerateTimelinePartSection(int steps, string partName) {
-// 			// <Border BorderThickness="1" BorderBrush="#cce" Height="50" Width="120">
-// 			// 	<Grid ColumnDefinitions="1*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#668">
-// 			// 		<Label VerticalAlignment="Center">Test1</Label>
-// 			// 	</Grid>
-// 			// </Border>
-//
-// 			Border border = new();
-// 			border.BorderThickness = new Thickness(1.0);
-// 			border.BorderBrush = Brush.Parse("#cce");
-// 			border.HorizontalAlignment = HorizontalAlignment.Left;
-// 			border.VerticalAlignment = VerticalAlignment.Center;
-// 			border.Height = 50;
-// 			border.Width = steps * 8;
-// 			border.AddHandler(PointerPressedEvent, OnClickSelectPart, RoutingStrategies.Tunnel);
-//
-// 			Grid grid = new();
-// 			grid.ColumnDefinitions = new ColumnDefinitions("1*");
-// 			grid.HorizontalAlignment = HorizontalAlignment.Stretch;
-// 			grid.VerticalAlignment = VerticalAlignment.Stretch;
-// 			grid.Background = Brush.Parse("#668");
-//
-// 			Label label = new();
-// 			label.VerticalAlignment = VerticalAlignment.Center;
-// 			label.Content = partName;
-//
-// 			grid.Children.Add(label);
-// 			border.Child = grid;
-//
-// 			return border;
-// 		}
-//
-// 		public Border GenerateTimelineSubPartSection(int steps, string partName) {
-// 			// <Border BorderThickness="1" BorderBrush="#cce" Height="50" Width="120">
-// 			// 	<Grid ColumnDefinitions="1*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#668">
-// 			// 		<Label VerticalAlignment="Center">Test1</Label>
-// 			// 	</Grid>
-// 			// </Border>
-//
-// 			Border border = new();
-// 			border.BorderThickness = new Thickness(1.0);
-// 			border.BorderBrush = Brush.Parse("#9999a9");
-// 			border.HorizontalAlignment = HorizontalAlignment.Left;
-// 			border.VerticalAlignment = VerticalAlignment.Center;
-// 			border.Height = 50;
-// 			border.Width = steps * 8;
-//
-// 			Grid grid = new();
-// 			grid.ColumnDefinitions = new ColumnDefinitions("1*");
-// 			grid.HorizontalAlignment = HorizontalAlignment.Stretch;
-// 			grid.VerticalAlignment = VerticalAlignment.Stretch;
-// 			grid.Background = Brush.Parse("#595979");
-//
-// 			Label label = new();
-// 			label.VerticalAlignment = VerticalAlignment.Center;
-// 			label.Content = partName;
-//
-// 			grid.Children.Add(label);
-// 			border.Child = grid;
-//
-// 			return border;
-// 		}
-//
-// 		private void EnableAllPartsInTimeline() {
-// 			foreach (object obj in CutsceneMainTimeline.Children) {
-// 				Border border = (Border) obj;
-// 				object? gridObj = border.Child;
-//
-// 				if (gridObj == null) return;
-// 				Grid grid = (Grid) gridObj;
-// 				grid.Background = Brush.Parse("#595979");
-// 			}
-//  		}
-//
-// 		public void OnClickSelectPart(object? sender, RoutedEventArgs e) {
-// 			if (sender == null) return;
-// 			Border border = (Border) sender;
-//
-// 			object? gridObj = border.Child;
-// 			if (gridObj == null) return;
-//
-// 			Grid grid = (Grid) gridObj;
-// 			object? labelObj = grid.Children[0];
-//
-// 			if (labelObj == null) return;
-// 			Label label = (Label) labelObj;
-//
-// 			object? selectedPartObj = label.Content;
-// 			if (selectedPartObj == null) return;
-//
-//
-// 			EnableAllPartsInTimeline();
-// 			grid.Background = Brush.Parse("#446");
-//
-// 			SelectCutscenePart((string) selectedPartObj);
-//
-// 			StatusText.Text = $"Selected part \"{selectedPart}\"!";
-// 		}
-//
-// 		public void SelectCutscenePart(string? selPart) {
-// 			if (selPart == null || archive == null || archive.SelectedCutsceneName == null) {
-// 				selectedPart = null;
-// 				DisableSubPartSelectionComboBox();
-// 				return;
-// 			}
-//
-// 			selectedPart = selPart;
-//
-// 			CutscenePanelNoParts.IsVisible = false;
-// 			CutscenePanelTabs.IsVisible = true;
-//
-// 			Cutscene cs = archive.GetLoadedCutscene();
-// 			Cutscene.Part part = cs.GetPartByName(selPart);
-//
-// 			if (part.SubPartEntries == null) {
-// 				DisableSubPartSelectionComboBox();
-// 				return;
-// 			}
-//
-// 			if (part.SubPartEntries.Count() < 1) {
-// 				DisableSubPartSelectionComboBox();
-// 				return;
-// 			}
-//
-// 			CutsceneTimelineSubPartBox.Items.Clear();
-// 			CutsceneTimelineSubPartBox.SelectedIndex = 0;
-// 			CutsceneTimelineSubPartBox.IsEnabled = true;
-// 			foreach (Abacus.SubPart subPart in part.SubPartEntries) {
-// 				CutsceneTimelineSubPartBox.Items.Add(new ComboBoxItem { Content = subPart.SubPartName });
-// 			}
-// 		}
-//
-// 		public void DisableSubPartSelectionComboBox() {
-// 			CutsceneTimelineSubPartBox.Items.Clear();
-// 			CutsceneTimelineSubPartBox.Items.Add(new ComboBoxItem { Content = "No SubParts" });
-// 			CutsceneTimelineSubPartBox.SelectedIndex = 0;
-// 			CutsceneTimelineSubPartBox.IsEnabled = false;
-// 		}
+	// 		private void EnableSaveButtons(bool enabled) {
+	// 			SaveButton.IsEnabled = enabled;
+	// 			SaveAsButton.IsEnabled = enabled;
+	// 		}
+	//
+	//
+	//
+	//
+	//
+	//
+	// 		private async Task<bool> AskLoseUnsavedChanges() {
+	// 			return await CMMsgBox.AskLoseUnsavedChanges(this);
+	// 		}
+	//
+	//
+	// 		private void OnClickNewArchive(object sender, RoutedEventArgs e) {
+	// 			// TODO: Create a cutscene archive maker
+	//
+	// // 			if (hasDialogWindowOpen) return;
+	// // 			if (!(await AskLoseUnsavedChanges())) return;
+	// //
+	// // 			hasDialogWindowOpen = true;
+	// // 			string? CutsceneName = await CMMsgBox.AskBCSVName(this, null);
+	// // 			hasDialogWindowOpen = false;
+	// // 			if (string.IsNullOrEmpty(CutsceneName)) return;
+	// //
+	// // 			cutscene = Cutscene.NewCutsceneFromTemplate(CutsceneName);
+	// // 			// LoadTree(cutscene);
+	// //
+	// // 			folderPath = null;
+	// // 			fileName = CutsceneName;
+	// //
+	// // 			UpdateUILoad();
+	// //
+	// // 			MainWindowX.Title = $"CutsceneMaker - [New Cutscene \"{CutsceneName}\"]";
+	// // 			StatusText.Text = $"New cutscene \"{CutsceneName}\" created!";
+	// 		}
+	//
+	// // 		private async void OnClickOpen(object? sender, RoutedEventArgs e) {
+	// // 			if (hasDialogWindowOpen) return;
+	// // 			if (!(await AskLoseUnsavedChanges())) return;
+	// //
+	// // 			hasDialogWindowOpen = true;
+	// // 			string? FilePath = await CMMsgBox.AskOpenBCSVTimeFile(StorageProvider);
+	// // 			hasDialogWindowOpen = false;
+	// // 			if (FilePath == null) {
+	// // 				StatusText.Text = "Open aborted";
+	// // 				return;
+	// // 			}
+	// //
+	// // 			cutscene = Cutscene.NewCutsceneFromFiles(FilePath);
+	// // 			// LoadTree(cutscene);
+	// // 			folderPath = Path.GetDirectoryName(FilePath)!;
+	// // 			fileName = FilePath.Substring(folderPath.Length, FilePath.Length - folderPath.Length - 9);
+	// //
+	// // 			UpdateUILoad();
+	// //
+	// // 			string TitleString = FilePath.Substring(0, FilePath.Length - 9);
+	// //
+	// // 			MainWindowX.Title = $"CutsceneMaker - [{TitleString}]";
+	// // 			StatusText.Text = $"Loaded \"{TitleString}\" successfully!";
+	// // 		}
+	//
+	// 		private async void OnClickOpenArchive(object? sender, RoutedEventArgs e) {
+	// 			if (hasDialogWindowOpen) return;
+	// 			// if (!(await AskLoseUnsavedChanges())) {
+	// 			// 	StatusText.Text = $"Aborted Open";
+	// 			// 	return;
+	// 			// }
+	//
+	// 			hasDialogWindowOpen = true;
+	// 			string? FilePath = await CMMsgBox.AskOpenArcFile(StorageProvider);
+	// 			hasDialogWindowOpen = false;
+	//
+	// 			if (FilePath == null) {
+	// 				StatusText.Text = $"Aborted Open";
+	// 				return;
+	// 			}
+	//
+	// 			CutsceneArchiveReadWrapper res = CutsceneArchive.LoadArchive(FilePath);
+	// 			if (res.IsError()) {
+	// 				await CMMsgBox.SendMessage(this, "Error", $"Couldn't open the file {FilePath} because of an error:\n\n{res.GetErrorMessage()}", ButtonEnum.Ok);
+	// 				StatusText.Text = $"Failed opened \"{FilePath}\"!";
+	// 				return;
+	// 			}
+	//
+	// 			SelectCutscenePart(null);
+	//
+	// 			archive = res.GetResult();
+	// 			PopulateArchiveSidebar();
+	//
+	// 			MainViewEmpty.IsVisible = false;
+	// 			MainViewLoaded.IsVisible = true;
+	//
+	// 			CutscenePanelEmpty.IsVisible = true;
+	// 			CutscenePanelPopulation.IsVisible = false;
+	//
+	// 			CutscenePanelNoParts.IsVisible = false;
+	// 			CutscenePanelTabs.IsVisible = false;
+	//
+	// 			ArchiveMenu.IsEnabled = true;
+	// 			CutsceneMenu.IsEnabled = false;
+	//
+	// 			// TODO: Select the first element. Might not going to add it tho.
+	//
+	// 			StatusText.Text = $"Successfully opened \"{FilePath}\"!";
+	// 		}
+	//
+	// 		private void PopulateArchiveSidebar() {
+	// 			// if (cutscene == null) return;
+	// 			if (archive == null) return;
+	//
+	// 			ArchiveSidebarCutscenePool.Children.Clear();
+	//
+	// 			if (archive.CutsceneNames.Count() < 1) {
+	// 				ArchiveSidebarEmpty.IsVisible = true;
+	// 				ArchiveSidebarPopulation.IsVisible = false;
+	// 				return;
+	// 			}
+	//
+	// 			ArchiveSidebarEmpty.IsVisible = false;
+	// 			ArchiveSidebarPopulation.IsVisible = true;
+	//
+	// 			foreach (string cutsceneName in archive.CutsceneNames) {
+	//
+	// 				ArchiveSidebarCutscenePool.Children.Add(BuildArchiveItem(cutsceneName));
+	// 			}
+	// 		}
+	//
+	// 		private Button BuildArchiveItem(string text) {
+	//
+	// 			Button btn = new();
+	// 			btn.HorizontalAlignment = HorizontalAlignment.Stretch;
+	// 			btn.Click += OnClickSelectCutsceneArchive;
+	//
+	// 			StackPanel stack = new StackPanel();
+	// 			stack.Orientation = Orientation.Horizontal;
+	// 			stack.VerticalAlignment = VerticalAlignment.Center;
+	//
+	// 			Image image = new Image();
+	// 			image.Source = new Bitmap("Assets/placeholder.png");
+	// 			image.Width = 14;
+	// 			image.Height = 14;
+	//
+	// 			Label lbl = new Label();
+	// 			lbl.FontSize = 12;
+	// 			lbl.Content = text;
+	//
+	// 			stack.Children.Add(image);
+	// 			stack.Children.Add(lbl);
+	//
+	// 			btn.Content = stack;
+	//
+	// 			return btn;
+	// 		}
+	//
+	// 		private void EnableAllArchiveSidebarButtons() {
+	// 			// if (cutscene == null) return;
+	// 			if (!ArchiveSidebarCutscenePool.IsVisible) return;
+	//
+	// 			foreach (object control in ArchiveSidebarCutscenePool.Children) {
+	// 				Button btn = (Button) control;
+	// 				btn.IsEnabled = true;
+	// 			}
+	// 		}
+	//
+	// 		private void OnClickSelectCutsceneArchive(object? sender, RoutedEventArgs e) {
+	// 			// if (cutscene == null) return;
+	// 			if (archive == null || sender == null) return;
+	//
+	// 			Button btn = (Button) sender;
+	// 			if (btn.Content == null) return;
+	//
+	// 			StackPanel stack = (StackPanel) btn.Content;
+	// 			if (stack.Children[1] == null) return;
+	//
+	// 			Label label = (Label) stack.Children[1];
+	// 			if (label.Content == null) return;
+	//
+	//
+	// 			archive.LoadCutscene((string) label.Content);
+	// 			SelectCutscenePart(null);
+	//
+	//
+	// 			EnableAllArchiveSidebarButtons();
+	// 			btn.IsEnabled = false;
+	//
+	// 			if (CutscenePanelPopulation.IsVisible == false) {
+	// 				CutscenePanelEmpty.IsVisible = false;
+	// 				CutscenePanelPopulation.IsVisible = true;
+	// 			}
+	// 			if (!CutsceneMenu.IsEnabled) CutsceneMenu.IsEnabled = true;
+	//
+	// 			RenderTimelineParts();
+	//
+	// 			CutscenePanelNoParts.IsVisible = true;
+	// 			CutscenePanelTabs.IsVisible = false;
+	//
+	// 			StatusText.Text = $"Successfully selected \"{archive.SelectedCutsceneName}\"!";
+	// 		}
+	//
+	// 		public void RenderTimelineParts() {
+	// 			if (archive == null || archive.SelectedCutsceneName == null) return;
+	//
+	// 			CutsceneMainTimeline.Children.Clear();
+	//
+	// 			CreateTimelineSecondStamps();
+	// 			foreach (Cutscene.Part part in archive.GetLoadedCutscene().Parts) {
+	// 				// Console.WriteLine($"{part.PartName}: {part.TimeEntry.TotalStep}");
+	// 				CutsceneMainTimeline.Children.Add(GenerateTimelinePartSection(part.TimeEntry.TotalStep, part.PartName));
+	// 			}
+	// 		}
+	//
+	// 		private void OnClickSave(object? sender, RoutedEventArgs e) {
+	// // 			// if (cutscene == null) return;
+	// // 			if (folderPath == null || fileName == null) {
+	// // 				OnClickSaveAs(sender, e);
+	// // 				return;
+	// // 			}
+	// //
+	// // 			// cutscene.SaveAll(Path.Combine(folderPath, fileName));
+	// //
+	// // 			StatusText.Text = $"Saved to \"{folderPath}\" as \"{fileName}\" successfully!";
+	// 		}
+	//
+	// 		private void OnClickSaveAs(object? sender, RoutedEventArgs e) {
+	// // 			// if (cutscene == null) return;
+	// //
+	// // 			string? ReturnedFolderPath = await CMMsgBox.AskSaveBCSVFile(StorageProvider, folderPath);
+	// // 			if (ReturnedFolderPath == null) return;
+	// //
+	// // 			// string FileName = "";
+	// // 			// if (fileName != null) {
+	// // 			// 	FileName = fileName;
+	// // 			// }
+	// // 			string? NewName = await CMMsgBox.AskBCSVName(this, FileName);
+	// // 			if (string.IsNullOrEmpty(NewName)) {
+	// // 				StatusText.Text = "Aborted saving.";
+	// // 				return;
+	// // 			}
+	// //
+	// // 			string CombinedPath = Path.Combine(ReturnedFolderPath, NewName);
+	// // 			if (Path.Exists(Path.Join(CombinedPath, "Time.bcsv"))) {
+	// // 				ButtonResult Choice = await CMMsgBox.SendMessage(this, "Overwrite", $"A cutscene with the name {NewName} already exists.\n\nDo you want to overwrite it?", ButtonEnum.YesNo);
+	// // 				if (Choice == ButtonResult.No) {
+	// // 					StatusText.Text = "Aborted saving.";
+	// // 					return;
+	// // 				}
+	// // 			}
+	// //
+	// // 			// cutscene.SaveAll(CombinedPath);
+	// //
+	// // 			fileName = NewName;
+	//
+	// 			// MainWindowX.Title = $"CutsceneMaker - [{CombinedPath}]";
+	// 			// StatusText.Text = $"Saved to \"{ReturnedFolderPath}\" as \"{NewName}\" successfully!";
+	// 		}
+	//
+	// 		private void CreateTimelineSecondStamps() {
+	// 			if (archive == null || archive.SelectedCutsceneName == null || !CutscenePanelPopulation.IsVisible) return;
+	//
+	// 			CutsceneMainTimelineTime.Children.Clear();
+	// 			CutsceneSubTimelineTime.Children.Clear();
+	//
+	// 			int limit = archive.GetLoadedCutscene().GetMaxTotalSteps() + 40;
+	// 			int minWidth = ((int) (MainWindowX.Width * 0.125)) - 30;
+	// 			if (limit < minWidth) limit = minWidth;
+	// 			int diff = limit % 5;
+	// 			limit -= diff - 1;
+	//
+	// 			// Console.WriteLine("Limit: {0}", limit);
+	//
+	// 			for (int i = 1; i < limit; i++) {
+	// 				if (i % 5 == 0 && i % 10 != 0) {
+	// 					CutsceneMainTimelineTime.Children.Add(GenerateTimelineFractionSecondStampPanel());
+	// 					CutsceneSubTimelineTime.Children.Add(GenerateTimelineFractionSecondStampPanel());
+	// 				}
+	//
+	// 				if (i % 10 == 0) {
+	// 					CutsceneMainTimelineTime.Children.Add(GenerateTimelineSecondStampPanel(i));
+	// 					CutsceneSubTimelineTime.Children.Add(GenerateTimelineSecondStampPanel(i));
+	// 				}
+	// 			}
+	// 		}
+	//
+	// 		public DockPanel GenerateTimelineSecondStampPanel(int second) {
+	// 			// <DockPanel Width="40" Height="15" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+	// 			// 	<Border BorderThickness="0, 0, 1, 0" BorderBrush="#8f8f8f">
+	// 			// 		<Label FontSize="6" Foreground="#8f8f8f" HorizontalAlignment="Right" VerticalAlignment="Center">10</Label>
+	// 			// 	</Border>
+	// 			// 	</DockPanel>
+	// 			// 	<DockPanel Width="40" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+	// 			// 	<Border BorderThickness="0, 0, 1, 0" BorderBrush="#6f6f6f"></Border>
+	// 			// </DockPanel>
+	//
+	// 			DockPanel panel = new();
+	// 			panel.Width = 40;
+	// 			panel.Height = 15;
+	// 			panel.HorizontalAlignment = HorizontalAlignment.Left;
+	// 			panel.VerticalAlignment = VerticalAlignment.Bottom;
+	//
+	// 			Border border = new();
+	// 			border.BorderThickness = new Thickness(0.0, 0.0, 1.0, 0.0);
+	// 			border.BorderBrush = Brush.Parse("#8f8f8f");
+	//
+	// 			Label label = new();
+	// 			label.FontSize = 8;
+	// 			label.Foreground = Brush.Parse("#8f8f8f");
+	// 			label.HorizontalAlignment = HorizontalAlignment.Right;
+	// 			label.VerticalAlignment = VerticalAlignment.Center;
+	// 			label.Content = $"{second}";
+	//
+	// 			border.Child = label;
+	// 			panel.Children.Add(border);
+	//
+	// 			return panel;
+	// 		}
+	//
+	// 		public DockPanel GenerateTimelineFractionSecondStampPanel() {
+	// 			// <DockPanel Width="40" Height="10" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+	// 			// 	<Border BorderThickness="0, 0, 1, 0" BorderBrush="#6f6f6f"></Border>
+	// 			// </DockPanel>
+	//
+	// 			DockPanel panel = new();
+	// 			panel.Width = 40;
+	// 			panel.Height = 10;
+	// 			panel.HorizontalAlignment = HorizontalAlignment.Left;
+	// 			panel.VerticalAlignment = VerticalAlignment.Bottom;
+	//
+	// 			Border border = new();
+	// 			border.BorderThickness = new Thickness(0.0, 0.0, 1.0, 0.0);
+	// 			border.BorderBrush = Brush.Parse("#8f8f8f");
+	//
+	// 			panel.Children.Add(border);
+	//
+	// 			return panel;
+	// 		}
+	//
+	// 		public Border GenerateTimelinePartSection(int steps, string partName) {
+	// 			// <Border BorderThickness="1" BorderBrush="#cce" Height="50" Width="120">
+	// 			// 	<Grid ColumnDefinitions="1*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#668">
+	// 			// 		<Label VerticalAlignment="Center">Test1</Label>
+	// 			// 	</Grid>
+	// 			// </Border>
+	//
+	// 			Border border = new();
+	// 			border.BorderThickness = new Thickness(1.0);
+	// 			border.BorderBrush = Brush.Parse("#cce");
+	// 			border.HorizontalAlignment = HorizontalAlignment.Left;
+	// 			border.VerticalAlignment = VerticalAlignment.Center;
+	// 			border.Height = 50;
+	// 			border.Width = steps * 8;
+	// 			border.AddHandler(PointerPressedEvent, OnClickSelectPart, RoutingStrategies.Tunnel);
+	//
+	// 			Grid grid = new();
+	// 			grid.ColumnDefinitions = new ColumnDefinitions("1*");
+	// 			grid.HorizontalAlignment = HorizontalAlignment.Stretch;
+	// 			grid.VerticalAlignment = VerticalAlignment.Stretch;
+	// 			grid.Background = Brush.Parse("#668");
+	//
+	// 			Label label = new();
+	// 			label.VerticalAlignment = VerticalAlignment.Center;
+	// 			label.Content = partName;
+	//
+	// 			grid.Children.Add(label);
+	// 			border.Child = grid;
+	//
+	// 			return border;
+	// 		}
+	//
+	// 		public Border GenerateTimelineSubPartSection(int steps, string partName) {
+	// 			// <Border BorderThickness="1" BorderBrush="#cce" Height="50" Width="120">
+	// 			// 	<Grid ColumnDefinitions="1*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#668">
+	// 			// 		<Label VerticalAlignment="Center">Test1</Label>
+	// 			// 	</Grid>
+	// 			// </Border>
+	//
+	// 			Border border = new();
+	// 			border.BorderThickness = new Thickness(1.0);
+	// 			border.BorderBrush = Brush.Parse("#9999a9");
+	// 			border.HorizontalAlignment = HorizontalAlignment.Left;
+	// 			border.VerticalAlignment = VerticalAlignment.Center;
+	// 			border.Height = 50;
+	// 			border.Width = steps * 8;
+	//
+	// 			Grid grid = new();
+	// 			grid.ColumnDefinitions = new ColumnDefinitions("1*");
+	// 			grid.HorizontalAlignment = HorizontalAlignment.Stretch;
+	// 			grid.VerticalAlignment = VerticalAlignment.Stretch;
+	// 			grid.Background = Brush.Parse("#595979");
+	//
+	// 			Label label = new();
+	// 			label.VerticalAlignment = VerticalAlignment.Center;
+	// 			label.Content = partName;
+	//
+	// 			grid.Children.Add(label);
+	// 			border.Child = grid;
+	//
+	// 			return border;
+	// 		}
+	//
+	// 		private void EnableAllPartsInTimeline() {
+	// 			foreach (object obj in CutsceneMainTimeline.Children) {
+	// 				Border border = (Border) obj;
+	// 				object? gridObj = border.Child;
+	//
+	// 				if (gridObj == null) return;
+	// 				Grid grid = (Grid) gridObj;
+	// 				grid.Background = Brush.Parse("#595979");
+	// 			}
+	//  		}
+	//
+	// 		public void OnClickSelectPart(object? sender, RoutedEventArgs e) {
+	// 			if (sender == null) return;
+	// 			Border border = (Border) sender;
+	//
+	// 			object? gridObj = border.Child;
+	// 			if (gridObj == null) return;
+	//
+	// 			Grid grid = (Grid) gridObj;
+	// 			object? labelObj = grid.Children[0];
+	//
+	// 			if (labelObj == null) return;
+	// 			Label label = (Label) labelObj;
+	//
+	// 			object? selectedPartObj = label.Content;
+	// 			if (selectedPartObj == null) return;
+	//
+	//
+	// 			EnableAllPartsInTimeline();
+	// 			grid.Background = Brush.Parse("#446");
+	//
+	// 			SelectCutscenePart((string) selectedPartObj);
+	//
+	// 			StatusText.Text = $"Selected part \"{selectedPart}\"!";
+	// 		}
+	//
+	// 		public void SelectCutscenePart(string? selPart) {
+	// 			if (selPart == null || archive == null || archive.SelectedCutsceneName == null) {
+	// 				selectedPart = null;
+	// 				DisableSubPartSelectionComboBox();
+	// 				return;
+	// 			}
+	//
+	// 			selectedPart = selPart;
+	//
+	// 			CutscenePanelNoParts.IsVisible = false;
+	// 			CutscenePanelTabs.IsVisible = true;
+	//
+	// 			Cutscene cs = archive.GetLoadedCutscene();
+	// 			Cutscene.Part part = cs.GetPartByName(selPart);
+	//
+	// 			if (part.SubPartEntries == null) {
+	// 				DisableSubPartSelectionComboBox();
+	// 				return;
+	// 			}
+	//
+	// 			if (part.SubPartEntries.Count() < 1) {
+	// 				DisableSubPartSelectionComboBox();
+	// 				return;
+	// 			}
+	//
+	// 			CutsceneTimelineSubPartBox.Items.Clear();
+	// 			CutsceneTimelineSubPartBox.SelectedIndex = 0;
+	// 			CutsceneTimelineSubPartBox.IsEnabled = true;
+	// 			foreach (Abacus.SubPart subPart in part.SubPartEntries) {
+	// 				CutsceneTimelineSubPartBox.Items.Add(new ComboBoxItem { Content = subPart.SubPartName });
+	// 			}
+	// 		}
+	//
+	// 		public void DisableSubPartSelectionComboBox() {
+	// 			CutsceneTimelineSubPartBox.Items.Clear();
+	// 			CutsceneTimelineSubPartBox.Items.Add(new ComboBoxItem { Content = "No SubParts" });
+	// 			CutsceneTimelineSubPartBox.SelectedIndex = 0;
+	// 			CutsceneTimelineSubPartBox.IsEnabled = false;
+	// 		}
 
 	// private void LoadTree(Cutscene cutscene) {
 	//     TreeParts.Items.Clear();
