@@ -14,18 +14,6 @@ namespace CutsceneMakerUI;
 
 public partial class TimelineView : UserControl
 {
-	public Action<string> OnSelectPart = (string partName) => {};
-	public Action<string, string> OnSelectSubPart = (string partName, string subPartName) => {};
-	public Action<string, string> OnDeselectSubPart = (string partName, string subPartName) => {};
-	public System.Action RequestReRender = () => {};
-	public System.Action OnMovePartBefore = () => {};
-	public System.Action OnMovePartAfter = () => {};
-	public Func<string, string, SubPart>? RequestSubPart;
-	public Func<int>? RequestPartStep;
-	public ContextMenu? PartCtx = null;
-	public ContextMenu? SubPartCtx = null;
-	public ContextMenu? PartEditCtx = null;
-	public ContextMenu? SubPartEditCtx = null;
 	private TimelinePart? SelectedTimelinePart = null;
 	private TimelinePart? SelectedTimelineSubPart = null;
 	private IDisposable? _SubPartBoxSubscription;
@@ -36,7 +24,9 @@ public partial class TimelineView : UserControl
 	public TimelineView()
 	{
 		InitializeComponent();
-		ResetSubPartComboBox();
+
+		MainTimeline.ContextMenu = (ContextMenu) MainWindow.Instance!.FindResource("PartPanelCtx")!;
+		ComboBox_Reset();
 
 		MovePartBefore.IsEnabled = false;
 		MovePartAfter.IsEnabled = false;
@@ -52,58 +42,33 @@ public partial class TimelineView : UserControl
 				if (i < 1)
 				{
 					SubTimeline.Children.Clear();
-					DeselectSubPart();
+					SubPart_Selected_Deselect();
 					return;
 				}
 
-				string subPartName = GetContentFromComboBoxItem(i);
-				if (SelectedTimelinePart != null && RequestSubPart != null && RequestPartStep != null)
-					RenderSubPart(RequestPartStep(), RequestSubPart(SelectedTimelinePart.PartName, subPartName));
+				string subPartName = ComboBox_GetContent(i);
+				if (SelectedTimelinePart != null)
+				{
+					SubPart subPart = MainWindow.Instance!.Core.GetSubPartByName(subPartName);
+
+					SubPart_Render(subPart);
+					MainWindow.Instance!.SubPart_Select(subPartName);
+					TimelineSubPart_SetSelected((TimelinePart) SubTimeline.Children[1]);
+				}
 			});
 	}
 
-	public void LoadContextMenus()
-	{
-		if (PartCtx != null)
-			MainTimeline.ContextMenu = PartCtx;
-		if (SubPartCtx != null && SelectedTimelinePart != null)
-			SubTimeline.ContextMenu = SubPartCtx;
-		else
-			SubTimeline.ContextMenu = null;
-	}
-
-	private string GetContentFromComboBoxItem(int i)
-	{
-		object? maybeComboBox = SubPartComboBox.Items[i];
-		if (maybeComboBox == null)
-			throw new Exception($"There is no item at index {i}");
-		if (!(maybeComboBox is ComboBoxItem))
-			throw new Exception($"The item at index {i} is not a ComboBoxItem");
-
-		ComboBoxItem comboItemPart = (ComboBoxItem) maybeComboBox;
-		object? content = comboItemPart.Content;
-		if (content == null)
-			throw new Exception($"The content of the ComboBoxItem at {i} is null!");
-		return (string) content;
-	}
-
-	private void SetContentToComboBoxItem(int i, string partName)
-	{
-		object? maybeComboBox = SubPartComboBox.Items[i];
-		if (maybeComboBox == null)
-			throw new Exception($"There is no item at index {i}");
-		if (!(maybeComboBox is ComboBoxItem))
-			throw new Exception($"The item at index {i} is not a ComboBoxItem");
-
-		ComboBoxItem comboItemPart = (ComboBoxItem) maybeComboBox;
-		comboItemPart.Content = partName;
-	}
 
 
 
-	public void UpdateSteps(double windowWidth, int totalSteps, bool forced = false)
+
+	#region Timeline
+	public void Timeline_UpdateSteps(bool forced = false)
 	{
 		// Oh so good math, I won't even try to explain what this does, just know that it gets the job done.
+		double windowWidth = MainWindow.Instance!.Width;
+		int totalSteps = MainWindow.Instance!.Core.GetCutscene().GetMaxTotalSteps();
+
 		int zoom = _ZoomTimeline * 5;
 		int limit = totalSteps + zoom;
 		int minWidth = ((int) (windowWidth * (1 / ((double) _ZoomTimeline)))) - 30;
@@ -170,54 +135,50 @@ public partial class TimelineView : UserControl
 			}
 		}
 	}
+	#endregion
 
-	public void RenderParts(List<Cutscene.Part> parts)
+
+
+
+
+	#region PartHandling
+	public void Part_RenderAll()
 	{
+		List<Cutscene.Part> parts = MainWindow.Instance!.Core.GetCutscene().Parts;
 		MainTimeline.Children.Clear();
 
 		foreach (Cutscene.Part part in parts)
 		{
 			int max = 8 / _ZoomTimeline;
 			TimelinePart timelinePart = new(part, part.PartName, Math.Max(part.TimeEntry.TotalStep, max), false, _ZoomTimeline);
-			timelinePart.Click = SelectedPart;
-			timelinePart.Ctx = PartEditCtx;
-			timelinePart.LoadContextMenus();
+
+			if (MainWindow.Instance!.Core.HasPartSelected() && MainWindow.Instance!.Core.GetSelectedPartName() == part.PartName)
+				timelinePart.Select(true);
+			if (MainWindow.Instance!.Core.HasSubPartSelected())
+				timelinePart.SelectedSubPart();
+
 			MainTimeline.Children.Add(timelinePart);
 		}
+
+		if (!MainWindow.Instance!.Core.HasPartSelected())
+			ComboBox_Reset();
+
+		if (SubPartComboBox.SelectedIndex > 0)
+			SubPart_Render(MainWindow.Instance!.Core.GetSubPartByName(ComboBox_GetContent(SubPartComboBox.SelectedIndex)));
+		else
+			SubPart_Render(null);
 	}
 
-	private void ActivateAllParts()
+	public void TimelinePart_SetSelected(TimelinePart timelinePart)
 	{
-		foreach (object obj in MainTimeline.Children)
-		{
-			if (obj is TimelinePart)
-			{
-				TimelinePart timelinePart = (TimelinePart) obj;
-				timelinePart.Select(false);
-			}
-		}
-	}
-
-	private void ActivateAllSubParts()
-	{
-		foreach (object obj in SubTimeline.Children)
-		{
-			if (obj is TimelinePart)
-			{
-				TimelinePart timelinePart = (TimelinePart) obj;
-				timelinePart.Select(false);
-			}
-		}
-	}
-
-	private void SelectedPart(TimelinePart timelinePart)
-	{
-		ActivateAllParts();
+		Part_ActivateAll();
 		timelinePart.Select(true);
 		SelectedTimelinePart = timelinePart;
 
-		object? timelinePartParentObj = timelinePart.Parent;
-		if (timelinePartParentObj != null && timelinePartParentObj is DockPanel timelinePartParent)
+		MainWindow.Instance!.Core.SetSelectedPart(timelinePart.PartName);
+		SubTimeline.ContextMenu = (ContextMenu) MainWindow.Instance!.FindResource("SubPartPanelCtx")!;
+
+		if (timelinePart.Parent! is DockPanel timelinePartParent)
 		{
 			int i = timelinePartParent.Children.IndexOf(timelinePart);
 			int max = timelinePartParent.Children.Count - 1;
@@ -231,33 +192,10 @@ public partial class TimelineView : UserControl
 				MovePartAfter.IsEnabled = false;
 		}
 
-		LoadContextMenus();
-		OnSelectPart(timelinePart.PartName);
+		MainWindow.Instance!.Part_Select(timelinePart.PartName);
 	}
 
-	public void DeselectPart()
-	{
-		if (SelectedTimelinePart != null)
-		{
-			SelectedTimelinePart.Select(false);
-			SelectedTimelinePart = null;
-		}
-		LoadContextMenus();
-	}
-
-	private void SelectedSubPart(TimelinePart timelinePart)
-	{
-		if (SelectedTimelinePart == null)
-			return;
-
-		ActivateAllSubParts();
-		timelinePart.Select(true);
-		SelectedTimelinePart.SelectedSubPart();
-		SelectedTimelineSubPart = timelinePart;
-		OnSelectSubPart(SelectedTimelinePart.PartName, timelinePart.PartName);
-	}
-
-	public void SetSelectedPart(string partName)
+	public void TimelinePart_SetSelectedByName(string partName)
 	{
 		foreach (object timelinePartObj in MainTimeline.Children)
 		{
@@ -265,14 +203,88 @@ public partial class TimelineView : UserControl
 			{
 				if (timelinePart.PartName == partName)
 				{
-					timelinePart.Click(timelinePart);
+					TimelinePart_SetSelected(timelinePart);
 					break;
 				}
 			}
 		}
 	}
 
-	public void SetSelectedSubPart(string subPartName)
+	private void Part_ActivateAll()
+	{
+		foreach (object obj in MainTimeline.Children)
+		{
+			if (obj is TimelinePart timelinePart)
+				timelinePart.Select(false);
+		}
+	}
+
+	public void Part_Selected_Deselect()
+	{
+		if (SelectedTimelinePart != null)
+		{
+			SelectedTimelinePart.Select(false);
+			SelectedTimelinePart = null;
+		}
+	}
+
+	public void Part_Selected_UpdateSteps(int step)
+	{
+		if (SelectedTimelinePart == null)
+			return;
+
+		SelectedTimelinePart.Border.Width = Math.Max(step * _ZoomTimeline, ((8 / _ZoomTimeline) * _ZoomTimeline));
+	}
+
+	public void Part_Selected_SetName(string name)
+	{
+		if (SelectedTimelinePart == null)
+			return;
+
+		SelectedTimelinePart.ChangeName(name);
+	}
+	#endregion
+
+
+
+
+
+	#region SubPartHandling
+	public void SubPart_Render(SubPart? subPart)
+	{
+		SubTimeline.Children.Clear();
+		if (subPart == null)
+		{
+			SubTimeline.ContextMenu = null;
+			return;
+		}
+
+		int space = MainWindow.Instance!.Core.GetStepUntilSelectedPart();
+
+		SubTimeline.ContextMenu = (ContextMenu) MainWindow.Instance!.FindResource("SubPartPanelCtx")!;
+		SubTimeline.Children.Add(new TimelineSubPartSpacer((space + subPart.MainPartStep) * _ZoomTimeline));
+		int max = 8 / _ZoomTimeline;
+		TimelinePart timelinePart = new(subPart, subPart.SubPartName, Math.Max(subPart.SubPartTotalStep, max), true, _ZoomTimeline);
+
+		if (MainWindow.Instance!.Core.HasSubPartSelected() && MainWindow.Instance!.Core.GetSelectedSubPartName() == subPart.SubPartName)
+			timelinePart.Select(true);
+
+		SubTimeline.Children.Add(timelinePart);
+	}
+
+	public void TimelineSubPart_SetSelected(TimelinePart timelinePart)
+	{
+		if (SelectedTimelinePart == null)
+			return;
+
+		SubPart_ActivateAll();
+		timelinePart.Select(true);
+		SelectedTimelinePart.SelectedSubPart();
+		SelectedTimelineSubPart = timelinePart;
+		MainWindow.Instance!.SubPart_Select(timelinePart.PartName);
+	}
+
+	public void TimelineSubPart_SetSelectedByName(string subPartName)
 	{
 		foreach (object timelinePartObj in SubTimeline.Children)
 		{
@@ -280,18 +292,96 @@ public partial class TimelineView : UserControl
 			{
 				if (timelinePart.PartName == subPartName)
 				{
-					timelinePart.Click(timelinePart);
+					TimelineSubPart_SetSelected(timelinePart);
 					break;
 				}
 			}
 		}
 	}
 
-	public void SetSubPartsComboBox(List<SubPart> subParts)
+	private void SubPart_ActivateAll()
+	{
+		foreach (object obj in SubTimeline.Children)
+		{
+			if (obj is TimelinePart)
+			{
+				TimelinePart timelinePart = (TimelinePart) obj;
+				timelinePart.Select(false);
+			}
+		}
+	}
+
+	public void SubPart_Selected_Deselect()
+	{
+		if (SelectedTimelinePart == null || SelectedTimelineSubPart == null)
+			return;
+
+		SelectedTimelineSubPart.Select(false);
+		MainWindow.Instance!.SubPart_Deselect(SelectedTimelinePart.PartName, SelectedTimelineSubPart.PartName);
+		SelectedTimelinePart.Select(true);
+		SelectedTimelineSubPart = null;
+	}
+
+	public void SubPart_Selected_UpdateSteps(int step)
+	{
+		if (SelectedTimelineSubPart == null)
+			return;
+
+		SelectedTimelineSubPart.Border.Width = Math.Max(step * _ZoomTimeline, ((8 / _ZoomTimeline) * _ZoomTimeline));
+	}
+
+	public void SubPart_Selected_SetName(string name)
+	{
+		if (SelectedTimelineSubPart == null)
+			return;
+
+		_IsEditingSubPartIndex = true;
+		SelectedTimelineSubPart.ChangeName(name);
+		int i = SubPartComboBox.SelectedIndex;
+		ComboBox_SetContent(i, name);
+		SubPartComboBox.SelectedIndex = 0;
+		SubPartComboBox.SelectedIndex = i; // This is for updating the string shown in the selected box. Idk why it doesn't change when I change the Content.
+		_IsEditingSubPartIndex = false;
+	}
+	#endregion
+
+
+
+
+
+	#region ComboBoxHandling
+	private string ComboBox_GetContent(int i)
+	{
+		object? maybeComboBox = SubPartComboBox.Items[i];
+		if (maybeComboBox == null)
+			throw new Exception($"There is no item at index {i}");
+		if (!(maybeComboBox is ComboBoxItem))
+			throw new Exception($"The item at index {i} is not a ComboBoxItem");
+
+		ComboBoxItem comboItemPart = (ComboBoxItem) maybeComboBox;
+		object? content = comboItemPart.Content;
+		if (content == null)
+			throw new Exception($"The content of the ComboBoxItem at {i} is null!");
+		return (string) content;
+	}
+
+	private void ComboBox_SetContent(int i, string partName)
+	{
+		object? maybeComboBox = SubPartComboBox.Items[i];
+		if (maybeComboBox == null)
+			throw new Exception($"There is no item at index {i}");
+		if (!(maybeComboBox is ComboBoxItem))
+			throw new Exception($"The item at index {i} is not a ComboBoxItem");
+
+		ComboBoxItem comboItemPart = (ComboBoxItem) maybeComboBox;
+		comboItemPart.Content = partName;
+	}
+
+	public void ComboBox_AddSubParts(List<SubPart> subParts)
 	{
 		if (subParts.Count < 1)
 		{
-			ResetSubPartComboBox();
+			ComboBox_Reset();
 			return;
 		}
 
@@ -304,99 +394,45 @@ public partial class TimelineView : UserControl
 		{
 			SubPartComboBox.Items.Add(new ComboBoxItem { Content = subPart.SubPartName });
 		}
-		_IsEditingSubPartIndex = false;
 
 		SubPartComboBox.SelectedIndex = 1;
+		_IsEditingSubPartIndex = false;
 
-		string subPartName = GetContentFromComboBoxItem(1);
-		if (SelectedTimelinePart != null && RequestSubPart != null && RequestPartStep != null)
-			RenderSubPart(RequestPartStep(), RequestSubPart(SelectedTimelinePart.PartName, subPartName));
+
+		string subPartName = ComboBox_GetContent(1);
+		if (SelectedTimelinePart != null)
+			SubPart_Render(MainWindow.Instance!.Core.GetSubPartByName(subPartName));
+		else
+			SubPart_Render(null);
 	}
 
-	public void ResetSubPartComboBox()
+	public void ComboBox_Reset()
 	{
 		SubPartComboBox.Items.Clear();
 		SubPartComboBox.Items.Add(new ComboBoxItem { Content = "No SubParts" });
 		SubPartComboBox.SelectedIndex = 0;
 		SubPartComboBox.IsEnabled = false;
 	}
+	#endregion
 
-	public void UpdateSelectedPartStep(int step)
-	{
-		if (SelectedTimelinePart == null)
-			return;
 
-		SelectedTimelinePart.Border.Width = step * _ZoomTimeline;
-	}
 
-	public void UpdateSelectedSubPartStep(int step)
-	{
-		if (SelectedTimelineSubPart == null)
-			return;
 
-		SelectedTimelineSubPart.Border.Width = step * _ZoomTimeline;
-	}
 
-	public void UpdateSelectedPartName(string name)
-	{
-		if (SelectedTimelinePart == null)
-			return;
-
-		SelectedTimelinePart.ChangeName(name);
-	}
-
-	public void UpdateSelectedSubPartName(string name)
-	{
-		if (SelectedTimelineSubPart == null)
-			return;
-
-		_IsEditingSubPartIndex = true;
-		SelectedTimelineSubPart.ChangeName(name);
-		int i = SubPartComboBox.SelectedIndex;
-		SetContentToComboBoxItem(i, name);
-		SubPartComboBox.SelectedIndex = 0;
-		SubPartComboBox.SelectedIndex = i; // This is for updating the string shown in the selected box. Idk why it doesn't change when I change the Content.
-		_IsEditingSubPartIndex = false;
-	}
-
-	public void RenderSubPart(int space, SubPart? subPart)
-	{
-		SubTimeline.Children.Clear();
-
-		if (subPart == null)
-			return;
-		SubTimeline.Children.Add(new TimelineSubPartSpacer((space + subPart.MainPartStep) * _ZoomTimeline));
-		int max = 8 / _ZoomTimeline;
-		TimelinePart timelinePart = new(subPart, subPart.SubPartName, Math.Max(subPart.SubPartTotalStep, max), true, _ZoomTimeline);
-		timelinePart.Click = SelectedSubPart;
-		timelinePart.Ctx = SubPartEditCtx;
-		timelinePart.LoadContextMenus();
-		SubTimeline.Children.Add(timelinePart);
-	}
-
-	public void DeselectSubPart()
-	{
-		if (SelectedTimelinePart == null || SelectedTimelineSubPart == null)
-			return;
-
-		SelectedTimelineSubPart.Select(false);
-		OnDeselectSubPart(SelectedTimelinePart.PartName, SelectedTimelineSubPart.PartName);
-		SelectedTimelineSubPart = null;
-	}
-
+	#region ButtonHandlers
 	private void OnDeselectSubpart(object? obj, RoutedEventArgs e)
 	{
-		DeselectSubPart();
+		SubPart_Selected_Deselect();
 	}
 
 	private void OnMovePartBeforeClick(object sender, RoutedEventArgs e)
 	{
-		OnMovePartBefore();
+		MainWindow.Instance!.Part_MoveBefore();
 	}
 
 	private void OnMovePartAfterClick(object sender, RoutedEventArgs e)
 	{
-		OnMovePartAfter();
+		MainWindow.Instance!.Part_MoveAfter();
 	}
 
 	private void OnZoomInClick(object sender, RoutedEventArgs e)
@@ -414,8 +450,12 @@ public partial class TimelineView : UserControl
 				_ZoomTimeline = 8;
 				ZoomInBtn.IsEnabled = false;
 				break;
+			default:
+				return;
 		}
-		RequestReRender();
+
+		Part_RenderAll();
+		Timeline_UpdateSteps(true);
 	}
 
 	private void OnZoomOutClick(object sender, RoutedEventArgs e)
@@ -433,7 +473,12 @@ public partial class TimelineView : UserControl
 				_ZoomTimeline = 1;
 				ZoomOutBtn.IsEnabled = false;
 				break;
+			default:
+				return;
 		}
-		RequestReRender();
+
+		Part_RenderAll();
+		Timeline_UpdateSteps(true);
 	}
+	#endregion
 }

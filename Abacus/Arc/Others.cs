@@ -14,18 +14,6 @@ namespace Abacus;
 
 public class OtherUtility
 {
-	private static uint ODT_FIELD_ENGLISH = 0x9FF8A861;
-	private static uint ODT_FIELD_JAPANESE = 0xABE181E4;
-
-	private static uint PMODT_FIELD_MODELNAME = 0xFF974D34;
-
-	private static uint MBI_MULTIBGMNAME = 0x8F913C1A;
-	private static uint MBI_BGMNAME = 0x59435F53;
-	private static uint MBI_STREAMNAME = 0x2F985A4B;
-
-	private static uint MAP_GP_POSNAME = 0x4BD5EEDF;
-
-
 	public string GamePath { get; private set; } = "";
 	public string GalaxyPath { get; private set; } = "";
 	public string LoadedAnimObject { get; private set; } = "";
@@ -120,8 +108,8 @@ public class OtherUtility
 
 		for (int i = 0; i < tbl.EntryCount; i++)
 		{
-			string eng_name = (string) tbl[i][tbl[ODT_FIELD_ENGLISH]];
-			string jap_name = (string) tbl[i][tbl[ODT_FIELD_JAPANESE]];
+			string eng_name = (string) tbl[i][tbl[Hashes.AutoCompletionHashes.ODT_FIELD_ENGLISH]];
+			string jap_name = (string) tbl[i][tbl[Hashes.AutoCompletionHashes.ODT_FIELD_JAPANESE]];
 			if (eng_name != "TestStarLightReceiveSwitch") // Filter TestStarLightReceiveSwitch because it has the same japanese name and isn't allowed to have multiple keys with the same values in BidirectionalDictionary
 			{
 				ObjDataTableList[eng_name] = jap_name;
@@ -150,7 +138,7 @@ public class OtherUtility
 
 		for (int i = 0; i < mbcsv.EntryCount; i++)
 		{
-			ProductMapObjDataTableList.Add((string) mbcsv[i][mbcsv[PMODT_FIELD_MODELNAME]]);
+			ProductMapObjDataTableList.Add((string) mbcsv[i][mbcsv[Hashes.AutoCompletionHashes.PMODT_FIELD_MODELNAME]]);
 		}
 	}
 
@@ -174,9 +162,9 @@ public class OtherUtility
 
 		for (int i = 0; i < msic.EntryCount; i++)
 		{
-			MusicList.Add((string) msic[i][msic[MBI_MULTIBGMNAME]]);
-			MusicList.Add((string) msic[i][msic[MBI_BGMNAME]]);
-			MusicList.Add((string) msic[i][msic[MBI_STREAMNAME]]);
+			MusicList.Add((string) msic[i][msic[Hashes.AutoCompletionHashes.MBI_MULTIBGMNAME]]);
+			MusicList.Add((string) msic[i][msic[Hashes.AutoCompletionHashes.MBI_BGMNAME]]);
+			MusicList.Add((string) msic[i][msic[Hashes.AutoCompletionHashes.MBI_STREAMNAME]]);
 		}
 	}
 
@@ -256,7 +244,7 @@ public class OtherUtility
 	{
 		for (int i = 0; i < genPos.EntryCount; i++)
 		{
-			string posName = (string) genPos[i][genPos[MAP_GP_POSNAME]];
+			string posName = (string) genPos[i][genPos[Hashes.AutoCompletionHashes.MAP_GP_POSNAME]];
 			if (!GeneralPosList.Contains(posName))
 				GeneralPosList.Add(posName);
 		}

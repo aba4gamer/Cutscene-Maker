@@ -12,11 +12,6 @@ namespace CutsceneMakerUI;
 
 public partial class CutscenePanel : UserControl
 {
-	public Action<string> Click { get; set; } = (string name) => {};
-	public ContextMenu? CtxMenu;
-	public ContextMenu? PanelCtxMenu;
-
-
 	public CutscenePanel()
 	{
 		InitializeComponent();
@@ -24,7 +19,7 @@ public partial class CutscenePanel : UserControl
 
 	public void LoadPanelCtxMenu()
 	{
-		Scroller.ContextMenu = PanelCtxMenu;
+		Scroller.ContextMenu = MainWindow.Instance!.FindResource("CutscenePanelCtx")! as ContextMenu;
 	}
 
 	public void LoadCutsceneList(List<string> cutsceneNames)
@@ -35,7 +30,6 @@ public partial class CutscenePanel : UserControl
 		{
 			CutsceneBtn btn = new();
 			btn.Click = CutsceneSelected;
-			btn.CtxMenu = CtxMenu;
 			btn.LoadName(name);
 
 			CutsceneBtns.Children.Add(btn);
@@ -50,7 +44,6 @@ public partial class CutscenePanel : UserControl
 		{
 			CutsceneBtn btn = new();
 			btn.Click = CutsceneSelected;
-			btn.CtxMenu = CtxMenu;
 			btn.LoadName(name);
 
 			CutsceneBtns.Children.Add(btn);
@@ -79,6 +72,6 @@ public partial class CutscenePanel : UserControl
 		ActivateAllButtons();
 		btn.IsEnabled = false;
 
-		Click(cutsceneName);
+		MainWindow.Instance!.SelectCutscene(cutsceneName);
 	}
 }

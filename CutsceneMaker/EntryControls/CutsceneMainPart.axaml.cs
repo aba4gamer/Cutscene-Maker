@@ -20,9 +20,6 @@ public partial class CutsceneMainPart : UserControl
 	private IDisposable? _waitUserInputFlagSubscription;
 	private Cutscene.Part? Part;
 
-	public Action<int> TotalStepChange = (int steps) => {};
-	public Action<string> PartNameChange = (string name) => {};
-
 	public CutsceneMainPart()
 	{
 		InitializeComponent();
@@ -53,7 +50,7 @@ public partial class CutsceneMainPart : UserControl
 					int step = (int) TotalStep.Value;
 
 					part.TimeEntry.TotalStep = step;
-					TotalStepChange(step);
+					MainWindow.Instance!.Part_UpdateStep(step);
 				}
 			});
 
@@ -77,7 +74,7 @@ public partial class CutsceneMainPart : UserControl
 			return;
 
 		Part.PartName = PartName.Text;
-		PartNameChange(PartName.Text);
+		MainWindow.Instance!.Part_UpdateName(PartName.Text);
 	}
 
 	private void PartName_OnKeyDown(object? sender, RoutedEventArgs e)
@@ -88,8 +85,10 @@ public partial class CutsceneMainPart : UserControl
 		switch (((KeyEventArgs) e).Key)
 		{
 			case Key.Enter:
+				PartName.IsEnabled = false;
+				PartName.IsEnabled = true;
+				MainWindow.Instance!.Part_UpdateName(PartName.Text);
 				Part.PartName = PartName.Text;
-				PartNameChange(PartName.Text);
 				break;
 		}
 	}

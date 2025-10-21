@@ -14,16 +14,6 @@ public partial class CutsceneView : UserControl
 	public TimelineView TimelineUI { get; private set; } = new();
 	public CutsceneWorkstation? WorkstationUI { get; private set; } = new();
 
-	public ContextMenu? PartCtx = null;
-	public ContextMenu? SubPartCtx = null;
-	public ContextMenu? PartEditCtx = null;
-	public ContextMenu? SubPartEditCtx = null;
-
-	public Action<int> Part_TotalStep = (int step) => {};
-	public Action<int> SubPart_TotalStep = (int step) => {};
-	public Action<string> Part_UpdateName = (string name) => {};
-	public Action<string> SubPart_UpdateName = (string name) => {};
-
 
 	public CutsceneView()
 	{
@@ -36,12 +26,6 @@ public partial class CutsceneView : UserControl
 		Timeline.Children.Clear();
 		Main.Children.Clear();
 
-		TimelineUI = new();
-		TimelineUI.PartCtx = PartCtx;
-		TimelineUI.PartEditCtx = PartEditCtx;
-		TimelineUI.SubPartCtx = SubPartCtx;
-		TimelineUI.SubPartEditCtx = SubPartEditCtx;
-		TimelineUI.LoadContextMenus();
 		Timeline.Children.Add(TimelineUI);
 
 		if (cutscene.Parts.Count < 1)
@@ -55,14 +39,15 @@ public partial class CutsceneView : UserControl
 		Main.Children.Add(workEmpty);
 	}
 
-	public void LoadPart(Cutscene.Part? part, int parts)
+	public void LoadPart(Cutscene.Part? part)
 	{
+		int parts = MainWindow.Instance!.Core.GetCutscene().Parts.Count;
 		if (WorkstationUI == null)
 			return;
 
 		if (part == null)
 		{
-			TimelineUI.DeselectPart();
+			TimelineUI.Part_Selected_Deselect();
 			if (parts < 1)
 			{
 				CutsceneWorkstationEmptyPart emptyWorkPart = new();
@@ -78,8 +63,6 @@ public partial class CutsceneView : UserControl
 
 		Main.Children.Clear();
 
-		WorkstationUI.Part_TotalStep = TotalStepChange;
-		WorkstationUI.Part_PartName = PartNameChange;
 		WorkstationUI.LoadPart(part);
 
 		Main.Children.Add(WorkstationUI);
@@ -92,34 +75,8 @@ public partial class CutsceneView : UserControl
 
 		Main.Children.Clear();
 
-		WorkstationUI.SubPart_TotalStep = TotalStepChangeSubPart;
-		WorkstationUI.SubPart_PartName = SubPartNameChange;
 		WorkstationUI.LoadSubPart(subPart);
 
 		Main.Children.Add(WorkstationUI);
-	}
-
-	private void TotalStepChange(int step)
-	{
-		TimelineUI.UpdateSelectedPartStep(step);
-		Part_TotalStep(step);
-	}
-
-	private void TotalStepChangeSubPart(int step)
-	{
-		TimelineUI.UpdateSelectedSubPartStep(step);
-		SubPart_TotalStep(step);
-	}
-
-	private void PartNameChange(string name)
-	{
-		TimelineUI.UpdateSelectedPartName(name);
-		Part_UpdateName(name);
-	}
-
-	private void SubPartNameChange(string name)
-	{
-		TimelineUI.UpdateSelectedSubPartName(name);
-		SubPart_UpdateName(name);
 	}
 }

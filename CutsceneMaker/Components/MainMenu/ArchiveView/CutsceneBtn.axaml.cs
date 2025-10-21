@@ -15,11 +15,12 @@ public partial class CutsceneBtn : UserControl
 {
 	public string CutsceneName { get; private set; } = "";
 	public Action<Button, string> Click { get; set; } = (Button btn, string name) => {};
-	public ContextMenu? CtxMenu = null;
+	public ContextMenu CtxMenu;
 
 	public CutsceneBtn()
 	{
 		InitializeComponent();
+		CtxMenu = (ContextMenu) MainWindow.Instance!.FindResource("CutsceneMenuCtx")!;
 	}
 
 	public void LoadName(string cutsceneName)
@@ -27,8 +28,7 @@ public partial class CutsceneBtn : UserControl
 		CutsceneNameTxt.Text = CutsceneName = cutsceneName;
 		ToolTip.SetTip(ToolTipPanel, CutsceneName);
 
-		if (CtxMenu != null)
-			ToolTipPanel.ContextMenu = CtxMenu;
+		ToolTipPanel.ContextMenu = CtxMenu;
 	}
 
 
@@ -41,8 +41,6 @@ public partial class CutsceneBtn : UserControl
 
 	public void OnPointerPressed(object sender, RoutedEventArgs e)
 	{
-		Console.WriteLine("Hey");
-		if (CtxMenu != null)
-			CtxMenu.Open(ToolTipPanel);
+		CtxMenu.Open(ToolTipPanel);
 	}
 }

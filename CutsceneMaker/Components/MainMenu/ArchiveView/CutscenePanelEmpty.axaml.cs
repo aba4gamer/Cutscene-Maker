@@ -20,6 +20,6 @@ public partial class CutscenePanelEmpty : UserControl
 
 	public void LoadContextMenu()
 	{
-		CtxHolder.ContextMenu = Ctx;
+		CtxHolder.ContextMenu = MainWindow.Instance!.FindResource("CutscenePanelCtx")! as ContextMenu;
 	}
 }

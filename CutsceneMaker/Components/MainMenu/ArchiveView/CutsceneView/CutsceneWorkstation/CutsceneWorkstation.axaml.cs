@@ -11,12 +11,6 @@ namespace CutsceneMakerUI;
 
 public partial class CutsceneWorkstation : UserControl
 {
-	public Action<int> Part_TotalStep = (int step) => {};
-	public Action<string> Part_PartName = (string name) => {};
-	public Action<int> SubPart_TotalStep = (int step) => {};
-	public Action<string> SubPart_PartName = (string name) => {};
-
-
 	public CutsceneWorkstation()
 	{
 		InitializeComponent();
@@ -25,9 +19,6 @@ public partial class CutsceneWorkstation : UserControl
 	public void LoadPart(Cutscene.Part part)
 	{
 		CutsceneMainPart partUI = new(part);
-		partUI.TotalStepChange = Part_TotalStep;
-		partUI.PartNameChange = Part_PartName;
-
 		CutscenePlayer player = new(part);
 		CutsceneAction action = new(part);
 		CutsceneCamera camera = new(part);
@@ -53,9 +44,6 @@ public partial class CutsceneWorkstation : UserControl
 	public void LoadSubPart(SubPart subPart)
 	{
 		CutsceneSubPart subPartUI = new(subPart);
-		subPartUI.TotalStepChange = SubPart_TotalStep;
-		subPartUI.SubPartNameChange = SubPart_PartName;
-
 		CutscenePlayer player = new(subPart);
 		CutsceneAction action = new(subPart);
 		CutsceneCamera camera = new(subPart);

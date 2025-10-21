@@ -20,8 +20,6 @@ public partial class CutsceneSubPart : UserControl
 	private IDisposable? _mainPartStepSubscription;
 	private SubPart? Part;
 
-	public Action<int> TotalStepChange = (int steps) => {};
-	public Action<string> SubPartNameChange = (string name) => {};
 
 	public CutsceneSubPart()
 	{
@@ -52,7 +50,7 @@ public partial class CutsceneSubPart : UserControl
 					int step = (int) SubPartTotalStep.Value;
 
 					part.SubPartTotalStep = step;
-					TotalStepChange(step);
+					MainWindow.Instance!.SubPart_UpdateStep(step);
 				}
 
 			});
@@ -73,7 +71,7 @@ public partial class CutsceneSubPart : UserControl
 			return;
 
 		Part.SubPartName = SubPartName.Text;
-		SubPartNameChange(SubPartName.Text);
+		MainWindow.Instance!.SubPart_UpdateName(SubPartName.Text);
 	}
 
 	private void PartName_OnKeyDown(object? sender, RoutedEventArgs e)
@@ -84,8 +82,10 @@ public partial class CutsceneSubPart : UserControl
 		switch (((KeyEventArgs) e).Key)
 		{
 			case Key.Enter:
+				SubPartName.IsEnabled = false;
+				SubPartName.IsEnabled = true;
+				MainWindow.Instance!.SubPart_UpdateName(SubPartName.Text);
 				Part.SubPartName = SubPartName.Text;
-				SubPartNameChange(SubPartName.Text);
 				break;
 		}
 	}

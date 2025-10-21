@@ -143,6 +143,13 @@ public partial class AutoTextBox : UserControl
 					FlyoutStackPanel.Children[FlyoutStackPanel.Children.Count-1].Focus(NavigationMethod.Tab);
 				}
 				break;
+			case Key.Escape:
+				if (FlyoutStackPanel.Children.Count > 0 && FlyoutBase.GetAttachedFlyout(Main)!.IsOpen)
+				{
+					e.Handled = true;
+					FlyoutBase.GetAttachedFlyout(Main)!.Hide();
+				}
+				break;
 		}
 	}
 

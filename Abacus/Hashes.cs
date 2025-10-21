@@ -66,4 +66,18 @@ public static class Hashes
         public const uint ANIM_CAMERA_END_FRAME = 0x3ACC8C28;
         public const uint IS_CONTINUOUS = 0xA1CF23F9;
     }
+
+    public static class AutoCompletionHashes
+    {
+        public static uint ODT_FIELD_ENGLISH = 0x9FF8A861;
+        public static uint ODT_FIELD_JAPANESE = 0xABE181E4;
+
+        public static uint PMODT_FIELD_MODELNAME = 0xFF974D34;
+
+        public static uint MBI_MULTIBGMNAME = 0x8F913C1A;
+        public static uint MBI_BGMNAME = 0x59435F53;
+        public static uint MBI_STREAMNAME = 0x2F985A4B;
+
+        public static uint MAP_GP_POSNAME = 0x4BD5EEDF;
+    }
 }

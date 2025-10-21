@@ -257,8 +257,6 @@ public class CutsceneArchive {
 
 	public void SaveTo(string path)
 	{
-
-
 		foreach (Cutscene cutscene in LoadedCutscenes.Values)
 		{
 			cutscene.SaveAll(_rarc);
@@ -272,5 +270,7 @@ public class CutsceneArchive {
 		byte[] savedArc = File.ReadAllBytes(path);
 		byte[] compressedArc = YAZ0.Compress(savedArc);
 		File.WriteAllBytes(path, compressedArc);
+
+		FilePath = path;
 	}
 }

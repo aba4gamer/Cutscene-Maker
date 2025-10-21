@@ -167,13 +167,18 @@ public class CutsceneCore
 
 	public Cutscene.Part GetSelectedPart()
 	{
+		return GetPartByName(Core.GetSelectedPartName());
+	}
+
+	public Cutscene.Part GetPartByName(string name)
+	{
 		foreach (Cutscene.Part part in Core.GetArchive().GetLoadedCutscene().Parts)
 		{
-			if (part.PartName == Core.GetSelectedPartName())
+			if (part.PartName == name)
 				return part;
 		}
 
-		throw new Exception($"No parts found with the name '{Core.GetSelectedPartName()}'!");
+		throw new Exception($"No parts found with the name '{name}'!");
 	}
 	#endregion
 
@@ -187,17 +192,22 @@ public class CutsceneCore
 
 	public SubPart GetSelectedSubPart()
 	{
+		return GetSubPartByName(Core.GetSelectedSubPartName());
+	}
+
+	public SubPart GetSubPartByName(string name)
+	{
 		Cutscene.Part part = GetSelectedPart();
 		if (part.SubPartEntries == null)
 			throw new Exception($"{part.PartName} doesn't have any SubParts!");
 
 		foreach (SubPart subPart in part.SubPartEntries)
 		{
-			if (subPart.SubPartName == Core.GetSelectedSubPartName())
+			if (subPart.SubPartName == name)
 				return subPart;
 		}
 
-		throw new Exception($"No subParts found with the name '{Core.GetSelectedSubPartName()}'!");
+		throw new Exception($"No subParts found with the name '{name}'!");
 	}
 
 	public void DeselectSubPart()

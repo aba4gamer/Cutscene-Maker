@@ -206,9 +206,9 @@ public class Cutscene
 		{
 			part.PlayerEntry = new()
 			{
-				PosName = (string)PlayerBCSV[iPlayer][PlayerBCSV[PlayerHashes.POS_NAME]],
-				BckName = (string)PlayerBCSV[iPlayer][PlayerBCSV[PlayerHashes.BCK_NAME]],
-				Visible = (int)PlayerBCSV[iPlayer][PlayerBCSV[PlayerHashes.VISIBLE]]
+				PosName = PlayerBCSV.ContainsField(PlayerHashes.POS_NAME) ? (string)PlayerBCSV[iPlayer][PlayerBCSV[PlayerHashes.POS_NAME]] : "",
+				BckName = PlayerBCSV.ContainsField(PlayerHashes.BCK_NAME) ? (string)PlayerBCSV[iPlayer][PlayerBCSV[PlayerHashes.BCK_NAME]] : "",
+				Visible = PlayerBCSV.ContainsField(PlayerHashes.VISIBLE) ? (int)PlayerBCSV[iPlayer][PlayerBCSV[PlayerHashes.VISIBLE]] : -1
 			};
 		}
 
@@ -217,9 +217,9 @@ public class Cutscene
 		{
 			part.WipeEntry = new()
 			{
-				WipeName = (string)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_NAME]],
-				WipeType = (int)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_TYPE]],
-				WipeFrame = (int)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_FRAME]]
+				WipeName = WipeBCSV.ContainsField(WipeHashes.WIPE_NAME) ? (string)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_NAME]] : "",
+				WipeType = WipeBCSV.ContainsField(WipeHashes.WIPE_TYPE) ? (int)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_TYPE]] : 0,
+				WipeFrame = WipeBCSV.ContainsField(WipeHashes.WIPE_FRAME) ? (int)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_FRAME]] : 0
 			};
 		}
 
@@ -242,11 +242,11 @@ public class Cutscene
 		{
 			part.ActionEntry = new()
 			{
-				CastName = (string)ActionBCSV[iAction][ActionBCSV[ActionHashes.CAST_NAME]],
-				CastID = (int)ActionBCSV[iAction][ActionBCSV[ActionHashes.CAST_ID]],
-				ActionType = (int)ActionBCSV[iAction][ActionBCSV[ActionHashes.ACTION_TYPE]],
-				PosName = (string)ActionBCSV[iAction][ActionBCSV[ActionHashes.POS_NAME]],
-				AnimName = (string)ActionBCSV[iAction][ActionBCSV[ActionHashes.ANIM_NAME]]
+				CastName = ActionBCSV.ContainsField(ActionHashes.CAST_NAME) ? (string)ActionBCSV[iAction][ActionBCSV[ActionHashes.CAST_NAME]] : "",
+				CastID = ActionBCSV.ContainsField(ActionHashes.CAST_ID) ? (int)ActionBCSV[iAction][ActionBCSV[ActionHashes.CAST_ID]] : -1,
+				ActionType = ActionBCSV.ContainsField(ActionHashes.ACTION_TYPE) ? (int)ActionBCSV[iAction][ActionBCSV[ActionHashes.ACTION_TYPE]] : -1,
+				PosName = ActionBCSV.ContainsField(ActionHashes.POS_NAME) ? (string)ActionBCSV[iAction][ActionBCSV[ActionHashes.POS_NAME]] : "",
+				AnimName = ActionBCSV.ContainsField(ActionHashes.ANIM_NAME) ? (string)ActionBCSV[iAction][ActionBCSV[ActionHashes.ANIM_NAME]] : ""
 			};
 		}
 
@@ -255,12 +255,12 @@ public class Cutscene
 		{
 			part.CameraEntry = new()
 			{
-				CameraTargetName = (string)CameraBCSV[iCamera][CameraBCSV[CameraHashes.CAMERA_TARGET_NAME]],
-				CameraTargetCastID = (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.CAMERA_TARGET_CAST_ID]],
-				AnimCameraName = (string)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_NAME]],
-				AnimCameraStartFrame = (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_START_FRAME]],
-				AnimCameraEndFrame = (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_END_FRAME]],
-				IsContinuous = (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.IS_CONTINUOUS]]
+				CameraTargetName = CameraBCSV.ContainsField(CameraHashes.CAMERA_TARGET_NAME) ? (string)CameraBCSV[iCamera][CameraBCSV[CameraHashes.CAMERA_TARGET_NAME]] : "",
+				CameraTargetCastID = CameraBCSV.ContainsField(CameraHashes.CAMERA_TARGET_CAST_ID) ? (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.CAMERA_TARGET_CAST_ID]] : -1,
+				AnimCameraName = CameraBCSV.ContainsField(CameraHashes.ANIM_CAMERA_NAME) ? (string)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_NAME]] : "",
+				AnimCameraStartFrame = CameraBCSV.ContainsField(CameraHashes.ANIM_CAMERA_START_FRAME) ? (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_START_FRAME]] : -1,
+				AnimCameraEndFrame = CameraBCSV.ContainsField(CameraHashes.ANIM_CAMERA_END_FRAME) ? (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_END_FRAME]] : 0,
+				IsContinuous = CameraBCSV.ContainsField(CameraHashes.IS_CONTINUOUS) ? (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.IS_CONTINUOUS]] : -1
 			};
 		}
 	}
