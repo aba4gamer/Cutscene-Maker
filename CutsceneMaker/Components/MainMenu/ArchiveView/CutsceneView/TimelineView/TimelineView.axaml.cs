@@ -192,6 +192,8 @@ public partial class TimelineView : UserControl
 				MovePartAfter.IsEnabled = false;
 		}
 
+		if (SelectedTimelineSubPart != null)
+			SubPart_Selected_Deselect();
 		MainWindow.Instance!.Part_Select(timelinePart.PartName);
 	}
 

@@ -57,6 +57,9 @@ public partial class CutsceneAction : UserControl
 
 		IsActionEnabled.GetObservable(CheckBox.IsCheckedProperty).Subscribe(isChecked =>
 		{
+			if (isChecked != (part.ActionEntry != null))
+				MainWindow.Instance!.AddEditedCutscene();
+
 			if (isChecked == true)
 			{
 				part.ActionEntry ??= new Abacus.Action();
@@ -98,6 +101,9 @@ public partial class CutsceneAction : UserControl
 		_castNameBoxSubscription = CastNameBox.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text =>
 			{
+				if ((text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(text) ? Program.AutoCompletion.ObjDataTableList[text] : text : "") != part.ActionEntry!.CastName)
+					MainWindow.Instance!.AddEditedCutscene();
+
 				Program.AutoCompletion.LoadRarc_ObjectAnim(text);
 				AnimName.AutoCompletion = Program.AutoCompletion.ObjectAnimList;
 
@@ -105,16 +111,40 @@ public partial class CutsceneAction : UserControl
 			});
 
 		_castIDSubscription = CastID.GetObservable(NumericUpDown.ValueProperty)
-			.Subscribe(value => part.ActionEntry!.CastID = value.HasValue ? (int)value.Value : -1);
+			.Subscribe(value =>
+			{
+				if (value != part.ActionEntry!.CastID)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.ActionEntry!.CastID = value.HasValue ? (int)value.Value : -1;
+			});
 
 		_actionTypeSubscription = ActionType.GetObservable(ComboBox.SelectedIndexProperty)
-			.Subscribe(value => part.ActionEntry!.ActionType = ActionType.SelectedIndex);
+			.Subscribe(value =>
+			{
+				if (value != part.ActionEntry!.ActionType)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.ActionEntry!.ActionType = ActionType.SelectedIndex;
+			});
 
 		_posNameSubscription = PosName.Main.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => part.ActionEntry!.PosName = text ?? string.Empty);
+			.Subscribe(text =>
+			{
+				if (text != part.ActionEntry!.PosName)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.ActionEntry!.PosName = text ?? string.Empty;
+			});
 
 		_animNameSubscription = AnimName.Main.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => part.ActionEntry!.AnimName = text ?? string.Empty);
+			.Subscribe(text =>
+			{
+				if (text != part.ActionEntry!.AnimName)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.ActionEntry!.AnimName = text ?? string.Empty;
+			});
 	}
 
 	private void DisposeSubscriptions()

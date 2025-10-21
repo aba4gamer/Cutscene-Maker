@@ -20,9 +20,10 @@ README in progress. If you can't run the app install .NET 9 but I think actually
 - ~~Add a proper "button" to the cutscenes in the cutscene sidebar~~ *Done*
 - ~~Add some context menus because people like them~~ *Done*
 - ~~Add ComboBox for CastName, ActionType and other things~~ *I (Antonio225) believe that it's done.*
+- ~~Add a better warning for unsaved progress~~ *Done but a bit bugged*
 - Add some cool icons (if I can do them cool lel)
 - Add icons to the timeline part
-- Add a better warning for unsaved progress
+- Add storage and a settings menu
 
 ### Auto completion support:
 

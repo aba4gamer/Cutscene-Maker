@@ -25,9 +25,11 @@ public partial class MainWindow : Window
 
 	public static MainWindow? Instance;
 
+
 	public CutsceneCore Core;
 	public ArchiveView ArchiveUI;
-	private bool HasEdited = false;
+
+	private List<string> EditedCutscenes = [];
 
 
 	public MainWindow()
@@ -162,7 +164,21 @@ public partial class MainWindow : Window
 
 	public async Task<bool> AskDiscardChanges()
 	{
-		return await MessageBox("Discard changes?", "You have unsaved changes, if you continue your progress will be lost, are you sure?", ButtonEnum.YesNo) == ButtonResult.Yes;
+		bool canDiscard = await MessageBox("Discard changes?", "You have unsaved changes, if you continue your progress will be lost, are you sure?", ButtonEnum.YesNo) == ButtonResult.Yes;
+		if (canDiscard)
+			EditedCutscenes = [];
+
+		return canDiscard;
+	}
+
+	public void AddEditedCutscene()
+	{
+		if (!Core.HasCutsceneSelected() && EditedCutscenes.Contains(Core.GetCutscene().CutsceneName))
+			return;
+
+		EditedCutscenes.Add(Core.GetCutscene().CutsceneName);
+
+		Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] *[{Core.GetCutscene().CutsceneName}]";
 	}
 	#endregion
 
@@ -317,14 +333,11 @@ public partial class MainWindow : Window
 	{
 		// Before creating a new archive let's check if the user has another archive open.
 		// If they have, we'll ask if they want to discard the changes.
-		if (Core.HasArchiveOpen() && HasEdited && !await AskDiscardChanges())
+		if (Core.HasArchiveOpen() && EditedCutscenes.Count > 0 && !await AskDiscardChanges())
 		{
 			StatusText.Text = "New archive aborted.";
 			return;
 		}
-
-		// Set edited to false to avoid asking discard the saves again
-		HasEdited = false;
 
 		// Ask the user where to save the file.
 		// If the string is null it means that the user aborted the saving
@@ -342,14 +355,11 @@ public partial class MainWindow : Window
 	{
 		// Before opening a new archive let's check if the user has another archive open.
 		// If they have, we'll ask if they want to discard the changes.
-		if (Core.HasArchiveOpen() && HasEdited && !await AskDiscardChanges())
+		if (Core.HasArchiveOpen() && EditedCutscenes.Count > 0 && !await AskDiscardChanges())
 		{
 			StatusText.Text = "Open aborted.";
 			return;
 		}
-
-		// Set edited to false to avoid asking discard the saves again
-		HasEdited = false;
 
 		// Ask the user to open a .arc file.
 		// If it's null, then the user aborted the open (and we should end the function as well).
@@ -369,7 +379,7 @@ public partial class MainWindow : Window
 		if (!Core.HasArchiveOpen())
 			return;
 
-		if (!await AskDiscardChanges())
+		if (EditedCutscenes.Count > 0 && !await AskDiscardChanges())
 		{
 			StatusText.Text = "Reload aborted.";
 			return;
@@ -381,6 +391,7 @@ public partial class MainWindow : Window
 
 		// Update the status & set the title.
 		StatusText.Text = $"Successfully reloaded '{filePath}'!";
+
 		Title = $"CutsceneMaker - [{filePath}]";
 	}
 
@@ -409,7 +420,7 @@ public partial class MainWindow : Window
 	public async void NewArchive(string filePath)
 	{
 		// If has changed, ask to discard before continuing
-		if (Core.HasArchiveOpen() && HasEdited && !await AskDiscardChanges())
+		if (Core.HasArchiveOpen() && EditedCutscenes.Count > 0 && !await AskDiscardChanges())
 		{
 			StatusText.Text = "New archive aborted.";
 			return;
@@ -444,7 +455,7 @@ public partial class MainWindow : Window
 	public async void OpenArchive(string arcPathName)
 	{
 		// If has changed, ask to discard before continuing
-		if (Core.HasArchiveOpen() && HasEdited && !await AskDiscardChanges())
+		if (Core.HasArchiveOpen() && EditedCutscenes.Count > 0 && !await AskDiscardChanges())
 		{
 			StatusText.Text = "Open aborted.";
 			return;
@@ -484,6 +495,12 @@ public partial class MainWindow : Window
 
 		Core.SaveArchive();
 		StatusText.Text = $"Successfully saved the archive!";
+
+		EditedCutscenes = [];
+		if (Core.HasCutsceneSelected())
+			Title = $"CutsceneMaker - [{Core.GetArchive().FilePath}] [{Core.GetCutscene().CutsceneName}]";
+		else
+			Title = $"CutsceneMaker - [{Core.GetArchive().FilePath}]";
 	}
 
 	public void SaveAs(string filePath)
@@ -493,7 +510,12 @@ public partial class MainWindow : Window
 
 		Core.SaveArchiveTo(filePath);
 		StatusText.Text = $"Successfully saved the archive to {filePath}!";
-		Title = $"CutsceneMaker - [{filePath}]";
+
+		EditedCutscenes = [];
+		if (Core.HasCutsceneSelected())
+			Title = $"CutsceneMaker - [{filePath}] [{Core.GetCutscene().CutsceneName}]";
+		else
+			Title = $"CutsceneMaker - [{filePath}]";
 	}
 	#endregion
 
@@ -523,7 +545,14 @@ public partial class MainWindow : Window
 
 		// Update the status & set the title.
 		StatusText.Text = $"Selected '{cutsceneName}' Cutscne!";
-		Title = $"CutsceneMaker - [{Core.GetArchive().FilePath}] [{cutsceneName}]";
+
+		if (EditedCutscenes.Count > 0)
+			if (EditedCutscenes.Contains(cutsceneName))
+				Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] *[{cutsceneName}]";
+			else
+				Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] [{cutsceneName}]";
+		else
+			Title = $"CutsceneMaker - [{Core.GetArchive().FilePath}] [{cutsceneName}]";
 	}
 	#endregion
 
@@ -570,6 +599,7 @@ public partial class MainWindow : Window
 		}
 
 		Core.SetSelectedPart(name);
+		MainWindow.Instance!.AddEditedCutscene();
 		ArchiveUI.CutsceneUI.TimelineUI.Part_Selected_SetName(name);
 	}
 
@@ -652,6 +682,7 @@ public partial class MainWindow : Window
 		}
 
 		Core.SetSelectedSubPart(name);
+		MainWindow.Instance!.AddEditedCutscene();
 		ArchiveUI.CutsceneUI.TimelineUI.SubPart_Selected_SetName(name);
 	}
 
@@ -818,6 +849,12 @@ public partial class MainWindow : Window
 		// Rename the cutscene
 		Core.GetArchive().RenameCutscene(cutsceneName, newCutsceneName);
 
+		// Set edited (if not present)
+		if (EditedCutscenes.Contains(cutsceneName))
+			EditedCutscenes.Remove(cutsceneName);
+		EditedCutscenes.Add(newCutsceneName);
+
+
 		// Reload the cutscene list
 		if (selectedCutsceneName != null && selectedCutsceneName == cutsceneName)
 			ArchiveUI.LoadCutsceneListAndSelect(Core.GetArchive().CutsceneNames, newCutsceneName);
@@ -827,6 +864,7 @@ public partial class MainWindow : Window
 			ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
 
 		// Update the status & set the title.
+		Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] *[{newCutsceneName}]";
 		StatusText.Text = $"Successfully renamed the cutscene '{cutsceneName}' to '{newCutsceneName}'!";
 
 		return newCutsceneName;

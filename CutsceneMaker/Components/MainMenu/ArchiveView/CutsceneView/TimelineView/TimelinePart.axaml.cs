@@ -54,6 +54,7 @@ public partial class TimelinePart : UserControl
 				Grid.Background = Brush.Parse("#393959");
 			else
 				Grid.Background = Brush.Parse("#446");
+
 		IsSelected = select;
 	}
 

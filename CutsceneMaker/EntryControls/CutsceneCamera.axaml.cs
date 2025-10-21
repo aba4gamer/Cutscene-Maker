@@ -53,6 +53,9 @@ public partial class CutsceneCamera : UserControl
 
 		IsCameraEnabled.GetObservable(CheckBox.IsCheckedProperty).Subscribe(isChecked =>
 		{
+			if (isChecked != (part.CameraEntry != null))
+				MainWindow.Instance!.AddEditedCutscene();
+
 			if (isChecked == true)
 			{
 				part.CameraEntry ??= new Abacus.Camera();
@@ -94,26 +97,60 @@ public partial class CutsceneCamera : UserControl
 		_cameraTargetNameSubscription = CameraTargetName.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text =>
 			{
+				if ((text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(text) ? Program.AutoCompletion.ObjDataTableList[text] : text : "") != part.CameraEntry!.CameraTargetName)
+					MainWindow.Instance!.AddEditedCutscene();
+
 				Program.AutoCompletion.LoadRarc_ObjectCanm(text);
 				AnimCameraName.AutoCompletion = Program.AutoCompletion.ObjectCanmList;
 
 				part.CameraEntry!.CameraTargetName = text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(text) ? Program.AutoCompletion.ObjDataTableList[text] : text : "";
+
 			});
 
 		_cameraTargetCastIDSubscription = CameraTargetCastID.GetObservable(NumericUpDown.ValueProperty)
-			.Subscribe(value => part.CameraEntry!.CameraTargetCastID = value.HasValue ? (int)value.Value : -1);
+			.Subscribe(value =>
+			{
+				if (value != part.CameraEntry!.CameraTargetCastID)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.CameraEntry!.CameraTargetCastID = value.HasValue ? (int)value.Value : -1;
+			});
 
 		_animCameraNameSubscription = AnimCameraName.Main.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => part.CameraEntry!.AnimCameraName = text ?? string.Empty);
+			.Subscribe(text =>
+			{
+				if (text != part.CameraEntry!.AnimCameraName)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.CameraEntry!.AnimCameraName = text ?? string.Empty;
+			});
 
 		_animCameraStartFrameSubscription = AnimCameraStartFrame.GetObservable(NumericUpDown.ValueProperty)
-			.Subscribe(value => part.CameraEntry!.AnimCameraStartFrame = value.HasValue ? (int)value.Value : -1);
+			.Subscribe(value =>
+			{
+				if (value != part.CameraEntry!.AnimCameraStartFrame)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.CameraEntry!.AnimCameraStartFrame = value.HasValue ? (int)value.Value : -1;
+			});
 
 		_animCameraEndFrameSubscription = AnimCameraEndFrame.GetObservable(NumericUpDown.ValueProperty)
-			.Subscribe(value => part.CameraEntry!.AnimCameraEndFrame = value.HasValue ? (int)value.Value : -1);
+			.Subscribe(value =>
+			{
+				if (value != part.CameraEntry!.AnimCameraEndFrame)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.CameraEntry!.AnimCameraEndFrame = value.HasValue ? (int)value.Value : -1;
+			});
 
 		_isContinuousSubscription = IsContinuous.GetObservable(CheckBox.IsCheckedProperty)
-			.Subscribe(isChecked => part.CameraEntry!.IsContinuous = isChecked == true ? 1 : 0);
+			.Subscribe(isChecked =>
+			{
+				if (isChecked != (part.CameraEntry!.IsContinuous != -1))
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.CameraEntry!.IsContinuous = isChecked == true ? 1 : 0;
+			});
 	}
 
 	private void DisposeSubscriptions()

@@ -53,6 +53,9 @@ public partial class CutsceneWipe : UserControl
 		}
 		IsWipeEnabled.GetObservable(CheckBox.IsCheckedProperty).Subscribe(Observer.Create<bool?>(isChecked =>
 		{
+			if (isChecked != (part.WipeEntry != null))
+				MainWindow.Instance!.AddEditedCutscene();
+
 			if (isChecked == true)
 			{
 				part.WipeEntry ??= new Abacus.Wipe();
@@ -85,13 +88,31 @@ public partial class CutsceneWipe : UserControl
 	{
 		DisposeSubscriptions();
 		_nameSubscription = WipeName.Main.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => part.WipeEntry!.WipeName = text != null ? WipeTypes.ContainsKey(text) ? WipeTypes[text] : text : "");
+			.Subscribe(text =>
+			{
+				if (text != part.WipeEntry!.WipeName)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.WipeEntry!.WipeName = text != null ? WipeTypes.ContainsKey(text) ? WipeTypes[text] : text : "";
+			});
 
 		_typeSubscription = WipeType.GetObservable(ComboBox.SelectedIndexProperty)
-			.Subscribe(value => part.WipeEntry!.WipeType = value);
+			.Subscribe(value =>
+			{
+				if (value != part.WipeEntry!.WipeType)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.WipeEntry!.WipeType = value;
+			});
 
 		_frameSubscription = WipeFrame.GetObservable(NumericUpDown.ValueProperty)
-			.Subscribe(value => part.WipeEntry!.WipeFrame = value.HasValue ? (int)value.Value : -1);
+			.Subscribe(value =>
+			{
+				if (value != part.WipeEntry!.WipeFrame)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.WipeEntry!.WipeFrame = value.HasValue ? (int)value.Value : -1;
+			});
 	}
 
 	private void DisposeSubscriptions()

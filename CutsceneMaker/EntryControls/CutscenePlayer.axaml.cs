@@ -44,6 +44,9 @@ public partial class CutscenePlayer : UserControl
 
 		IsPlayerEnabled.GetObservable(CheckBox.IsCheckedProperty).Subscribe(isChecked =>
 		{
+			if (isChecked != (part.PlayerEntry != null))
+				MainWindow.Instance!.AddEditedCutscene();
+
 			if (isChecked == true)
 			{
 				part.PlayerEntry ??= new Abacus.Player();
@@ -80,13 +83,31 @@ public partial class CutscenePlayer : UserControl
 		DisposeSubscriptions();
 
 		_posNameSubscription = PosName.Main.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => PlayerEntry.PosName = text ?? "");
+			.Subscribe(text =>
+			{
+				if (text != PlayerEntry.PosName)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				PlayerEntry.PosName = text ?? "";
+			});
 
 		_bckNameSubscription = BckName.Main.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => PlayerEntry.BckName = text ?? "");
+			.Subscribe(text =>
+			{
+				if (text != PlayerEntry.BckName)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				PlayerEntry.BckName = text ?? "";
+			});
 
 		_visibleSubscription = Visible.GetObservable(CheckBox.IsCheckedProperty)
-			.Subscribe(isChecked => PlayerEntry.Visible = isChecked == true ? 1 : 0);
+			.Subscribe(isChecked =>
+			{
+				if (isChecked != (PlayerEntry.Visible != 0))
+					MainWindow.Instance!.AddEditedCutscene();
+
+				PlayerEntry.Visible = isChecked == true ? 1 : 0;
+			});
 	}
 
 	private void DisposeSubscriptions()

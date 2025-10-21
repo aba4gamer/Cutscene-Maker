@@ -45,6 +45,9 @@ public partial class CutsceneSubPart : UserControl
 		_subPartTotalStepSubscription = SubPartTotalStep.GetObservable(NumericUpDown.ValueProperty)
 			.Subscribe(value =>
 			{
+				if (value != part.SubPartTotalStep)
+					MainWindow.Instance!.AddEditedCutscene();
+
 				if (SubPartTotalStep.Value != null)
 				{
 					int step = (int) SubPartTotalStep.Value;
@@ -52,11 +55,16 @@ public partial class CutsceneSubPart : UserControl
 					part.SubPartTotalStep = step;
 					MainWindow.Instance!.SubPart_UpdateStep(step);
 				}
-
 			});
 
 		_mainPartStepSubscription = MainPartStep.GetObservable(NumericUpDown.ValueProperty)
-			.Subscribe(value => part.MainPartStep = (int)value!.Value);
+			.Subscribe(value =>
+			{
+				if (value != part.MainPartStep)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.MainPartStep = (int)value!.Value;
+			});
 	}
 
 	private void DisposeSubscriptions()
@@ -71,7 +79,6 @@ public partial class CutsceneSubPart : UserControl
 			return;
 
 		Part.SubPartName = SubPartName.Text;
-		MainWindow.Instance!.SubPart_UpdateName(SubPartName.Text);
 	}
 
 	private void PartName_OnKeyDown(object? sender, RoutedEventArgs e)

@@ -45,6 +45,9 @@ public partial class CutsceneMainPart : UserControl
 		_totalStepSubscription = TotalStep.GetObservable(NumericUpDown.ValueProperty)
 			.Subscribe(value =>
 			{
+				if (value != part.TimeEntry.TotalStep)
+					MainWindow.Instance!.AddEditedCutscene();
+
 				if (TotalStep.Value != null)
 				{
 					int step = (int) TotalStep.Value;
@@ -55,10 +58,22 @@ public partial class CutsceneMainPart : UserControl
 			});
 
 		_suspendFlagSubscription = SuspendFlag.GetObservable(CheckBox.IsCheckedProperty)
-			.Subscribe(isChecked => part.TimeEntry.SuspendFlag = isChecked == true ? 1 : 0);
+			.Subscribe(isChecked =>
+			{
+				if (isChecked != (part.TimeEntry.SuspendFlag != 0))
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.TimeEntry.SuspendFlag = isChecked == true ? 1 : 0;
+			});
 
 		_waitUserInputFlagSubscription = WaitUserInputFlag.GetObservable(CheckBox.IsCheckedProperty)
-			.Subscribe(isChecked => part.TimeEntry.WaitUserInputFlag = isChecked == true ? 1 : 0);
+			.Subscribe(isChecked =>
+			{
+				if (isChecked != (part.TimeEntry.WaitUserInputFlag != 0))
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.TimeEntry.WaitUserInputFlag = isChecked == true ? 1 : 0;
+			});
 	}
 
 	private void DisposeSubscriptions()

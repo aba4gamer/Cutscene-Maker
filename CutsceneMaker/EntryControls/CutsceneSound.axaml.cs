@@ -50,6 +50,9 @@ public partial class CutsceneSound : UserControl
 
 		IsSoundEnabled.GetObservable(CheckBox.IsCheckedProperty).Subscribe(isChecked =>
 		{
+			if (isChecked != (part.SoundEntry != null))
+				MainWindow.Instance!.AddEditedCutscene();
+
 			if (isChecked == true)
 			{
 				part.SoundEntry ??= new Abacus.Sound();
@@ -89,11 +92,20 @@ public partial class CutsceneSound : UserControl
 		DisposeSubscriptions();
 
 		_bgmSubscription = BGM.Main.GetObservable(TextBox.TextProperty)
-			.Subscribe(text => part.SoundEntry!.Bgm = text ?? "");
+			.Subscribe(text =>
+			{
+				if (text != part.SoundEntry!.Bgm)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.SoundEntry!.Bgm = text ?? "";
+			});
 
 		_systemSeSubscription = SystemSe.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text =>
 			{
+				if (text != part.SoundEntry!.SystemSe)
+					MainWindow.Instance!.AddEditedCutscene();
+
 				if (text != null)
 				{
 					if (text.StartsWith(SoundEffectsList.PREFIX[0]))
@@ -134,6 +146,9 @@ public partial class CutsceneSound : UserControl
 		_actionSeSubscription = ActionSe.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text =>
 			{
+				if (text != part.SoundEntry!.ActionSe)
+					MainWindow.Instance!.AddEditedCutscene();
+
 				if (text != null)
 				{
 					if (text.StartsWith(SoundEffectsList.PREFIX[0]))
@@ -172,13 +187,31 @@ public partial class CutsceneSound : UserControl
 			});
 
 		_returnBgmSubscription = ReturnBgm.GetObservable(CheckBox.IsCheckedProperty)
-			.Subscribe(isChecked => part.SoundEntry!.ReturnBgm = isChecked == true ? 1 : 0);
+			.Subscribe(isChecked =>
+			{
+				if (isChecked != (part.SoundEntry!.ReturnBgm != 0))
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.SoundEntry!.ReturnBgm = isChecked == true ? 1 : 0;
+			});
 
 		_bgmWipeOutFrameSubscription = BgmWipeOutFrame.GetObservable(NumericUpDown.ValueProperty)
-			.Subscribe(value => part.SoundEntry!.WipeOutFrame = value.HasValue ? (int)value.Value : -1);
+			.Subscribe(value =>
+			{
+				if (value != part.SoundEntry!.WipeOutFrame)
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.SoundEntry!.WipeOutFrame = value.HasValue ? (int)value.Value : -1;
+			});
 
 		_allSoundStopFrameSubscription = AllSoundStopFrame.GetObservable(CheckBox.IsCheckedProperty)
-			.Subscribe(isChecked => part.SoundEntry!.AllSoundStopFrame = isChecked == true ? 1 : -1);
+			.Subscribe(isChecked =>
+			{
+				if (isChecked != (part.SoundEntry!.AllSoundStopFrame != -1))
+					MainWindow.Instance!.AddEditedCutscene();
+
+				part.SoundEntry!.AllSoundStopFrame = isChecked == true ? 1 : -1;
+			});
 	}
 
 	private void DisposeSubscriptions()
