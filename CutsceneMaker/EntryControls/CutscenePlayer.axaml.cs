@@ -28,8 +28,8 @@ public partial class CutscenePlayer : UserControl
 	public CutscenePlayer(ICommonEntries part)
 	{
 		InitializeComponent();
-		BckName.AutoCompletion = Program.Utility.MarioAnimeList;
-		PosName.AutoCompletion = Program.Utility.GeneralPosList;
+		BckName.AutoCompletion = Program.AutoCompletion.MarioAnimeList;
+		PosName.AutoCompletion = Program.AutoCompletion.GeneralPosList;
 
 
 		if (part.PlayerEntry != null)

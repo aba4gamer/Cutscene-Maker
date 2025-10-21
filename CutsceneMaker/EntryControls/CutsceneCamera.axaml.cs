@@ -30,18 +30,18 @@ public partial class CutsceneCamera : UserControl
 	public CutsceneCamera(ICommonEntries part)
 	{
 		InitializeComponent();
-		CameraTargetName.AutoCompletion = Program.Utility.ObjDataTableEnglishNames;
+		CameraTargetName.AutoCompletion = Program.AutoCompletion.ObjDataTableEnglishNames;
 
 		if (part.CameraEntry != null)
 		{
-			if (Program.Utility.ObjDataTableList.ContainsValue(part.CameraEntry.CameraTargetName) && Program.Utility.LoadedCanmObject != Program.Utility.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName])
+			if (Program.AutoCompletion.ObjDataTableList.ContainsValue(part.CameraEntry.CameraTargetName) && Program.AutoCompletion.LoadedCanmObject != Program.AutoCompletion.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName])
 			{
-				Program.Utility.LoadRarc_ObjectCanm(Program.Utility.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName]);
-				AnimCameraName.AutoCompletion = Program.Utility.ObjectCanmList;
+				Program.AutoCompletion.LoadRarc_ObjectCanm(Program.AutoCompletion.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName]);
+				AnimCameraName.AutoCompletion = Program.AutoCompletion.ObjectCanmList;
 			}
 
 			IsCameraEnabled.IsChecked = true;
-			CameraTargetName.Main.Text = Program.Utility.ObjDataTableList.ContainsValue(part.CameraEntry.CameraTargetName) ? Program.Utility.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName] : part.CameraEntry.CameraTargetName;
+			CameraTargetName.Main.Text = Program.AutoCompletion.ObjDataTableList.ContainsValue(part.CameraEntry.CameraTargetName) ? Program.AutoCompletion.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName] : part.CameraEntry.CameraTargetName;
 			CameraTargetCastID.Value = part.CameraEntry.CameraTargetCastID;
 			AnimCameraName.Main.Text = part.CameraEntry.AnimCameraName;
 			AnimCameraStartFrame.Value = part.CameraEntry.AnimCameraStartFrame;
@@ -58,7 +58,7 @@ public partial class CutsceneCamera : UserControl
 				part.CameraEntry ??= new Abacus.Camera();
 				SetControlsEnabled(true);
 
-				part.CameraEntry.CameraTargetName = CameraTargetName.Main.Text != null ? Program.Utility.ObjDataTableList.ContainsKey(CameraTargetName.Main.Text) ? Program.Utility.ObjDataTableList[CameraTargetName.Main.Text] : CameraTargetName.Main.Text : "";
+				part.CameraEntry.CameraTargetName = CameraTargetName.Main.Text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(CameraTargetName.Main.Text) ? Program.AutoCompletion.ObjDataTableList[CameraTargetName.Main.Text] : CameraTargetName.Main.Text : "";
 				part.CameraEntry.CameraTargetCastID = CameraTargetCastID.Value.HasValue ? (int)CameraTargetCastID.Value.Value : -1;
 				part.CameraEntry.AnimCameraName = AnimCameraName.Main.Text ?? string.Empty;
 				part.CameraEntry.AnimCameraStartFrame = AnimCameraStartFrame.Value.HasValue ? (int)AnimCameraStartFrame.Value.Value : -1;
@@ -94,10 +94,10 @@ public partial class CutsceneCamera : UserControl
 		_cameraTargetNameSubscription = CameraTargetName.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text =>
 			{
-				Program.Utility.LoadRarc_ObjectCanm(text);
-				AnimCameraName.AutoCompletion = Program.Utility.ObjectCanmList;
+				Program.AutoCompletion.LoadRarc_ObjectCanm(text);
+				AnimCameraName.AutoCompletion = Program.AutoCompletion.ObjectCanmList;
 
-				part.CameraEntry!.CameraTargetName = text != null ? Program.Utility.ObjDataTableList.ContainsKey(text) ? Program.Utility.ObjDataTableList[text] : text : "";
+				part.CameraEntry!.CameraTargetName = text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(text) ? Program.AutoCompletion.ObjDataTableList[text] : text : "";
 			});
 
 		_cameraTargetCastIDSubscription = CameraTargetCastID.GetObservable(NumericUpDown.ValueProperty)

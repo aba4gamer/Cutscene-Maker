@@ -30,7 +30,7 @@ public partial class CutsceneSound : UserControl
 	public CutsceneSound(ICommonEntries part)
 	{
 		InitializeComponent();
-		BGM.AutoCompletion = Program.Utility.MusicList;
+		BGM.AutoCompletion = Program.AutoCompletion.MusicList;
 		SystemSe.AutoCompletion = SoundEffectsList.PREFIX;
 		ActionSe.AutoCompletion = SoundEffectsList.PREFIX;
 

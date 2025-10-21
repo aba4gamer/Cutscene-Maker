@@ -27,7 +27,7 @@ public partial class MainWindow : Window
 
 	public CutsceneCore Core;
 	public ArchiveView ArchiveUI;
-	public bool HasEdited = false;
+	private bool HasEdited = false;
 
 
 	public MainWindow()
@@ -462,7 +462,7 @@ public partial class MainWindow : Window
 		Core.LoadArchive(archiveWrapper.GetResult());
 
 		// Load other archives for auto completion
-		Program.Utility.LoadRarcs(arcPathName);
+		Program.AutoCompletion.LoadRarcs(arcPathName);
 
 		// Update the menu buttons & update the UI
 		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);

@@ -12,7 +12,7 @@ using Hack.io.Utility;
 
 namespace Abacus;
 
-public class OtherUtility
+public class AutoCompletionData
 {
 	public string GamePath { get; private set; } = "";
 	public string GalaxyPath { get; private set; } = "";
@@ -34,7 +34,7 @@ public class OtherUtility
 
 
 
-	public OtherUtility()
+	public AutoCompletionData()
 	{
 
 	}
