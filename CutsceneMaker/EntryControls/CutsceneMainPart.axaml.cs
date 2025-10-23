@@ -88,8 +88,8 @@ public partial class CutsceneMainPart : UserControl
 		if (Part == null || PartName.Text == null)
 			return;
 
-		Part.PartName = PartName.Text;
 		MainWindow.Instance!.Part_UpdateName(PartName.Text);
+		Part.PartName = PartName.Text;
 	}
 
 	private void PartName_OnKeyDown(object? sender, RoutedEventArgs e)

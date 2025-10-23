@@ -78,6 +78,7 @@ public partial class CutsceneSubPart : UserControl
 		if (Part == null || SubPartName.Text == null)
 			return;
 
+		MainWindow.Instance!.SubPart_UpdateName(SubPartName.Text);
 		Part.SubPartName = SubPartName.Text;
 	}
 
