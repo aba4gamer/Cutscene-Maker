@@ -147,6 +147,14 @@ public partial class TimelineView : UserControl
 		List<Cutscene.Part> parts = MainWindow.Instance!.Core.GetCutscene().Parts;
 		MainTimeline.Children.Clear();
 
+		if (parts.Count < 1)
+		{
+			ComboBox_Reset();
+			SubPart_Render(null);
+			SubTimeline.ContextMenu = null;
+			return;
+		}
+
 		foreach (Cutscene.Part part in parts)
 		{
 			int max = 8 / _ZoomTimeline;
@@ -154,13 +162,13 @@ public partial class TimelineView : UserControl
 
 			if (MainWindow.Instance!.Core.HasPartSelected() && MainWindow.Instance!.Core.GetSelectedPartName() == part.PartName)
 			{
+				TimelinePart_SetSelected(timelinePart);
 				timelinePart.Select(true);
-				SelectedTimelinePart = timelinePart;
 			}
 			if (MainWindow.Instance!.Core.HasSubPartSelected() && MainWindow.Instance!.Core.GetSelectedPartName() == part.PartName)
 			{
+				TimelinePart_SetSelected(timelinePart);
 				timelinePart.SelectedSubPart();
-				SelectedTimelinePart = timelinePart;
 			}
 
 			MainTimeline.Children.Add(timelinePart);
@@ -180,9 +188,18 @@ public partial class TimelineView : UserControl
 			SubPart_Render(null);
 	}
 
-	public void TimelinePart_SetSelected(TimelinePart timelinePart)
+	public void TimelinePart_SetSelected(TimelinePart? timelinePart)
 	{
 		Part_ActivateAll();
+
+		if (timelinePart == null)
+		{
+			ComboBox_Reset();
+			SubPart_Render(null);
+			SubTimeline.ContextMenu = null;
+			return;
+		}
+
 		timelinePart.Select(true);
 		SelectedTimelinePart = timelinePart;
 
@@ -267,10 +284,7 @@ public partial class TimelineView : UserControl
 	{
 		SubTimeline.Children.Clear();
 		if (subPart == null)
-		{
-			SubTimeline.ContextMenu = null;
 			return;
-		}
 
 		int space = MainWindow.Instance!.Core.GetStepUntilSelectedPart();
 
@@ -306,6 +320,7 @@ public partial class TimelineView : UserControl
 				if (timelinePart.PartName == subPartName)
 				{
 					TimelineSubPart_SetSelected(timelinePart);
+					ComboBox_SelectByName(subPartName);
 					break;
 				}
 			}
@@ -425,6 +440,23 @@ public partial class TimelineView : UserControl
 		SubPartComboBox.Items.Add(new ComboBoxItem { Content = "No SubParts" });
 		SubPartComboBox.SelectedIndex = 0;
 		SubPartComboBox.IsEnabled = false;
+	}
+
+	public void ComboBox_SelectByName(string subPartName)
+	{
+		int i = 0;
+		foreach (object? obj in SubPartComboBox.Items)
+		{
+			if (obj != null && obj is ComboBoxItem itm)
+			{
+				if (((string) itm.Content!) == subPartName)
+				{
+					SubPartComboBox.SelectedIndex = i;
+					break;
+				}
+			}
+			i++;
+		}
 	}
 	#endregion
 

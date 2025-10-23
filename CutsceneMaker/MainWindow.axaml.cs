@@ -1028,6 +1028,7 @@ public partial class MainWindow : Window
 		cutscene.Parts.Remove(part);
 
 		// Re-render the parts, update the steps & set the new part as selected
+		ArchiveUI.CutsceneUI.TimelineUI.TimelinePart_SetSelected(null);
 		ArchiveUI.CutsceneUI.TimelineUI.Part_RenderAll();
 		ArchiveUI.CutsceneUI.TimelineUI.Timeline_UpdateSteps();
 
@@ -1069,6 +1070,7 @@ public partial class MainWindow : Window
 		Core.SetSelectedSubPart(subPartName);
 
 		// Re-render the parts, update the steps & set the new part as selected
+		ArchiveUI.CutsceneUI.TimelineUI.ComboBox_AddSubParts(part.SubPartEntries!);
 		ArchiveUI.CutsceneUI.TimelineUI.SubPart_Render(Core.GetSelectedSubPart());
 		ArchiveUI.CutsceneUI.TimelineUI.Timeline_UpdateSteps();
 		ArchiveUI.CutsceneUI.TimelineUI.TimelineSubPart_SetSelectedByName(subPartName);
