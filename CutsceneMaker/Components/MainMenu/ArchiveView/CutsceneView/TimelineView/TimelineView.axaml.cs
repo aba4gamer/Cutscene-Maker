@@ -153,9 +153,15 @@ public partial class TimelineView : UserControl
 			TimelinePart timelinePart = new(part, part.PartName, Math.Max(part.TimeEntry.TotalStep, max), false, _ZoomTimeline);
 
 			if (MainWindow.Instance!.Core.HasPartSelected() && MainWindow.Instance!.Core.GetSelectedPartName() == part.PartName)
+			{
 				timelinePart.Select(true);
-			if (MainWindow.Instance!.Core.HasSubPartSelected())
+				SelectedTimelinePart = timelinePart;
+			}
+			if (MainWindow.Instance!.Core.HasSubPartSelected() && MainWindow.Instance!.Core.GetSelectedPartName() == part.PartName)
+			{
 				timelinePart.SelectedSubPart();
+				SelectedTimelinePart = timelinePart;
+			}
 
 			MainTimeline.Children.Add(timelinePart);
 		}
@@ -163,7 +169,12 @@ public partial class TimelineView : UserControl
 		if (!MainWindow.Instance!.Core.HasPartSelected())
 			ComboBox_Reset();
 
-		if (SubPartComboBox.SelectedIndex > 0)
+		if (SubPartComboBox.SelectedIndex > 0 && MainWindow.Instance!.Core.HasSubPartSelected())
+		{
+			SubPart_Render(MainWindow.Instance!.Core.GetSubPartByName(ComboBox_GetContent(SubPartComboBox.SelectedIndex)));
+			SelectedTimelineSubPart = (TimelinePart) SubTimeline.Children[1];
+		}
+		else if (SubPartComboBox.SelectedIndex > 0)
 			SubPart_Render(MainWindow.Instance!.Core.GetSubPartByName(ComboBox_GetContent(SubPartComboBox.SelectedIndex)));
 		else
 			SubPart_Render(null);
