@@ -48,12 +48,11 @@ public partial class CutsceneSubPart : UserControl
 				if (value != part.SubPartTotalStep)
 					MainWindow.Instance!.AddEditedCutscene();
 
-				if (SubPartTotalStep.Value != null)
+				if (value != null)
 				{
-					int step = (int) SubPartTotalStep.Value;
+					part.SubPartTotalStep = (int)value.Value;
+					MainWindow.Instance!.SubPart_UpdateStep((int)value.Value);
 
-					part.SubPartTotalStep = step;
-					MainWindow.Instance!.SubPart_UpdateStep(step);
 				}
 			});
 
@@ -63,7 +62,11 @@ public partial class CutsceneSubPart : UserControl
 				if (value != part.MainPartStep)
 					MainWindow.Instance!.AddEditedCutscene();
 
-				part.MainPartStep = (int)value!.Value;
+				if (value != null)
+				{
+					part.MainPartStep = (int)value.Value;
+					MainWindow.Instance!.SubPart_UpdateSpaceSteps((int)value.Value);
+				}
 			});
 	}
 

@@ -695,6 +695,15 @@ public partial class MainWindow : Window
 		ArchiveUI.CutsceneUI.TimelineUI.Timeline_UpdateSteps();
 	}
 
+	public void SubPart_UpdateSpaceSteps(int step)
+	{
+		if (!Core.HasSubPartSelected() || ArchiveUI == null || ArchiveUI.CutsceneUI == null || ArchiveUI.CutsceneUI.TimelineUI == null)
+			return;
+
+		ArchiveUI.CutsceneUI.TimelineUI.SubPart_Selected_UpdateSpaceSteps(step);
+		ArchiveUI.CutsceneUI.TimelineUI.Timeline_UpdateSteps();
+	}
+
 	public void SubPart_Deselect(string partName, string subPartName)
 	{
 		if (!Core.HasCutsceneSelected() || ArchiveUI == null || ArchiveUI.CutsceneUI == null)

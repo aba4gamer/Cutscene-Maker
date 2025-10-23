@@ -358,6 +358,16 @@ public partial class TimelineView : UserControl
 		SelectedTimelineSubPart.Border.Width = Math.Max(step * _ZoomTimeline, ((8 / _ZoomTimeline) * _ZoomTimeline));
 	}
 
+	public void SubPart_Selected_UpdateSpaceSteps(int step)
+	{
+		if (SelectedTimelineSubPart == null)
+			return;
+
+		int space = MainWindow.Instance!.Core.GetStepUntilSelectedPart();
+		if (SubTimeline.Children[0]! is TimelineSubPartSpacer timelineSpacer)
+			timelineSpacer.Spacer.Width = (space + MainWindow.Instance!.Core.GetSelectedSubPart().MainPartStep) * _ZoomTimeline;
+	}
+
 	public void SubPart_Selected_SetName(string name)
 	{
 		if (SelectedTimelineSubPart == null)
