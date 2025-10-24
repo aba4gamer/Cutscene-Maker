@@ -5,13 +5,10 @@
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="CutsceneMakerUI.ArchiveView">
 	<DockPanel>
-		<SplitView DisplayMode="Inline" PanePlacement="Left" OpenPaneLength="150" IsPaneOpen="True">
-			<SplitView.Pane>
-				<Grid Name="Sidebar" ColumnDefinitions="1*" Background="#323232" HorizontalAlignment="Stretch"></Grid>
-			</SplitView.Pane>
-			<SplitView.Content>
-				<Grid Name="Main" ColumnDefinitions="1*" HorizontalAlignment="Stretch"></Grid>
-			</SplitView.Content>
-		</SplitView>
+		<Grid ColumnDefinitions="0.5*, 4, 1.8*">
+			<Grid Grid.Column="0" Name="Sidebar" ColumnDefinitions="1*" Background="#323232" HorizontalAlignment="Stretch" />
+			<GridSplitter Grid.Column="1" Background="Black" ResizeDirection="Columns"/>
+			<Grid Grid.Column="2" Name="Main" ColumnDefinitions="1*" HorizontalAlignment="Stretch" />
+		</Grid>
 	</DockPanel>
 </UserControl>
