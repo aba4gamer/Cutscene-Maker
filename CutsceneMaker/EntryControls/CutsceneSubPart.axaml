@@ -4,19 +4,17 @@
 			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			x:Class="CutsceneMakerUI.CutsceneSubPart">
-	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto" ColumnDefinitions="Auto,150">
+	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto" ColumnDefinitions="Auto,250,150">
 
 		<TextBlock Text="SubPart Name" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<StackPanel Grid.Row="0" Grid.Column="1"  Orientation="Horizontal" VerticalAlignment="Center" Margin="5" Spacing="3">
-			<TextBox Name="SubPartName" KeyDown="PartName_OnKeyDown" />
-			<Button Click="OnSubPartNameChange">Apply SubPart Name</Button>
-		</StackPanel>
+		<TextBox Name="SubPartName" Grid.Row="0" Grid.Column="1" KeyDown="PartName_OnKeyDown" Margin="5" />
+		<Button Grid.Row="0" Grid.Column="2" Click="OnSubPartNameChange" Margin="5">Apply SubPart Name</Button>
 
 		<TextBlock Text="SubPartTotalStep" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<NumericUpDown Name="SubPartTotalStep" Grid.Row="1" Grid.Column="1" Width="150" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="1"/>
+		<NumericUpDown Name="SubPartTotalStep" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="1"/>
 
 		<TextBlock Text="MainPartStep" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<NumericUpDown Name="MainPartStep" Grid.Row="2" Grid.Column="1" Width="150" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="0"/>
+		<NumericUpDown Name="MainPartStep" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="0"/>
 
 	</Grid>
 </UserControl>
