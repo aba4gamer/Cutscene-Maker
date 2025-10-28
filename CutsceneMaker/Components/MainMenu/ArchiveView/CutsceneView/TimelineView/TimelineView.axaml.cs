@@ -42,7 +42,8 @@ public partial class TimelineView : UserControl
 				if (i < 1)
 				{
 					SubTimeline.Children.Clear();
-					SubPart_Selected_Deselect();
+					if (MainWindow.Instance!.Core.HasSubPartSelected())
+						SubPart_Selected_Deselect();
 					return;
 				}
 
