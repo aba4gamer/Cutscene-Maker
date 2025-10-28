@@ -16,7 +16,7 @@
 		<NumericUpDown Name="SubPartTotalStep" Grid.Row="1" Grid.Column="1" Width="150" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="1"/>
 
 		<TextBlock Text="MainPartStep" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<NumericUpDown Name="MainPartStep" Grid.Row="2" Grid.Column="1" Width="150" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>
+		<NumericUpDown Name="MainPartStep" Grid.Row="2" Grid.Column="1" Width="150" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="0"/>
 
 	</Grid>
 </UserControl>

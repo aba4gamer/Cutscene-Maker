@@ -41,6 +41,7 @@ To build use:
 - [Hack.io.BCSV](https://github.com/SuperHackio/Hack.io)
 - [Hack.io.RARC](https://github.com/SuperHackio/Hack.io)
 - [Hack.io.YAZ0](https://github.com/SuperHackio/Hack.io)
+- [BidirectionalDictionary](https://github.com/iiKuzmychov/BidirectionalDictionary)
 
 ## Credits
 - [Hack.io](https://github.com/SuperHackio/Hack.io) libraries by [Super Hackio](https://github.com/SuperHackio)
