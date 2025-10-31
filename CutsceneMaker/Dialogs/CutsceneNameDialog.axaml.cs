@@ -90,6 +90,12 @@ public partial class CutsceneNameDialog : Window
 		}
 	}
 
+	protected override void OnClosing(WindowClosingEventArgs e)
+	{
+		if (!e.IsProgrammatic)
+			CutsceneName = null;
+	}
+
 
 
 	private void OnSubmit(object sender, RoutedEventArgs e)
@@ -106,7 +112,6 @@ public partial class CutsceneNameDialog : Window
 
 	private void CloseWin()
 	{
-		CutsceneName = null;
 		Close();
 	}
 

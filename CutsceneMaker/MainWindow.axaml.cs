@@ -922,13 +922,23 @@ public partial class MainWindow : Window
 
 		// Ask for a cutscene name
 		// And also send a list of already existing cutscenes name so we avoid replacing cutscenes
-		string? cutsceneName = await MsgBox.AskName(this, "New Cutscene", "Type a name of your new cutscene", "DemoMyCoolCutscene", null, Core.GetArchive().CutsceneNames, "A cutscene with this name already exists!");
+		List<string> names = [];
+		foreach (string name in Core.GetArchive().CutsceneNames)
+		{
+			names.Add(name);
+			names.Add(name.Substring(4, name.Length - 4));
+		}
+		string? cutsceneName = await MsgBox.AskName(this, "New Cutscene", "Type a name of your new cutscene", "DemoMyCoolCutscene", null, names, "A cutscene with this name already exists!");
 		// If this value is null it means that the user aborted
 		if (cutsceneName == null)
 		{
 			StatusText.Text = $"Aborted new cutscene.";
 			return;
 		}
+
+		// Add "Demo" at the start if it isn't already present
+		if (!cutsceneName.StartsWith("Demo"))
+			cutsceneName = $"Demo{cutsceneName}";
 
 		// Create the new cutscene with name
 		Core.GetArchive().CreateNewCutscene(cutsceneName);
