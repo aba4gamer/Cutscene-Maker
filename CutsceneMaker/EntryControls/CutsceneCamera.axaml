@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:views="using:CutsceneMakerUI"
+			x:Class="CutsceneMakerUI.CutsceneCamera">
+	<Grid RowDefinitions="Auto,40,Auto,Auto,25,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,250">
+		<TextBlock Text="Enabled?" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<CheckBox Name="IsCameraEnabled" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
+
+		<TextBlock Text="CameraTargetName" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="CameraTargetName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" />
+
+		<TextBlock Text="CameraTargetCastID" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<NumericUpDown Name="CameraTargetCastID" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>
+
+		<TextBlock Text="AnimCameraName" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="AnimCameraName" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+
+		<TextBlock Text="AnimCameraStartFrame" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<NumericUpDown Name="AnimCameraStartFrame" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>
+
+		<TextBlock Text="AnimCameraEndFrame" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<NumericUpDown Name="AnimCameraEndFrame" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>
+
+		<TextBlock Text="IsContinuous" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<CheckBox Name="IsContinuous" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+	</Grid>
+</UserControl>

@@ -1,12 +1,12 @@
 .vs/
 .vscode/
 
-*/bin/
-*/dbg/
-*/obj/
+Test/
+CutsceneMaker/Templates/
+
+**/bin/
+**/dbg/
+**/obj/
 
 *.old
 *.user
-
-Test/
-Hack.io/

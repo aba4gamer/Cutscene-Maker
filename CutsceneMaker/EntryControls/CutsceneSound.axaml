@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:views="using:CutsceneMakerUI"
+			x:Class="CutsceneMakerUI.CutsceneSound">
+	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,250">
+
+		<TextBlock Text="Enabled?" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<CheckBox Name="IsSoundEnabled" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
+
+		<TextBlock Text="BGM" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="BGM" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+
+		<TextBlock Text="SystemSe" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="SystemSe" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+
+		<TextBlock Text="ActionSe" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="ActionSe" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+
+		<TextBlock Text="ReturnBgm" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<CheckBox Name="ReturnBgm" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
+
+		<TextBlock Text="BgmWipeOutFrame" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<NumericUpDown Name="BgmWipeOutFrame" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>
+
+		<TextBlock Text="AllSoundStopFrame" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<CheckBox Name="AllSoundStopFrame" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
+	</Grid>
+</UserControl>

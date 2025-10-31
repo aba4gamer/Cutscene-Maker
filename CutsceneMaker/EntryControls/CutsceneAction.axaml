@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			xmlns:views="using:CutsceneMakerUI"
+			x:Class="CutsceneMakerUI.CutsceneAction">
+	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,250,150">
+		<TextBlock Text="Enabled?" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<CheckBox Name="IsActionEnabled" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
+
+		<TextBlock Text="CastName" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="CastNameBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" />
+
+		<TextBlock Text="CastID" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<NumericUpDown Name="CastID" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+
+		<!--Will change to a list or smth instead of just a number. The problem is that the user will have to specify on which game he is-->
+		<TextBlock Text="ActionType" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<ComboBox Name="ActionType" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5">
+			<ComboBoxItem ToolTip.Tip="Plays the animation that &quot;AnimName&quot; is set to. This happens for all Action Types">Play Animation</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Makes the object Appear">Apppear</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Makes the object Disappear (using it's Kill function).">Kill</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Executes a function that the object specifically registered to the cutscene. This is object specific, and not every object has one">Special Function</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Sets the objects Nerve to a nerve specifically registered to the cutscene. This is object specific, and not every object has one">Special Nerve</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="The SW_A of this object will be activated">Activate SW_A</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="The SW_B of this object will be activated">Activate SW_B</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="The model of the object will be unhidden">Show Model</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="The model of the object will be hidden">Hide Model</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Start a conversation with an NPC. Effectively useless because NPC's do not register their text to cutscenes unless the cutscene has a specific name">Start NPC Message</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Start a conversation with an NPC without stopping Mario's current animation. Effectively useless because NPC's do not register their text to cutscenes unless the cutscene has a specific name">Start NPC Message (Alt)</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Duplicate of 10">Start NPC Message (Alt)</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="The SW_A of this object will be deactivated">Deactivate SW_A</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="The SW_B of this object will be deactivated">Deactivate SW_B</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Tries to pause execution of this object">Request Movement: Off</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Tries to resume execution of this object">Request Movement: On</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Unknown. Related to StoryBookWarpDemo. Uses 1 as arg">StoryBookWarpDemo (arg1)</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Unknown. Related to StoryBookWarpDemo. Uses 0 as arg">StoryBookWarpDemo (arg0)</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Unknown. Related to StoryBookWarpDemo">StoryBookWarpDemo</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Unknown. Related to StoryBookWarpDemo">StoryBookWarpDemo</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Unknown. Used at the end of the cutscene where Mario meets Yoshi for the first time">?</ComboBoxItem>
+		</ComboBox>
+
+		<TextBlock Text="PosName" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="PosName" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+
+		<TextBlock Text="AnimName" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<views:AutoTextBox Name="AnimName" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+	</Grid>
+</UserControl>

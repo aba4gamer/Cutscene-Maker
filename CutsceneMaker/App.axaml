@@ -1,9 +1,26 @@
 <Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="CutsceneMaker.App"
-             RequestedThemeVariant="Dark">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-    <Application.Styles>
-        <FluentTheme />
-    </Application.Styles>
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			x:Class="CutsceneMaker.App"
+			RequestedThemeVariant="Dark">
+			<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+	<Application.Styles>
+		<FluentTheme />
+	</Application.Styles>
+	<Application.Resources>
+		<ImageBrush x:Key="CutsceneButtonImg" Source="Assets\placeholder.png" />
+	</Application.Resources>
+	<!--<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.ThemeDictionaries>
+				<ResourceDictionary x:Key='Light'>
+					<SolidColorBrush x:Key='BackgroundBrush'>SpringGreen</SolidColorBrush>
+					<SolidColorBrush x:Key='ForegroundBrush'>Black</SolidColorBrush>
+				</ResourceDictionary>
+				<ResourceDictionary x:Key='Dark'>
+					<SolidColorBrush x:Key='BackgroundBrush'>DodgerBlue</SolidColorBrush>
+					<SolidColorBrush x:Key='ForegroundBrush'>White</SolidColorBrush>
+				</ResourceDictionary>
+			</ResourceDictionary.ThemeDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>-->
 </Application>

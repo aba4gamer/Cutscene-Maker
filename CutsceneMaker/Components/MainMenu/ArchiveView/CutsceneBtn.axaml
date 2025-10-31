@@ -1,0 +1,18 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="CutsceneMakerUI.CutsceneBtn">
+	<Grid Name="ToolTipPanel">
+		<Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" />
+		<Button Name="MainBtn" HorizontalAlignment="Stretch" Click="OnClickCutscene">
+			<StackPanel Margin="4">
+				<DockPanel VerticalAlignment="Center">
+					<Svg Path="avares://CutsceneMaker/Assets/cutscene.svg" Width="14" Height="14" VerticalAlignment="Center" Margin="0, 0, 4, 0" />
+					<TextBlock Name="CutsceneNameTxt" MaxLines="1" TextTrimming="CharacterEllipsis" FontSize="12" />
+				</DockPanel>
+			</StackPanel>
+		</Button>
+	</Grid>
+</UserControl>

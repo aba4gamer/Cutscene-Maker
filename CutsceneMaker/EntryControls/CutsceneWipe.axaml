@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			xmlns:views="using:CutsceneMakerUI"
+			x:Class="CutsceneMakerUI.CutsceneWipe">
+	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto" ColumnDefinitions="Auto,250">
+
+		<TextBlock Text="Enabled?" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5" />
+		<CheckBox Name="IsWipeEnabled" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="5" />
+
+		<!--TODO: Change to a list format, anyone wants to write japanese characters-->
+		<!-- Yeah, will do that in another PR -->
+		<TextBlock Text="WipeName" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5" />
+		<views:AutoTextBox Name="WipeName" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" />
+
+		<TextBlock Text="WipeType" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<ComboBox Name="WipeType" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5">
+			<ComboBoxItem ToolTip.Tip="Fade to Gameplay">Open Wipe</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Fade to Black">Close Wipe</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Cut to Gameplay">Force Open Wipe</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Cut to Black">Force Close Wipe</ComboBoxItem>
+		</ComboBox>
+
+		<TextBlock Text="WipeFrame" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="5" />
+		<NumericUpDown Name="WipeFrame" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" />
+	</Grid>
+</UserControl>
