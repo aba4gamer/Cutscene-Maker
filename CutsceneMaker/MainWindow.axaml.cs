@@ -847,13 +847,25 @@ public partial class MainWindow : Window
 
 		// Ask for the new cutscene name
 		// And also send a list of already existing cutscenes name so we avoid replacing cutscenes
-		string? newCutsceneName = await MsgBox.AskName(this, "Rename Cutscene", $"Type a new name for the cutscene '{cutsceneName}'", cutsceneName, cutsceneName, Core.GetArchive().CutsceneNames, "A cutscene with this name already exists!");
+		List<string> names = [];
+		foreach (string name in Core.GetArchive().CutsceneNames)
+		{
+			if (name != cutsceneName)
+			{
+				names.Add(name);
+				names.Add(name.Substring(4, name.Length - 4));
+			}
+		}
+		string? newCutsceneName = await MsgBox.AskName(this, "Rename Cutscene", $"Type a new name for the cutscene '{cutsceneName}'", cutsceneName, cutsceneName, names, "A cutscene with this name already exists!");
 		// If this value is null it means that the user aborted
-		if (newCutsceneName == null)
+		if (newCutsceneName == null || newCutsceneName == cutsceneName || newCutsceneName == cutsceneName.Substring(4, cutsceneName.Length - 4))
 		{
 			StatusText.Text = $"Aborted rename cutscene.";
 			return null;
 		}
+
+		if (!newCutsceneName.StartsWith("Demo"))
+			newCutsceneName = $"Demo{newCutsceneName}";
 
 		// Rename the cutscene
 		Core.GetArchive().RenameCutscene(cutsceneName, newCutsceneName);
@@ -999,9 +1011,15 @@ public partial class MainWindow : Window
 
 		// Ask the user the name of the part
 		// Also send a list of all part names so we avoid replacing parts
-		string? partName = await MsgBox.AskName(this, "Rename SubPart", $"Type a new name for the part '{part.PartName}'", part.PartName, part.PartName, Core.GetAllPartNames(), "A part/subpart with this name already exists!");
+		List<string> names = [];
+		foreach (string name in Core.GetAllPartNames())
+		{
+			if (oldPartName != name)
+				names.Add(name);
+		}
+		string? partName = await MsgBox.AskName(this, "Rename Part", $"Type a new name for the part '{part.PartName}'", part.PartName, part.PartName, names, "A part/subpart with this name already exists!");
 		// If this value is null it means that the user aborted
-		if (partName == null)
+		if (partName == null || partName == oldPartName)
 		{
 			StatusText.Text = $"Aborted rename part.";
 			return;
@@ -1113,9 +1131,15 @@ public partial class MainWindow : Window
 
 		// Ask the user the name of the part
 		// Also send a list of all part names so we avoid replacing parts
-		string? subPartName = await MsgBox.AskName(this, "Rename SubPart", $"Type a new name for the sub part '{subPart.SubPartName}'", subPart.SubPartName, subPart.SubPartName, Core.GetAllPartNames(), "A part/subpart with this name already exists!");
+		List<string> names = [];
+		foreach (string name in Core.GetAllPartNames())
+		{
+			if (oldSubPartName != name)
+				names.Add(name);
+		}
+		string? subPartName = await MsgBox.AskName(this, "Rename SubPart", $"Type a new name for the sub part '{subPart.SubPartName}'", subPart.SubPartName, subPart.SubPartName, names, "A part/subpart with this name already exists!");
 		// If this value is null it means that the user aborted
-		if (subPartName == null)
+		if (subPartName == null || oldSubPartName == subPartName)
 		{
 			StatusText.Text = $"Aborted rename sub part.";
 			return;
