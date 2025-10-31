@@ -17,6 +17,7 @@ namespace CutsceneMakerUI;
 public partial class CutsceneWipe : UserControl
 {
 	private IDisposable? _nameSubscription;
+	private IDisposable? _nameFocusSubscription;
 	private IDisposable? _typeSubscription;
 	private IDisposable? _frameSubscription;
 
@@ -96,6 +97,12 @@ public partial class CutsceneWipe : UserControl
 				part.WipeEntry!.WipeName = text != null ? WipeTypes.ContainsKey(text) ? WipeTypes[text] : text : "";
 			});
 
+		_nameFocusSubscription = WipeName.Main.GetObservable(TextBox.IsFocusedProperty)
+			.Subscribe(isFocused => {
+				if (isFocused)
+					WipeName.ShowFlyout();
+			});
+
 		_typeSubscription = WipeType.GetObservable(ComboBox.SelectedIndexProperty)
 			.Subscribe(value =>
 			{
@@ -118,6 +125,7 @@ public partial class CutsceneWipe : UserControl
 	private void DisposeSubscriptions()
 	{
 		_nameSubscription?.Dispose();
+		_nameFocusSubscription?.Dispose();
 		_typeSubscription?.Dispose();
 		_frameSubscription?.Dispose();
 	}
