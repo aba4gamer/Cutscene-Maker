@@ -11,7 +11,7 @@
 		<views:AutoTextBox Name="CastNameBox" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" />
 
 		<TextBlock Text="CastID" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<NumericUpDown Name="CastID" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+		<NumericUpDown Name="CastID" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>
 
 		<!--Will change to a list or smth instead of just a number. The problem is that the user will have to specify on which game he is-->
 		<TextBlock Text="ActionType" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
