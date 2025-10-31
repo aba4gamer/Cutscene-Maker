@@ -63,6 +63,41 @@ public partial class MainWindow : Window
 		StatusText.Text = "Ready!";
 	}
 
+	public MainWindow(string[]? args)
+	{
+		// Setting the instance
+		Instance = this;
+
+		// Initializing.
+		InitializeComponent();
+		Core = new();
+		ArchiveUI = new();
+
+		// Disabling buttons.
+		BtnsLayer_MainMenu();
+
+		// Give the grid an empty main menu.
+		MainMenu.Children.Add(new MainMenu(OnClickNewArchive, OnClickOpenArchive));
+
+		// Update the timeline's steps when the window is resized
+		ClientSizeProperty.Changed.Subscribe(size =>
+		{
+			if (!Core.HasCutsceneSelected() || ArchiveUI == null || ArchiveUI.CutsceneUI == null)
+				return;
+
+			ArchiveUI.CutsceneUI.TimelineUI.Timeline_UpdateSteps();
+		});
+
+		// Initialization complete.
+		// Set the title and the status to ready
+		Title = "CutsceneMaker - Main Menu";
+		StatusText.Text = "Ready!";
+
+		// Open the file in args if any
+		if (args != null && args.Length > 0)
+			OpenArchive(args[0]);
+	}
+
 
 
 	#region HelperFunctions
