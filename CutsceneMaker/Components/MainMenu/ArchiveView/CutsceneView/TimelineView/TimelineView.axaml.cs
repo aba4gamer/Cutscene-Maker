@@ -148,6 +148,12 @@ public partial class TimelineView : UserControl
 		List<Cutscene.Part> parts = MainWindow.Instance!.Core.GetCutscene().Parts;
 		MainTimeline.Children.Clear();
 
+		if (!MainWindow.Instance!.Core.HasPartSelected())
+		{
+			MovePartBefore.IsEnabled = false;
+			MovePartAfter.IsEnabled = false;
+		}
+
 		if (parts.Count < 1)
 		{
 			ComboBox_Reset();
