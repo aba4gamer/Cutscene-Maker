@@ -11,40 +11,100 @@
 	<DockPanel>
 		<Menu DockPanel.Dock="Top" VerticalAlignment="Top">
 			<MenuItem Header="_File">
-				<MenuItem Header="_New Archive" Click="OnClickNewArchive" InputGesture="Ctrl+N" HotKey="Ctrl+N" ToolTip.Tip="Creates a new .arc archive file for cutscenes" />
-				<MenuItem Header="_Open Archive" Click="OnClickOpenArchive" InputGesture="Ctrl+O" HotKey="Ctrl+O" ToolTip.Tip="Opens an existing .arc archive file for cutscenes" />
+				<MenuItem Header="_New Archive" Click="OnClickNewArchive" InputGesture="Ctrl+N" HotKey="Ctrl+N" ToolTip.Tip="Creates a new .arc archive file for cutscenes">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/new-archive.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="_Open Archive" Click="OnClickOpenArchive" InputGesture="Ctrl+O" HotKey="Ctrl+O" ToolTip.Tip="Opens an existing .arc archive file for cutscenes">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/open-archive.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<Separator />
-				<MenuItem Name="SaveBtn" Header="_Save" Click="OnClickSave" InputGesture="Ctrl+S" HotKey="Ctrl+S" ToolTip.Tip="Saves the changes overwriting the existing .arc archive file" />
-				<MenuItem Name="SaveAsBtn" Header="Save _As" Click="OnClickSaveAs" InputGesture="Ctrl+Alt+S" HotKey="Ctrl+Alt+S" ToolTip.Tip="Saves the changes in a new .arc archive file" />
+				<MenuItem Name="SaveBtn" Header="_Save" Click="OnClickSave" InputGesture="Ctrl+S" HotKey="Ctrl+S" ToolTip.Tip="Saves the changes overwriting the existing .arc archive file">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/save-archive.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Name="SaveAsBtn" Header="Save _As" Click="OnClickSaveAs" InputGesture="Ctrl+Alt+S" HotKey="Ctrl+Alt+S" ToolTip.Tip="Saves the changes in a new .arc archive file">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/save-archive-as.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<Separator />
 				<!--<MenuItem Header="_Preferences" InputGesture="Ctrl+P" HotKey="Ctrl+P" />-->
-				<MenuItem Name="ReloadArchiveBtn" Header="_Reload Archive" Click="OnReloadArchive" InputGesture="Ctrl+R" HotKey="Ctrl+R" ToolTip.Tip="Reloads the .arc archive file discarding changes if any" />
+				<MenuItem Name="ReloadArchiveBtn" Header="_Reload Archive" Click="OnReloadArchive" InputGesture="Ctrl+R" HotKey="Ctrl+R" ToolTip.Tip="Reloads the .arc archive file discarding changes if any">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/reload-archive.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
 			</MenuItem>
+
+
 			<MenuItem Name="ArchiveMenu" Header="_Archive">
-				<MenuItem Header="_New Cutscene..." Click="OnCreateNewCutscene" InputGesture="Ctrl+Shift+N" HotKey="Ctrl+Shift+N" ToolTip.Tip="Creates a new cutscene with a name" />
+				<MenuItem Header="_New Cutscene..." Click="OnCreateNewCutscene" InputGesture="Ctrl+Shift+N" HotKey="Ctrl+Shift+N" ToolTip.Tip="Creates a new cutscene with a name">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/new-cutscene.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<Separator />
-				<MenuItem Name="RenameCutsceneBtn" Header="_Rename Selected Cutscene" Click="OnRenameCutscene" InputGesture="Ctrl+Shift+R" HotKey="Ctrl+Shift+R" ToolTip.Tip="Renames the selected cutscene" />
-				<MenuItem Name="DeleteCutsceneBtn" Header="_Delete Selected Cutscene" Click="OnDeleteCutscene" InputGesture="Ctrl+Shift+D" HotKey="Ctrl+Shift+D" ToolTip.Tip="Deletes the selected cutscene" />
+				<MenuItem Name="RenameCutsceneBtn" Header="_Rename Selected Cutscene" Click="OnRenameCutscene" InputGesture="Ctrl+Shift+R" HotKey="Ctrl+Shift+R" ToolTip.Tip="Renames the selected cutscene">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/rename-cutscene.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Name="DeleteCutsceneBtn" Header="_Delete Selected Cutscene" Click="OnDeleteCutscene" InputGesture="Ctrl+Shift+D" HotKey="Ctrl+Shift+D" ToolTip.Tip="Deletes the selected cutscene">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/delete-cutscene.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
 			</MenuItem>
+
+
 			<MenuItem Name="CutsceneMenu" Header="_Cutscene">
-				<MenuItem Header="_New Part" Click="OnNewPart" InputGesture="Alt+N" HotKey="Alt+N" ToolTip.Tip="Creates a new part in the selected cutscene" />
-				<MenuItem Name="SubPartBtn" Header="_New SubPart" Click="OnNewSubPart" InputGesture="Alt+Shift+N" HotKey="Alt+Shift+N" ToolTip.Tip="Creates a new sub part in the selected part of the selected cutscene" />
+				<MenuItem Header="_New Part" Click="OnNewPart" InputGesture="Alt+N" HotKey="Alt+N" ToolTip.Tip="Creates a new part in the selected cutscene">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/new-part.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Name="SubPartBtn" Header="_New SubPart" Click="OnNewSubPart" InputGesture="Alt+Shift+N" HotKey="Alt+Shift+N" ToolTip.Tip="Creates a new sub part in the selected part of the selected cutscene">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/new-subpart.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<Separator />
-				<MenuItem Name="RenamePartBtn" Header="_Rename Part" Click="OnRenamePart" InputGesture="Alt+R" HotKey="Alt+R" ToolTip.Tip="Renames the selected part of the selected cutscene" />
-				<MenuItem Name="DeletePartBtn" Header="_Delete Part" Click="OnDeletePart" InputGesture="Alt+Delete" HotKey="Alt+Delete" ToolTip.Tip="Deletes the selected part of the selected cutscene" />
+				<MenuItem Name="RenamePartBtn" Header="_Rename Part" Click="OnRenamePart" InputGesture="Alt+R" HotKey="Alt+R" ToolTip.Tip="Renames the selected part of the selected cutscene">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/rename-part.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Name="DeletePartBtn" Header="_Delete Part" Click="OnDeletePart" InputGesture="Alt+Delete" HotKey="Alt+Delete" ToolTip.Tip="Deletes the selected part of the selected cutscene">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/delete-part.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<Separator />
-				<MenuItem Name="RenameSubPartBtn" Header="_Rename SubPart" Click="OnRenameSubPart" InputGesture="Alt+Shift+R" HotKey="Alt+Shift+R" ToolTip.Tip="Renames the selected sub part in the selected part of the selected cutscene" />
-				<MenuItem Name="DeleteSubPartBtn" Header="_Delete SubPart" Click="OnDeleteSubPart" InputGesture="Alt+Shift+Delete" HotKey="Alt+Shift+Delete" ToolTip.Tip="Deletes the selected sub part in the selected part of the selected cutscene" />
+				<MenuItem Name="RenameSubPartBtn" Header="_Rename SubPart" Click="OnRenameSubPart" InputGesture="Alt+Shift+R" HotKey="Alt+Shift+R" ToolTip.Tip="Renames the selected sub part in the selected part of the selected cutscene">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/rename-subpart.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Name="DeleteSubPartBtn" Header="_Delete SubPart" Click="OnDeleteSubPart" InputGesture="Alt+Shift+Delete" HotKey="Alt+Shift+Delete" ToolTip.Tip="Deletes the selected sub part in the selected part of the selected cutscene">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/delete-subpart.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
 			</MenuItem>
 			<MenuItem Name="SettingsMenu" Header="_About">
 				<MenuItem Name="WikiBtn" Header="_Luma's Wiki" Click="OnWiki" ToolTip.Tip="More information about Cutscenes right here">
 					<MenuItem.Icon>
-						<Image Source="Assets/wiki-icon.png"/>
+						<Svg Path="Assets/menu/wiki-icon.svg"/>
 					</MenuItem.Icon>
 				</MenuItem>
-				<MenuItem Name= "GitHubBtn" Header="_GitHub" Click="OnGitHub" ToolTip.Tip="The CutsceneMaker GitHub repo">
+				<MenuItem Name="GitHubBtn" Header="_GitHub" Click="OnGitHub" ToolTip.Tip="The CutsceneMaker GitHub repo">
 					<MenuItem.Icon>
-						<Image Source="Assets/github-mark-white.png"/>
+						<Svg Path="Assets/menu/github.svg" />
 					</MenuItem.Icon>
                 </MenuItem>         
 			</MenuItem>
@@ -60,33 +120,99 @@
 	</DockPanel>
 	<Window.Resources>
 		<ContextMenu x:Key="CutsceneMenuCtx">
-			<MenuItem Header="Rename" Click="OnRenameCutsceneContext"/>
-			<MenuItem Header="Delete" Click="OnDeleteCutsceneContext"/>
+			<MenuItem Header="Rename" Click="OnRenameCutsceneContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/rename-cutscene.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Delete" Click="OnDeleteCutsceneContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/delete-cutscene.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
 			<Separator />
-			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext"/>
-			<MenuItem Header="Reload" Click="OnReloadCutsceneContext"/>
+			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext">
+				<MenuItem.Icon>
+						<Svg Path="Assets/menu/new-cutscene.svg" />
+					</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Reload" Click="OnReloadCutsceneContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/reload-archive.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
 		</ContextMenu>
+
+
 		<ContextMenu x:Key="CutscenePanelCtx">
-			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext"/>
-			<MenuItem Header="Reload Archive" Click="OnReloadCutsceneContext"/>
+			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/new-cutscene.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Reload Archive" Click="OnReloadCutsceneContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/reload-archive.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
 		</ContextMenu>
+
+
 		<ContextMenu x:Key="PartMenuCtx">
-			<MenuItem Header="Rename" Click="OnRenamePartContext"/>
-			<MenuItem Header="Delete" Click="OnDeletePartContext"/>
+			<MenuItem Header="Rename" Click="OnRenamePartContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/rename-part.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Delete" Click="OnDeletePartContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/delete-part.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
 			<Separator />
-			<MenuItem Header="New Part" Click="OnNewPartContext"/>
+			<MenuItem Header="New Part" Click="OnNewPartContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/new-part.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
 		</ContextMenu>
+
+
 		<ContextMenu x:Key="PartPanelCtx">
-			<MenuItem Header="New Part" Click="OnNewPartContext"/>
+			<MenuItem Header="New Part" Click="OnNewPartContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/new-part.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
 		</ContextMenu>
+
+
 		<ContextMenu x:Key="SubPartMenuCtx">
-			<MenuItem Header="Rename" Click="OnRenameSubPartContext"/>
-			<MenuItem Header="Delete" Click="OnDeleteSubPartContext"/>
+			<MenuItem Header="Rename" Click="OnRenameSubPartContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/rename-subpart.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Delete" Click="OnDeleteSubPartContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/delete-subpart.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
 			<Separator />
-			<MenuItem Header="New SubPart" Click="OnNewSubPartContext"/>
+			<MenuItem Header="New SubPart" Click="OnNewSubPartContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/new-subpart.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
 		</ContextMenu>
+
+
 		<ContextMenu x:Key="SubPartPanelCtx">
-			<MenuItem Header="New SubPart" Click="OnNewSubPartContext"/>
+			<MenuItem Header="New SubPart" Click="OnNewSubPartContext">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/new-subpart.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
 		</ContextMenu>
 	</Window.Resources>
 </Window>
