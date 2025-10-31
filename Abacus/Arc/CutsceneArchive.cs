@@ -245,6 +245,8 @@ public class CutsceneArchive {
 			cutscene.SaveAll(_rarc);
 		}
 
+		_rarc.KeepFileIDsSynced = true;
+
 		StreamUtil.SetEndianBig();
 		FileStream stream = File.OpenWrite(FilePath);
 		_rarc.Save(stream);
@@ -261,6 +263,8 @@ public class CutsceneArchive {
 		{
 			cutscene.SaveAll(_rarc);
 		}
+
+		_rarc.KeepFileIDsSynced = true;
 
 		StreamUtil.SetEndianBig();
 		FileStream stream = File.OpenWrite(path);
