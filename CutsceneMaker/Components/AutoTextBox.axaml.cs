@@ -32,22 +32,7 @@ public partial class AutoTextBox : UserControl
 				if (text == null)
 					return;
 
-				FlyoutStackPanel.Children.Clear();
-				foreach (string option in AutoCompletion)
-				{
-					if (option.ToLower().StartsWith(text.ToLower()))
-					{
-						ComboBoxItem itm = new ComboBoxItem { Content = option };
-						itm.AddHandler(PointerPressedEvent, ComboBoxItem_OnPointerPressed, RoutingStrategies.Tunnel);
-						itm.AddHandler(KeyDownEvent, ComboBoxItem_OnKeyDown, RoutingStrategies.Tunnel);
-						FlyoutStackPanel.Children.Add(itm);
-					}
-				}
-
-				if (FlyoutStackPanel.Children.Count > 0)
-					FlyoutBase.ShowAttachedFlyout(Main);
-				else
-					FlyoutBase.GetAttachedFlyout(Main)?.Hide();
+				ShowFlyout();
 				Main.Focus();
 			});
 	}
@@ -148,6 +133,11 @@ public partial class AutoTextBox : UserControl
 				{
 					e.Handled = true;
 					FlyoutBase.GetAttachedFlyout(Main)!.Hide();
+				} else if (!FlyoutBase.GetAttachedFlyout(Main)!.IsOpen)
+				{
+					Main.IsEnabled = false;
+					Main.IsEnabled = true;
+					e.Handled = true;
 				}
 				break;
 		}
@@ -169,5 +159,27 @@ public partial class AutoTextBox : UserControl
 		}
 
 		FlyoutBase.ShowAttachedFlyout(Main);
+	}
+
+
+	public void ShowFlyout()
+	{
+		string text = Main.Text ?? "";
+		FlyoutStackPanel.Children.Clear();
+		foreach (string option in AutoCompletion)
+		{
+			if (option.ToLower().StartsWith(text.ToLower()))
+			{
+				ComboBoxItem itm = new ComboBoxItem { Content = option };
+				itm.AddHandler(PointerPressedEvent, ComboBoxItem_OnPointerPressed, RoutingStrategies.Tunnel);
+				itm.AddHandler(KeyDownEvent, ComboBoxItem_OnKeyDown, RoutingStrategies.Tunnel);
+				FlyoutStackPanel.Children.Add(itm);
+			}
+		}
+
+		if (FlyoutStackPanel.Children.Count > 0)
+			FlyoutBase.ShowAttachedFlyout(Main);
+		else
+			FlyoutBase.GetAttachedFlyout(Main)?.Hide();
 	}
 }
