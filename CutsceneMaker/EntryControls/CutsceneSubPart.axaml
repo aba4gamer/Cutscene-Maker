@@ -4,11 +4,11 @@
 			xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			x:Class="CutsceneMakerUI.CutsceneSubPart">
-	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto" ColumnDefinitions="Auto,250,150">
+	<Grid RowDefinitions="Auto,40,Auto,Auto,Auto" ColumnDefinitions="Auto,250,250">
 
 		<TextBlock Text="SubPart Name" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<TextBox Name="SubPartName" Grid.Row="0" Grid.Column="1" KeyDown="PartName_OnKeyDown" Margin="5" />
-		<Button Grid.Row="0" Grid.Column="2" Click="OnSubPartNameChange" Margin="5">Apply SubPart Name</Button>
+		<TextBox Name="SubPartName" Grid.Row="0" Grid.Column="1" Margin="5" />
+		<TextBlock Name="SubPartNameWarn" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Margin="5" Text="This name is already used!" Foreground="#0000" />
 
 		<TextBlock Text="SubPartTotalStep" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<NumericUpDown Name="SubPartTotalStep" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="1"/>

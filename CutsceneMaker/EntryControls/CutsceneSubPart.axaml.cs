@@ -5,6 +5,7 @@ using Abacus;
 
 using Avalonia;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Interactivity;
@@ -16,6 +17,7 @@ namespace CutsceneMakerUI;
 
 public partial class CutsceneSubPart : UserControl
 {
+	private IDisposable? _subPartNameSubscription;
 	private IDisposable? _subPartTotalStepSubscription;
 	private IDisposable? _mainPartStepSubscription;
 	private SubPart? Part;
@@ -41,6 +43,34 @@ public partial class CutsceneSubPart : UserControl
 	private void SubscribeToChanges(Abacus.SubPart part)
 	{
 		DisposeSubscriptions();
+
+		_subPartNameSubscription = SubPartName.GetObservable(TextBox.TextProperty)
+			.Subscribe(text =>
+			{
+				if (text == null || part.SubPartName == text)
+				{
+					SubPartNameWarn.Foreground = Brush.Parse("#0000");
+					return;
+				}
+
+				text = text.Trim();
+				if (text == "")
+				{
+					SubPartNameWarn.Text = "Name can't be empty!";
+					SubPartNameWarn.Foreground = Brush.Parse("#FA8072");
+				}
+				else if (MainWindow.Instance!.Core.GetAllPartNames().Contains(text))
+				{
+					SubPartNameWarn.Text = "This name is already used!";
+					SubPartNameWarn.Foreground = Brush.Parse("#FA8072");
+				}
+				else
+				{
+					SubPartNameWarn.Foreground = Brush.Parse("#0000");
+					MainWindow.Instance!.SubPart_UpdateName(text);
+					part.SubPartName = text;
+				}
+			});
 
 		_subPartTotalStepSubscription = SubPartTotalStep.GetObservable(NumericUpDown.ValueProperty)
 			.Subscribe(value =>
@@ -72,32 +102,8 @@ public partial class CutsceneSubPart : UserControl
 
 	private void DisposeSubscriptions()
 	{
+		_subPartNameSubscription?.Dispose();
 		_subPartTotalStepSubscription?.Dispose();
 		_mainPartStepSubscription?.Dispose();
-	}
-
-	private void OnSubPartNameChange(object? sender, RoutedEventArgs e)
-	{
-		if (Part == null || SubPartName.Text == null)
-			return;
-
-		MainWindow.Instance!.SubPart_UpdateName(SubPartName.Text);
-		Part.SubPartName = SubPartName.Text;
-	}
-
-	private void PartName_OnKeyDown(object? sender, RoutedEventArgs e)
-	{
-		if (Part == null || SubPartName.Text == null)
-			return;
-
-		switch (((KeyEventArgs) e).Key)
-		{
-			case Key.Enter:
-				SubPartName.IsEnabled = false;
-				SubPartName.IsEnabled = true;
-				MainWindow.Instance!.SubPart_UpdateName(SubPartName.Text);
-				Part.SubPartName = SubPartName.Text;
-				break;
-		}
 	}
 }

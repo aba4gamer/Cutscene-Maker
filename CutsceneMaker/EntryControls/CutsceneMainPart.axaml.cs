@@ -5,6 +5,7 @@ using Abacus;
 
 using Avalonia;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Interactivity;
@@ -16,6 +17,7 @@ namespace CutsceneMakerUI;
 public partial class CutsceneMainPart : UserControl
 {
 	private IDisposable? _totalStepSubscription;
+	private IDisposable? _partNameSubscription;
 	private IDisposable? _suspendFlagSubscription;
 	private IDisposable? _waitUserInputFlagSubscription;
 	private Cutscene.Part? Part;
@@ -41,6 +43,34 @@ public partial class CutsceneMainPart : UserControl
 	private void SubscribeToChanges(Cutscene.Part part)
 	{
 		DisposeSubscriptions();
+
+		_partNameSubscription = PartName.GetObservable(TextBox.TextProperty)
+			.Subscribe(text =>
+			{
+				if (text == null || part.PartName == text)
+				{
+					PartNameWarn.Foreground = Brush.Parse("#0000");
+					return;
+				}
+
+				text = text.Trim();
+				if (text == "")
+				{
+					PartNameWarn.Text = "Name can't be empty!";
+					PartNameWarn.Foreground = Brush.Parse("#FA8072");
+				}
+				else if (MainWindow.Instance!.Core.GetAllPartNames().Contains(text))
+				{
+					PartNameWarn.Text = "This name is already used!";
+					PartNameWarn.Foreground = Brush.Parse("#FA8072");
+				}
+				else
+				{
+					PartNameWarn.Foreground = Brush.Parse("#0000");
+					MainWindow.Instance!.Part_UpdateName(text);
+					part.PartName = text;
+				}
+			});
 
 		_totalStepSubscription = TotalStep.GetObservable(NumericUpDown.ValueProperty)
 			.Subscribe(value =>
@@ -79,32 +109,8 @@ public partial class CutsceneMainPart : UserControl
 	private void DisposeSubscriptions()
 	{
 		_totalStepSubscription?.Dispose();
+		_partNameSubscription?.Dispose();
 		_suspendFlagSubscription?.Dispose();
 		_waitUserInputFlagSubscription?.Dispose();
-	}
-
-	private void OnPartNameChange(object? sender, RoutedEventArgs e)
-	{
-		if (Part == null || PartName.Text == null)
-			return;
-
-		MainWindow.Instance!.Part_UpdateName(PartName.Text);
-		Part.PartName = PartName.Text;
-	}
-
-	private void PartName_OnKeyDown(object? sender, RoutedEventArgs e)
-	{
-		if (Part == null || PartName.Text == null)
-			return;
-
-		switch (((KeyEventArgs) e).Key)
-		{
-			case Key.Enter:
-				PartName.IsEnabled = false;
-				PartName.IsEnabled = true;
-				MainWindow.Instance!.Part_UpdateName(PartName.Text);
-				Part.PartName = PartName.Text;
-				break;
-		}
 	}
 }
