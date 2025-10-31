@@ -158,12 +158,18 @@ public partial class AutoTextBox : UserControl
 			FlyoutStackPanel.Children.Add(itm);
 		}
 
+		if (AutoCompletion.Count < 1)
+			return;
+
 		FlyoutBase.ShowAttachedFlyout(Main);
 	}
 
 
 	public void ShowFlyout()
 	{
+		if (AutoCompletion.Count < 1)
+			return;
+
 		string text = Main.Text ?? "";
 		FlyoutStackPanel.Children.Clear();
 		foreach (string option in AutoCompletion)
