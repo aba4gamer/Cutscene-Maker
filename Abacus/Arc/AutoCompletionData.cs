@@ -110,11 +110,19 @@ public class AutoCompletionData
 		{
 			string eng_name = (string) tbl[i][tbl[Hashes.AutoCompletionHashes.ODT_FIELD_ENGLISH]];
 			string jap_name = (string) tbl[i][tbl[Hashes.AutoCompletionHashes.ODT_FIELD_JAPANESE]];
-			if (eng_name != "TestStarLightReceiveSwitch") // Filter TestStarLightReceiveSwitch because it has the same japanese name and isn't allowed to have multiple keys with the same values in BidirectionalDictionary
+			if (ObjDataTableList.ContainsKey(eng_name))
 			{
-				ObjDataTableList[eng_name] = jap_name;
-				ObjDataTableEnglishNames.Add(eng_name);
+				Console.WriteLine($"[WARNING] [ObjNameTable]: Can't add key {eng_name} (with value {jap_name}) because it's already present!");
+				continue;
 			}
+			if (ObjDataTableList.ContainsValue(jap_name))
+			{
+				Console.WriteLine($"[WARNING] [ObjNameTable]: Can't add value {jap_name} (with key {eng_name}) because it's already present!");
+				continue;
+			}
+
+			ObjDataTableList[eng_name] = jap_name;
+			ObjDataTableEnglishNames.Add(eng_name);
 		}
 	}
 
