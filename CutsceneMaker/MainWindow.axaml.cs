@@ -30,6 +30,7 @@ public partial class MainWindow : Window
 	public ArchiveView ArchiveUI;
 
 	private List<string> EditedCutscenes = [];
+	private bool IsNewArchive = false;
 
 
 	public MainWindow()
@@ -213,7 +214,10 @@ public partial class MainWindow : Window
 
 		EditedCutscenes.Add(Core.GetCutscene().CutsceneName);
 
-		Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] *[{Core.GetCutscene().CutsceneName}]";
+		if (IsNewArchive)
+			Title = $"CutsceneMaker - 'New Archive' *[{Core.GetCutscene().CutsceneName}]";
+		else
+			Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] *[{Core.GetCutscene().CutsceneName}]";
 	}
 	#endregion
 
@@ -374,16 +378,7 @@ public partial class MainWindow : Window
 			return;
 		}
 
-		// Ask the user where to save the file.
-		// If the string is null it means that the user aborted the saving
-		string? filePath = await MsgBox.AskSaveArcFile(StorageProvider, "DemoMyCoolCutscene.arc");
-		if (filePath == null)
-		{
-			StatusText.Text = $"New archive aborted";
-			return;
-		}
-
-		NewArchive(filePath);
+		NewArchive();
 	}
 
 	public async void Ask_OpenArchive()
@@ -427,7 +422,10 @@ public partial class MainWindow : Window
 		// Update the status & set the title.
 		StatusText.Text = $"Successfully reloaded '{filePath}'!";
 
-		Title = $"CutsceneMaker - [{filePath}]";
+		if (IsNewArchive)
+			Title = $"CutsceneMaker - 'New Archive'";
+		else
+			Title = $"CutsceneMaker - [{filePath}]";
 	}
 
 	public async void Ask_SaveAs()
@@ -452,7 +450,7 @@ public partial class MainWindow : Window
 	// ============================
 	// Backend
 
-	public async void NewArchive(string filePath)
+	public async void NewArchive()
 	{
 		// If has changed, ask to discard before continuing
 		if (Core.HasArchiveOpen() && EditedCutscenes.Count > 0 && !await AskDiscardChanges())
@@ -461,30 +459,13 @@ public partial class MainWindow : Window
 			return;
 		}
 
-		// Copying the arc template to the new location
-		File.Copy("./Templates/TemplateDemo.arc", filePath);
-
-		// Open the archive.
-		// And check for errors.
-		CutsceneArchiveReadWrapper archiveWrapper = CutsceneArchive.LoadArchive(filePath);
-		if (archiveWrapper.IsError)
-		{
-			await MsgBox.SendMessage(this, "Error while creating the .arc file", $"Couldn't open the newly made '{filePath}' file because of an error:\n\n{archiveWrapper.GetErrorMessage()}", ButtonEnum.Ok);
-			StatusText.Text = $"Failed to create '{filePath}'.";
-			return;
-		}
-		Core.LoadArchive(archiveWrapper.GetResult());
-
-		// Update the menu buttons & update the UI
-		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
-
-		BtnsLayer_ArchiveOpen();
-		MainMenu.Children.Clear();
-		MainMenu.Children.Add(ArchiveUI);
+		// Opening the arc template to the new location
+		OpenArchive("./Templates/TemplateDemo.arc");
+		IsNewArchive = true;
 
 		// Update the status & set the title.
-		StatusText.Text = $"Successfully created '{filePath}'!";
-		Title = $"CutsceneMaker - [{filePath}]";
+		StatusText.Text = $"Successfully created a new archive!";
+		Title = $"CutsceneMaker - 'New Archive'";
 	}
 
 	public async void OpenArchive(string arcPathName)
@@ -509,6 +490,7 @@ public partial class MainWindow : Window
 
 		// Load other archives for auto completion
 		Program.AutoCompletion.LoadRarcs(arcPathName);
+		IsNewArchive = false;
 
 		// Update the menu buttons & update the UI
 		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
@@ -528,6 +510,12 @@ public partial class MainWindow : Window
 		if (!Core.HasArchiveOpen())
 			return;
 
+		if (IsNewArchive)
+		{
+			Ask_SaveAs();
+			return;
+		}
+
 		Core.SaveArchive();
 		StatusText.Text = $"Successfully saved the archive!";
 
@@ -545,6 +533,7 @@ public partial class MainWindow : Window
 
 		Core.SaveArchiveTo(filePath);
 		StatusText.Text = $"Successfully saved the archive to {filePath}!";
+		IsNewArchive = false;
 
 		EditedCutscenes = [];
 		if (Core.HasCutsceneSelected())
@@ -583,11 +572,20 @@ public partial class MainWindow : Window
 
 		if (EditedCutscenes.Count > 0)
 			if (EditedCutscenes.Contains(cutsceneName))
-				Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] *[{cutsceneName}]";
+				if (IsNewArchive)
+					Title = $"CutsceneMaker - 'New Archive' *[{cutsceneName}]";
+				else
+					Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] *[{cutsceneName}]";
 			else
-				Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] [{cutsceneName}]";
+				if (IsNewArchive)
+					Title = $"CutsceneMaker - 'New Archive' [{cutsceneName}]";
+				else
+					Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] [{cutsceneName}]";
 		else
-			Title = $"CutsceneMaker - [{Core.GetArchive().FilePath}] [{cutsceneName}]";
+			if (IsNewArchive)
+				Title = $"CutsceneMaker - 'New Archive' [{cutsceneName}]";
+			else
+				Title = $"CutsceneMaker - [{Core.GetArchive().FilePath}] [{cutsceneName}]";
 	}
 	#endregion
 
@@ -920,7 +918,10 @@ public partial class MainWindow : Window
 			ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
 
 		// Update the status & set the title.
-		Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] *[{newCutsceneName}]";
+		if (IsNewArchive)
+			Title = $"CutsceneMaker - 'New Archive' *[{newCutsceneName}]";
+		else
+			Title = $"CutsceneMaker - *[{Core.GetArchive().FilePath}] *[{newCutsceneName}]";
 		StatusText.Text = $"Successfully renamed the cutscene '{cutsceneName}' to '{newCutsceneName}'!";
 
 		return newCutsceneName;
