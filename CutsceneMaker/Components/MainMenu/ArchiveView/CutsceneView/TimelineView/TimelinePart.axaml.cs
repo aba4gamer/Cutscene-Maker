@@ -46,14 +46,14 @@ public partial class TimelinePart : UserControl
 	{
 		if (!select)
 			if (IsSubPart)
-				Grid.Background = Brush.Parse("#595979");
-			else
-				Grid.Background = Brush.Parse("#668");
-		else
-			if (IsSubPart)
 				Grid.Background = Brush.Parse("#393959");
 			else
 				Grid.Background = Brush.Parse("#446");
+		else
+			if (IsSubPart)
+				Grid.Background = Brush.Parse("#595979");
+			else
+				Grid.Background = Brush.Parse("#668");
 
 		IsSelected = select;
 	}
@@ -61,7 +61,7 @@ public partial class TimelinePart : UserControl
 	public void SelectedSubPart()
 	{
 		IsSelected = false;
-		Grid.Background = Brush.Parse("#484880");
+		Grid.Background = Brush.Parse("#5e5e7e");
 	}
 
 

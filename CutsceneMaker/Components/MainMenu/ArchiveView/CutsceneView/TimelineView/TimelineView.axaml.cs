@@ -260,6 +260,7 @@ public partial class TimelineView : UserControl
 	{
 		if (SelectedTimelinePart != null)
 		{
+			Console.WriteLine("AAA");
 			SelectedTimelinePart.Select(false);
 			SelectedTimelinePart = null;
 		}
