@@ -18,6 +18,7 @@ public partial class CutsceneMainPart : UserControl
 {
 	private IDisposable? _totalStepSubscription;
 	private IDisposable? _partNameSubscription;
+	private IDisposable? _partNameFocusSubscription;
 	private IDisposable? _suspendFlagSubscription;
 	private IDisposable? _waitUserInputFlagSubscription;
 	private Cutscene.Part? Part;
@@ -72,6 +73,13 @@ public partial class CutsceneMainPart : UserControl
 				}
 			});
 
+		_partNameFocusSubscription = PartName.GetObservable(TextBox.IsFocusedProperty)
+			.Subscribe(isFocused =>
+			{
+				if (!isFocused)
+					PartName.Text = part.PartName;
+			});
+
 		_totalStepSubscription = TotalStep.GetObservable(NumericUpDown.ValueProperty)
 			.Subscribe(value =>
 			{
@@ -110,6 +118,7 @@ public partial class CutsceneMainPart : UserControl
 	{
 		_totalStepSubscription?.Dispose();
 		_partNameSubscription?.Dispose();
+		_partNameFocusSubscription?.Dispose();
 		_suspendFlagSubscription?.Dispose();
 		_waitUserInputFlagSubscription?.Dispose();
 	}

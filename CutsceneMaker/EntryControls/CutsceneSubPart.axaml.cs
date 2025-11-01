@@ -18,6 +18,7 @@ namespace CutsceneMakerUI;
 public partial class CutsceneSubPart : UserControl
 {
 	private IDisposable? _subPartNameSubscription;
+	private IDisposable? _subPartNameFocusSubscription;
 	private IDisposable? _subPartTotalStepSubscription;
 	private IDisposable? _mainPartStepSubscription;
 	private SubPart? Part;
@@ -72,6 +73,13 @@ public partial class CutsceneSubPart : UserControl
 				}
 			});
 
+		_subPartNameFocusSubscription = SubPartName.GetObservable(TextBox.IsFocusedProperty)
+			.Subscribe(isFocused =>
+			{
+				if (!isFocused)
+					SubPartName.Text = part.SubPartName;
+			});
+
 		_subPartTotalStepSubscription = SubPartTotalStep.GetObservable(NumericUpDown.ValueProperty)
 			.Subscribe(value =>
 			{
@@ -103,6 +111,7 @@ public partial class CutsceneSubPart : UserControl
 	private void DisposeSubscriptions()
 	{
 		_subPartNameSubscription?.Dispose();
+		_subPartNameFocusSubscription?.Dispose();
 		_subPartTotalStepSubscription?.Dispose();
 		_mainPartStepSubscription?.Dispose();
 	}
