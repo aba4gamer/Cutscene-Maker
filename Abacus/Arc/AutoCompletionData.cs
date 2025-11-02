@@ -14,6 +14,7 @@ namespace Abacus;
 
 public class AutoCompletionData
 {
+	public string VanillaGamePath = "";
 	public string GamePath { get; private set; } = "";
 	public string GalaxyPath { get; private set; } = "";
 	public string LoadedAnimObject { get; private set; } = "";
@@ -39,8 +40,21 @@ public class AutoCompletionData
 
 	}
 
-	public static RARC? TryLoadRarcYAZ0(string path)
+	public RARC? TryLoadRarcYAZ0(string rpath)
 	{
+		string path = !rpath.StartsWith(".") ? Path.GetFullPath(Path.Combine(GamePath, rpath)) : Path.GetFullPath(rpath);
+		if (!File.Exists(path) && VanillaGamePath.Trim() != "")
+		{
+			Console.WriteLine($"[WARNING] [AutoCompletionLoader] Can't find file: '{path}', trying with the base game...");
+			path = Path.GetFullPath(Path.Combine(VanillaGamePath, rpath));
+		}
+		if (!File.Exists(path))
+		{
+			Console.WriteLine($"[WARNING] [AutoCompletionLoader] Can't find file: '{path}'");
+			return null;
+		}
+
+
 		RARC rarc = new();
 		try
 		{
@@ -56,7 +70,7 @@ public class AutoCompletionData
 		{
 			Console.WriteLine($"Exception while trying to load archive: {path}!");
 			Console.WriteLine(e.ToString());
-			// throw new Exception($"Invalid .arc file! Are you sure that it's a Nintendo Revolution Archive? Error:\n{e.GetType()}: {e.Message}");
+			return null;
 		}
 		return rarc;
 	}
@@ -70,19 +84,19 @@ public class AutoCompletionData
 		string galaxyNameDemo = Path.GetFileName(path);
 		string galaxyName = galaxyNameDemo.Substring(0, galaxyNameDemo.Length - 8);
 
-		string objDataTablePath = Path.Combine(gamePath, "SystemData", "ObjNameTable.arc");
-		string productMapObjDataTablePath = Path.Combine(gamePath, "ObjectData", "ProductMapObjDataTable.arc");
-		string multiBgmInfoPath = Path.Combine(gamePath, "AudioRes", "Info", "MultiBgmInfo.arc");
-		string marioAnimePath = Path.Combine(gamePath, "ObjectData", "MarioAnime.arc");
-		string galaxyMapPath = Path.Combine(galaxyPath, galaxyName + "Map.arc");
+		string objDataTablePath = Path.Combine("SystemData", "ObjNameTable.arc");
+		string productMapObjDataTablePath = Path.Combine("ObjectData", "ProductMapObjDataTable.arc");
+		string multiBgmInfoPath = Path.Combine("AudioRes", "Info", "MultiBgmInfo.arc");
+		string marioAnimePath = Path.Combine("ObjectData", "MarioAnime.arc");
+		string galaxyMapPath = Path.Combine("StageData", galaxyName, galaxyName + "Map.arc");
 
 		GamePath = gamePath;
 		GalaxyPath = galaxyPath;
 
-		LoadRarc_ObjDataTable(File.Exists(objDataTablePath) ? objDataTablePath : "./Templates/ObjNameTable.arc");
-		LoadRarc_ProductMapObjDataTable(File.Exists(productMapObjDataTablePath) ? productMapObjDataTablePath : "./Templates/ProductMapObjDataTable.arc");
-		LoadRarc_MultiBgmInfo(File.Exists(multiBgmInfoPath) ? multiBgmInfoPath : "./Templates/MultiBgmInfo.arc");
-		LoadRarc_MarioAnime(File.Exists(marioAnimePath) ? marioAnimePath : "./Templates/MarioAnime.arc");
+		LoadRarc_ObjDataTable(objDataTablePath);
+		LoadRarc_ProductMapObjDataTable(productMapObjDataTablePath);
+		LoadRarc_MultiBgmInfo(multiBgmInfoPath);
+		LoadRarc_MarioAnime(marioAnimePath);
 		if (File.Exists(galaxyMapPath))
 			LoadRarc_GeneralPos(galaxyMapPath);
 	}
@@ -92,7 +106,7 @@ public class AutoCompletionData
 		ObjDataTableList = new();
 		ObjDataTableEnglishNames = [];
 
-		RARC? objDataTable = TryLoadRarcYAZ0(path);
+		RARC? objDataTable = TryLoadRarcYAZ0(path) ?? TryLoadRarcYAZ0("./Templates/ObjNameTable.arc");
 		if (objDataTable == null)
 			return;
 
@@ -112,12 +126,12 @@ public class AutoCompletionData
 			string jap_name = (string) tbl[i][tbl[Hashes.AutoCompletionHashes.ODT_FIELD_JAPANESE]];
 			if (ObjDataTableList.ContainsKey(eng_name))
 			{
-				Console.WriteLine($"[WARNING] [ObjNameTable]: Can't add key {eng_name} (with value {jap_name}) because it's already present!");
+				Console.WriteLine($"[WARNING] [AutoCompletionLoader: ObjNameTable]: Can't add key {eng_name} (with value {jap_name}) because it's already present!");
 				continue;
 			}
 			if (ObjDataTableList.ContainsValue(jap_name))
 			{
-				Console.WriteLine($"[WARNING] [ObjNameTable]: Can't add value {jap_name} (with key {eng_name}) because it's already present!");
+				Console.WriteLine($"[WARNING] [AutoCompletionLoader: ObjNameTable]: Can't add value {jap_name} (with key {eng_name}) because it's already present!");
 				continue;
 			}
 
@@ -130,7 +144,7 @@ public class AutoCompletionData
 	{
 		ProductMapObjDataTableList = new();
 
-		RARC? ProductMapObjDataTable = TryLoadRarcYAZ0(path);
+		RARC? ProductMapObjDataTable = TryLoadRarcYAZ0(path) ?? TryLoadRarcYAZ0("./Templates/ProductMapObjDataTable.arc");
 		if (ProductMapObjDataTable == null)
 			return;
 
@@ -154,7 +168,7 @@ public class AutoCompletionData
 	{
 		MusicList = [];
 
-		RARC? MultiBgmInfo = TryLoadRarcYAZ0(path);
+		RARC? MultiBgmInfo = TryLoadRarcYAZ0(path) ?? TryLoadRarcYAZ0("./Templates/MultiBgmInfo.arc");
 		if (MultiBgmInfo == null)
 			return;
 
@@ -180,7 +194,7 @@ public class AutoCompletionData
 	{
 		MarioAnimeList = [];
 
-		RARC? MarioAnime = TryLoadRarcYAZ0(path);
+		RARC? MarioAnime = TryLoadRarcYAZ0(path) ?? TryLoadRarcYAZ0("./Templates/MarioAnime.arc");
 		if (MarioAnime == null)
 			return;
 

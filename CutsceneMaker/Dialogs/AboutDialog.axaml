@@ -1,0 +1,16 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		Width="360"
+		x:Class="CutsceneMaker.AboutDialog"
+		x:Name="AboutDialogWindow"
+		Title="About"
+		SizeToContent="WidthAndHeight"
+		Background="#3a3a3a"
+		WindowStartupLocation="CenterOwner"
+		CanResize="False">
+	<StackPanel Margin="10" Spacing="8" HorizontalAlignment="Stretch">
+		<TextBlock TextWrapping="Wrap" FontSize="28" Text="CutsceneMaker" HorizontalAlignment="Center" />
+		<TextBlock Name="Version" TextWrapping="Wrap" HorizontalAlignment="Center" />
+	</StackPanel>
+</Window>

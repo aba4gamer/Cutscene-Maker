@@ -43,12 +43,14 @@ To build use:
 - [Hack.io.YAZ0](https://github.com/SuperHackio/Hack.io)
 - [BidirectionalDictionary](https://github.com/iiKuzmychov/BidirectionalDictionary)
 - [Svg.Controls.Avalonia](https://github.com/wieslawsoltes/Svg.Skia)
+- [Tommy](https://github.com/dezhidki/Tommy)
 
 ## Credits
 - [Hack.io](https://github.com/SuperHackio/Hack.io) libraries by [Super Hackio](https://github.com/SuperHackio)
 - [MessageBox.Avalonia](https://github.com/AvaloniaCommunity/MessageBox.Avalonia) by [CreateLab](https://github.com/CreateLab)
 - [BidirectionalDictionary](https://github.com/iiKuzmychov/BidirectionalDictionary) by [iikuzmychov](https://github.com/iikuzmychov)
 - [Svg.Controls.Avalonia](https://github.com/wieslawsoltes/Svg.Skia) by [wieslawsoltes](https://github.com/wieslawsoltes/)
+- [Tommy](https://github.com/dezhidki/Tommy) by [dezhidki](https://github.com/dezhidki)
 - [Fluent System](https://github.com/microsoft/fluentui-system-icons) by [Microsoft](https://github.com/microsoft)
 - [Symbols Nerd Font](https://www.nerdfonts.com) by Ryan L McIntyre
 - Cinema cutscene icon by Freepix

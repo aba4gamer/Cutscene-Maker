@@ -1,0 +1,25 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		Width="560" Height="400"
+		x:Class="CutsceneMaker.SettingsDialog"
+		x:Name="SettingsDialogWindow"
+		Title="Settings"
+		Background="#3a3a3a"
+		WindowStartupLocation="CenterOwner"
+		CanResize="False">
+	<Grid Margin="6" RowDefinitions="1*, *">
+		<SplitView Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsPaneOpen="True" DisplayMode="Inline" OpenPaneLength="160">
+			<SplitView.Pane>
+				<TextBlock Text="Hey" />
+			</SplitView.Pane>
+
+			<TextBlock Text="Hey22" />
+		</SplitView>
+
+		<Border Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Padding="5" BorderThickness="0, 1, 0, 0" BorderBrush="#888">
+			<StackPanel HorizontalAlignment="Right">
+				<Button Name="ApplyBtn">Apply</Button>
+			</StackPanel>
+		</Border>
+	</Grid>
+</Window>

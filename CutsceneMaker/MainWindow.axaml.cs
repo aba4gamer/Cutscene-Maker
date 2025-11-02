@@ -28,6 +28,9 @@ public partial class MainWindow : Window
 
 	public CutsceneCore Core;
 	public ArchiveView ArchiveUI;
+	public bool IsSettingsOpen = false;
+	public SettingsDialog? SettingsDialog = null;
+	public Settings UserSettings = new();
 
 	private List<string> EditedCutscenes = [];
 	private bool IsNewArchive = false;
@@ -239,7 +242,7 @@ public partial class MainWindow : Window
 
 
 	// ============================
-	// Save, SaveAs & Reload
+	// Save, SaveAs, Reload & Settings
 
 	private void OnClickSave(object? sender, RoutedEventArgs e)
 	{
@@ -256,9 +259,35 @@ public partial class MainWindow : Window
 		Ask_ReloadArchive();
 	}
 
+	private void OnSettings(object? sender, RoutedEventArgs e)
+	{
+		if (IsSettingsOpen)
+		{
+			if (SettingsDialog != null)
+			{
+				SettingsDialog.Topmost = true;
+				SettingsDialog.Activate();
+				SettingsDialog.Topmost = false;
+			}
+
+			return;
+		}
+
+		IsSettingsOpen = true;
+
+		SettingsDialog = new();
+		SettingsDialog.Show();
+	}
+
 
 	// ============================
-	// Wiki & Github
+	// Version, Wiki & Github
+
+	private async void OnVersion(object? sender, RoutedEventArgs e)
+	{
+		AboutDialog about = new();
+		await about.ShowDialog(this);
+	}
 
 	private void OnWiki(object? sender, RoutedEventArgs e)
 	{

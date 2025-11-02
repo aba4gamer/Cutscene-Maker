@@ -33,10 +33,14 @@
 					</MenuItem.Icon>
 				</MenuItem>
 				<Separator />
-				<!--<MenuItem Header="_Preferences" InputGesture="Ctrl+P" HotKey="Ctrl+P" />-->
 				<MenuItem Name="ReloadArchiveBtn" Header="_Reload Archive" Click="OnReloadArchive" InputGesture="Ctrl+R" HotKey="Ctrl+R" ToolTip.Tip="Reloads the .arc archive file discarding changes if any">
 					<MenuItem.Icon>
 						<Svg Path="Assets/menu/reload-archive.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Name="SettingsBtn" Header="Sett_ings" Click="OnSettings" InputGesture="Ctrl+I" HotKey="Ctrl+I" ToolTip.Tip="Opens the settings menu">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/settings.svg" />
 					</MenuItem.Icon>
 				</MenuItem>
 			</MenuItem>
@@ -96,7 +100,15 @@
 					</MenuItem.Icon>
 				</MenuItem>
 			</MenuItem>
+
+
 			<MenuItem Name="SettingsMenu" Header="_About">
+				<MenuItem Name="VersionBtn" Header="_Version" Click="OnVersion" ToolTip.Tip="Check the version of CutsceneMaker">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/about-version.svg" />
+					</MenuItem.Icon>
+                </MenuItem>
+				<Separator />
 				<MenuItem Name="WikiBtn" Header="_Luma's Wiki" Click="OnWiki" ToolTip.Tip="More information about Cutscenes right here">
 					<MenuItem.Icon>
 						<Svg Path="Assets/menu/wiki-icon.svg"/>
@@ -120,23 +132,23 @@
 	</DockPanel>
 	<Window.Resources>
 		<ContextMenu x:Key="CutsceneMenuCtx">
-			<MenuItem Header="Rename" Click="OnRenameCutsceneContext">
+			<MenuItem Header="Rename" Click="OnRenameCutsceneContext" ToolTip.Tip="Renames the selected cutscene">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/rename-cutscene.svg" />
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Delete" Click="OnDeleteCutsceneContext">
+			<MenuItem Header="Delete" Click="OnDeleteCutsceneContext" ToolTip.Tip="Deletes the selected cutscene">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/delete-cutscene.svg" />
 				</MenuItem.Icon>
 			</MenuItem>
 			<Separator />
-			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext">
+			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext" ToolTip.Tip="Creates a new cutscene with a name">
 				<MenuItem.Icon>
 						<Svg Path="Assets/menu/new-cutscene.svg" />
 					</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Reload" Click="OnReloadCutsceneContext">
+			<MenuItem Header="Reload" Click="OnReloadCutsceneContext" ToolTip.Tip="Reloads the .arc archive file discarding changes if any">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/reload-archive.svg" />
 				</MenuItem.Icon>
@@ -145,12 +157,12 @@
 
 
 		<ContextMenu x:Key="CutscenePanelCtx">
-			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext">
+			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext" ToolTip.Tip="Creates a new cutscene with a name">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/new-cutscene.svg" />
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Reload Archive" Click="OnReloadCutsceneContext">
+			<MenuItem Header="Reload Archive" Click="OnReloadCutsceneContext" ToolTip.Tip="Reloads the .arc archive file discarding changes if any">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/reload-archive.svg" />
 				</MenuItem.Icon>
@@ -159,18 +171,18 @@
 
 
 		<ContextMenu x:Key="PartMenuCtx">
-			<MenuItem Header="Rename" Click="OnRenamePartContext">
+			<MenuItem Header="Rename" Click="OnRenamePartContext" ToolTip.Tip="Renames the selected part of the selected cutscene">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/rename-part.svg" />
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Delete" Click="OnDeletePartContext">
+			<MenuItem Header="Delete" Click="OnDeletePartContext" ToolTip.Tip="Deletes the selected part of the selected cutscene">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/delete-part.svg" />
 				</MenuItem.Icon>
 			</MenuItem>
 			<Separator />
-			<MenuItem Header="New Part" Click="OnNewPartContext">
+			<MenuItem Header="New Part" Click="OnNewPartContext" ToolTip.Tip="Creates a new part in the selected cutscene">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/new-part.svg" />
 				</MenuItem.Icon>
@@ -179,7 +191,7 @@
 
 
 		<ContextMenu x:Key="PartPanelCtx">
-			<MenuItem Header="New Part" Click="OnNewPartContext">
+			<MenuItem Header="New Part" Click="OnNewPartContext" ToolTip.Tip="Creates a new part in the selected cutscene">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/new-part.svg" />
 				</MenuItem.Icon>
@@ -188,18 +200,18 @@
 
 
 		<ContextMenu x:Key="SubPartMenuCtx">
-			<MenuItem Header="Rename" Click="OnRenameSubPartContext">
+			<MenuItem Header="Rename" Click="OnRenameSubPartContext" ToolTip.Tip="Renames the selected sub part in the selected part of the selected cutscene">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/rename-subpart.svg" />
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Header="Delete" Click="OnDeleteSubPartContext">
+			<MenuItem Header="Delete" Click="OnDeleteSubPartContext" ToolTip.Tip="Deletes the selected sub part in the selected part of the selected cutscene">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/delete-subpart.svg" />
 				</MenuItem.Icon>
 			</MenuItem>
 			<Separator />
-			<MenuItem Header="New SubPart" Click="OnNewSubPartContext">
+			<MenuItem Header="New SubPart" Click="OnNewSubPartContext" ToolTip.Tip="Creates a new sub part in the selected part of the selected cutscene">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/new-subpart.svg" />
 				</MenuItem.Icon>
@@ -208,7 +220,7 @@
 
 
 		<ContextMenu x:Key="SubPartPanelCtx">
-			<MenuItem Header="New SubPart" Click="OnNewSubPartContext">
+			<MenuItem Header="New SubPart" Click="OnNewSubPartContext" ToolTip.Tip="Creates a new sub part in the selected part of the selected cutscene">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/new-subpart.svg" />
 				</MenuItem.Icon>
