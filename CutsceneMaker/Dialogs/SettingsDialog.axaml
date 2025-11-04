@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		Width="560" Height="400"
+		Width="500" Height="200"
 		x:Class="CutsceneMaker.SettingsDialog"
 		x:Name="SettingsDialogWindow"
 		Title="Settings"
@@ -8,17 +8,16 @@
 		WindowStartupLocation="CenterOwner"
 		CanResize="False">
 	<Grid Margin="6" RowDefinitions="1*, *">
-		<SplitView Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsPaneOpen="True" DisplayMode="Inline" OpenPaneLength="160">
-			<SplitView.Pane>
-				<TextBlock Text="Hey" />
-			</SplitView.Pane>
-
-			<TextBlock Text="Hey22" />
-		</SplitView>
-
-		<Border Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Padding="5" BorderThickness="0, 1, 0, 0" BorderBrush="#888">
-			<StackPanel HorizontalAlignment="Right">
-				<Button Name="ApplyBtn">Apply</Button>
+		<TextBlock Text="Base Game Path" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Grid.Row="0"/>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" Spacing="2">
+			<TextBox Name="BaseGamePathBox" HorizontalAlignment="Stretch" VerticalAlignment="Center" ToolTip.Tip="The program will use ObjNameTable.arc as a reference" Watermark="C:\I\am\a\cool\base\path\SMG2\DATA\files\"/>
+			<Button Name="BrowseBaseGamePathBtn" Content="Browse..." HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="0,0,0,0" Click="OnBrowse"/>
+		</StackPanel>
+		<TextBlock Grid.Row="1" Name="PathValidatorBlock"/>
+			<Border Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Padding="5" BorderThickness="0, 1, 0, 0" BorderBrush="#888">
+			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+				<Button Name="CancelBtn" Click="OnCancel" Margin="0,0,5,0">Cancel</Button>
+				<Button Name="ApplyBtn" Click="OnApply">Apply</Button>
 			</StackPanel>
 		</Border>
 	</Grid>

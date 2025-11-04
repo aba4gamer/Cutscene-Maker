@@ -9,11 +9,11 @@ namespace CutsceneMaker;
 
 public class Settings
 {
-	private static string FILE_PATH = "./settings.toml";
+	private readonly string FILE_PATH = "./settings.toml";
 
-	public string? VanillaGamePath { get; private set; }
+	public string? VanillaGamePath { get; set; }
 
-	private TomlTable table;
+	private TomlTable? table;
 
 
 
@@ -27,11 +27,20 @@ public class Settings
 
 		using(StreamReader settFile = File.OpenText(FILE_PATH))
 		{
-			table = TOML.Parse(settFile);
+            table = TOML.Parse(settFile);
 
 			VanillaGamePath = table["vanilla_game_path"].HasValue ? table["vanilla_game_path"].AsString.Value : null;
 			if (VanillaGamePath != null)
 				Program.AutoCompletion.VanillaGamePath = VanillaGamePath;
 		}
 	}
+
+	public void saveSettings()
+	{
+		table!["vanilla_game_path"] = VanillaGamePath;
+		using(StreamWriter settFile = File.CreateText(FILE_PATH))
+		{
+			table.WriteTo(settFile);
+		}
+    }
 }
