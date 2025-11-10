@@ -9,10 +9,10 @@
 		CanResize="False">
 	<Grid Margin="6" RowDefinitions="1*, *">
 		<TextBlock Text="Base Game Path" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Grid.Row="0"/>
-		<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" Spacing="2">
-			<TextBox Name="BaseGamePathBox" HorizontalAlignment="Stretch" VerticalAlignment="Center" ToolTip.Tip="The program will use ObjNameTable.arc as a reference" Watermark="C:\I\am\a\cool\base\path\SMG2\DATA\files\"/>
-			<Button Name="BrowseBaseGamePathBtn" Content="Browse..." HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Margin="0,0,0,0" Click="OnBrowse"/>
-		</StackPanel>
+		<Grid ColumnDefinitions="*, 78" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+			<TextBox Grid.Column="0" Name="BaseGamePathBox" HorizontalAlignment="Stretch" VerticalAlignment="Center" ToolTip.Tip="The program will use ObjNameTable.arc as a reference" Watermark="C:\I\am\a\cool\base\path\SMG2\DATA\files\"/>
+			<Button Grid.Column="1" Name="BrowseBaseGamePathBtn" Content="Browse..." HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Click="OnBrowse"/>
+		</Grid>
 		<TextBlock Grid.Row="1" Name="PathValidatorBlock"/>
 			<Border Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Padding="5" BorderThickness="0, 1, 0, 0" BorderBrush="#888">
 			<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
