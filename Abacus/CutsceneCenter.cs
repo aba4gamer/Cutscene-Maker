@@ -70,8 +70,9 @@ public class Cutscene
 
 			object? bcsvObjWipe = rarc[$"Stage/csv/{CutsceneName}Wipe.bcsv"];
 			if (bcsvObjWipe != null) {
-				WipeBCSV.Load((MemoryStream) ((ArchiveFile) bcsvObjWipe));
-				LoadBCSV(Path.Combine("Templates", "DemoTemplateWipe.bcsv"), WipeBCSV);
+				WipeBCSV.Load((MemoryStream)((ArchiveFile)bcsvObjWipe));
+			} else {
+                LoadBCSV(Path.Combine("Templates", "DemoTemplateWipe.bcsv"), WipeBCSV);
 			}
 
 			object? bcsvObjSound = rarc[$"Stage/csv/{CutsceneName}Sound.bcsv"];
