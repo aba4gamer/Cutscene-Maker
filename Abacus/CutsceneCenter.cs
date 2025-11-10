@@ -54,57 +54,15 @@ public class Cutscene
 		{
 			// TODO: Handle files not existng
 
-			object? bcsvObjTime = rarc[$"Stage/csv/{CutsceneName}Time.bcsv"];
-			if (bcsvObjTime != null) {
-				TimeBCSV.Load((MemoryStream) ((ArchiveFile) bcsvObjTime));
-			} else {
-				LoadBCSV(Path.Combine("Templates", "DemoTemplateTime.bcsv"), TimeBCSV);
-			}
+			LoadOrDefault(rarc, CutsceneName, "Time", TimeBCSV);
+			LoadOrDefault(rarc, CutsceneName, "Player", PlayerBCSV);
+			LoadOrDefault(rarc, CutsceneName, "Wipe", WipeBCSV);
+			LoadOrDefault(rarc, CutsceneName, "Sound", SoundBCSV);
+			LoadOrDefault(rarc, CutsceneName, "Action", ActionBCSV);
+			LoadOrDefault(rarc, CutsceneName, "Camera", CameraBCSV);
+			LoadOrDefault(rarc, CutsceneName, "SubPart", SubPartBCSV);
 
-			object? bcsvObjPlayer = rarc[$"Stage/csv/{CutsceneName}Player.bcsv"];
-			if (bcsvObjPlayer != null) {
-				PlayerBCSV.Load((MemoryStream) ((ArchiveFile) bcsvObjPlayer));
-			} else {
-				LoadBCSV(Path.Combine("Templates", "DemoTemplatePlayer.bcsv"), PlayerBCSV);
-			}
-
-			object? bcsvObjWipe = rarc[$"Stage/csv/{CutsceneName}Wipe.bcsv"];
-			if (bcsvObjWipe != null) {
-				WipeBCSV.Load((MemoryStream)((ArchiveFile)bcsvObjWipe));
-			} else {
-                LoadBCSV(Path.Combine("Templates", "DemoTemplateWipe.bcsv"), WipeBCSV);
-			}
-
-			object? bcsvObjSound = rarc[$"Stage/csv/{CutsceneName}Sound.bcsv"];
-			if (bcsvObjSound != null) {
-				SoundBCSV.Load((MemoryStream) ((ArchiveFile) bcsvObjSound));
-			} else {
-				LoadBCSV(Path.Combine("Templates", "DemoTemplateSound.bcsv"), SoundBCSV);
-			}
-
-			object? bcsvObjAction = rarc[$"Stage/csv/{CutsceneName}Action.bcsv"];
-			if (bcsvObjAction != null) {
-				ActionBCSV.Load((MemoryStream) ((ArchiveFile) bcsvObjAction));
-			} else {
-				LoadBCSV(Path.Combine("Templates", "DemoTemplateAction.bcsv"), ActionBCSV);
-			}
-
-			object? bcsvObjCamera = rarc[$"Stage/csv/{CutsceneName}Camera.bcsv"];
-			if (bcsvObjCamera != null) {
-				CameraBCSV.Load((MemoryStream) ((ArchiveFile) bcsvObjCamera));
-			} else {
-				LoadBCSV(Path.Combine("Templates", "DemoTemplateCamera.bcsv"), CameraBCSV);
-			}
-
-			object? bcsvObjSubPart = rarc[$"Stage/csv/{CutsceneName}SubPart.bcsv"];
-			if (bcsvObjSubPart != null) {
-				SubPartBCSV.Load((MemoryStream) ((ArchiveFile) bcsvObjSubPart));
-			} else {
-				LoadBCSV(Path.Combine("Templates", "DemoTemplateSubPart.bcsv"), SubPartBCSV);
-			}
-
-
-			Console.WriteLine($"[Abacus] '{CutsceneName}' loaded succesfully!");
+            Console.WriteLine($"[Abacus] '{CutsceneName}' loaded succesfully!");
 		}
 		catch (Exception e)
 		{
@@ -144,10 +102,11 @@ public class Cutscene
 			}
 		}
 	}
-	/// <summary>
-	/// Load all BCSVs from a folder. You can use this function to reload a Cutscene if you know the folder where it is.
-	/// </summary>
-	public void LoadAll(string folderPath) // Since NewCutsceneFromFiles() exists idk which accesibility modificator use so I'll keep it in public.
+
+    /// <summary>
+    /// Load all BCSVs from a folder. You can use this function to reload a Cutscene if you know the folder where it is.
+    /// </summary>
+    public void LoadAll(string folderPath) // Since NewCutsceneFromFiles() exists idk which accesibility modificator use so I'll keep it in public.
 	{
 		try
 		{
@@ -266,7 +225,15 @@ public class Cutscene
 		}
 	}
 
-	protected static void LoadBCSV(string filePath, BCSV bcsv)
+    protected static void LoadOrDefault(Archive rarc, string DemoName, string DemoType, BCSV Result)
+    {
+        if (rarc[$"Stage/csv/{DemoName}{DemoType}.bcsv"] is ArchiveFile af)
+            Result.Load((MemoryStream)af);
+        else
+            LoadBCSV(Path.Combine("Templates", $"DemoTemplate{DemoType}.bcsv"), Result);
+    }
+
+    protected static void LoadBCSV(string filePath, BCSV bcsv)
 	{
 		StreamUtil.SetEndianBig(); // StreamUtil my beloved. This saved me from manually reverse every byte.
 		using FileStream stream = File.OpenRead(filePath);
