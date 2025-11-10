@@ -52,8 +52,6 @@ public class Cutscene
 	{
 		try
 		{
-			// TODO: Handle files not existng
-
 			LoadOrDefault(rarc, CutsceneName, "Time", TimeBCSV);
 			LoadOrDefault(rarc, CutsceneName, "Player", PlayerBCSV);
 			LoadOrDefault(rarc, CutsceneName, "Wipe", WipeBCSV);
@@ -338,7 +336,7 @@ public class Cutscene
 // 			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Camera.bcsv"), CameraBCSV);
 // 			SaveBCSV(Path.Combine(folderPath, CutsceneName + "SubPart.bcsv"), SubPartBCSV);
 
-			Console.WriteLine($"[Abacus] '{CutsceneName}' and saved in the archive succesfully");
+			Console.WriteLine($"[Abacus] '{CutsceneName}' and saved in the archive succesfully!");
 		}
 		catch (Exception e)
 		{

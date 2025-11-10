@@ -66,6 +66,8 @@ public partial class CutsceneWipe : UserControl
 				part.WipeEntry.WipeType = WipeType.SelectedIndex;
 				part.WipeEntry.WipeFrame = WipeFrame.Value.HasValue ? (int)WipeFrame.Value.Value : -1;
 
+				Console.WriteLine(part.WipeEntry == null);
+
 				SubscribeToChanges(part);
 			}
 			else

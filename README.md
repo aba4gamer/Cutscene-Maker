@@ -22,8 +22,8 @@ README in progress. If you can't run the app install .NET 9 but I think actually
 - ~~Add ComboBox for CastName, ActionType and other things~~ *I (Antonio225) believe that it's done.*
 - ~~Add a better warning for unsaved progress~~ *Done but a bit bugged*
 - ~~Add some cool icons (if I can do them cool lel)~~ *Done*
-- Add icons to the timeline part
-- ~~Add storage and a settings menu~~
+- ~~Add icons to the timeline part~~ *Done*
+- ~~Add storage and a settings menu~~ *Done*
 
 ### Auto completion support:
 
