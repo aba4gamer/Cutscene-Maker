@@ -75,6 +75,8 @@ public partial class CutsceneWipe : UserControl
 
 				DisposeSubscriptions();
 			}
+
+			MainWindow.Instance!.ArchiveUI.CutsceneUI.TimelineUI.Entries_Changes(part);
 		}));
 	}
 

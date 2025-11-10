@@ -4,9 +4,18 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 x:Class="CutsceneMakerUI.TimelinePart">
-	<Border Name="Border" BorderThickness="1" BorderBrush="#cce" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0, 10">
-		<Grid Name="Grid" ColumnDefinitions="1*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#446">
-			<Label Name="NameLabel" VerticalAlignment="Center"></Label>
+	<Border Name="Border" BorderThickness="1" BorderBrush="#cce" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="#446" Margin="0, 10">
+		<Grid Name="Grid" RowDefinitions="0.5*,0.5*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,0,3">
+			<Label Grid.Row="0" Name="NameLabel" VerticalAlignment="Top" />
+			<ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch">
+				<StackPanel  Spacing="3" Orientation="Horizontal" VerticalAlignment="Bottom">
+					<Image Name="PlayerIcon" Source="/Assets/timeline/player.png" Width="14" Height="14" ToolTip.Tip="Player Enabled" />
+					<Image Name="ActionIcon" Source="/Assets/timeline/action.png" Width="14" Height="14" ToolTip.Tip="Action Enabled" />
+					<Image Name="CameraIcon" Source="/Assets/timeline/camera.png" Width="14" Height="14" ToolTip.Tip="Camera Enabled" />
+					<Image Name="SoundIcon" Source="/Assets/timeline/sound.png" Width="14" Height="14" ToolTip.Tip="Sound Enabled" />
+					<Image Name="WipeIcon" Source="/Assets/timeline/wipe.png" Width="14" Height="14" ToolTip.Tip="Wipe Enabled" />
+				</StackPanel>
+			</ScrollViewer>
 		</Grid>
 	</Border>
 </UserControl>

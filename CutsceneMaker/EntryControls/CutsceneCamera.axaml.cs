@@ -77,6 +77,8 @@ public partial class CutsceneCamera : UserControl
 
 				DisposeSubscriptions();
 			}
+
+			MainWindow.Instance!.ArchiveUI.CutsceneUI.TimelineUI.Entries_Changes(part);
 		});
 	}
 

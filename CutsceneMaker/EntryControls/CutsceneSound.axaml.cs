@@ -74,6 +74,8 @@ public partial class CutsceneSound : UserControl
 
 				DisposeSubscriptions();
 			}
+
+			MainWindow.Instance!.ArchiveUI.CutsceneUI.TimelineUI.Entries_Changes(part);
 		});
 	}
 

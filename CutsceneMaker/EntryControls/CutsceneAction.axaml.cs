@@ -82,6 +82,8 @@ public partial class CutsceneAction : UserControl
 
 				DisposeSubscriptions();
 			}
+
+			MainWindow.Instance!.ArchiveUI.CutsceneUI.TimelineUI.Entries_Changes(part);
 		});
 	}
 

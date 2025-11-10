@@ -23,7 +23,7 @@ README in progress. If you can't run the app install .NET 9 but I think actually
 - ~~Add a better warning for unsaved progress~~ *Done but a bit bugged*
 - ~~Add some cool icons (if I can do them cool lel)~~ *Done*
 - Add icons to the timeline part
-- Add storage and a settings menu
+- ~~Add storage and a settings menu~~
 
 ### Auto completion support:
 
