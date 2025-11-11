@@ -16,7 +16,7 @@
 		<TextBlock Text="SuspendFlag" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<CheckBox Name="SuspendFlag" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
-		<TextBlock Text="WaitUserInputFlag" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<TextBlock Text="WaitUserInputFlag" Name="WaitUserInputFlagName" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<CheckBox Name="WaitUserInputFlag" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 	</Grid>
 </UserControl>

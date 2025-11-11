@@ -20,7 +20,8 @@ public partial class CutsceneAction : UserControl
 {
 	private IDisposable? _castNameBoxSubscription;
 	private IDisposable? _castIDSubscription;
-	private IDisposable? _actionTypeSubscription;
+	private IDisposable? _actionTypeSMG1Subscription;
+	private IDisposable? _actionTypeSMG2Subscription;
 	private IDisposable? _posNameSubscription;
 	private IDisposable? _animNameSubscription;
 
@@ -33,6 +34,17 @@ public partial class CutsceneAction : UserControl
 	public CutsceneAction(ICommonEntries part)
 	{
 		InitializeComponent();
+
+		if (MainWindow.Instance!.Core.GetArchive().IsSMG1)
+		{
+			ActionTypeSMG2.IsVisible = false;
+			ActionTypeSMG1.IsVisible = true;
+		}
+		else
+		{
+			ActionTypeSMG2.IsVisible = true;
+			ActionTypeSMG1.IsVisible = false;
+		}
 
 		PosName.AutoCompletion = Program.AutoCompletion.GeneralPosList;
 		CastNameBox.AutoCompletion = Program.AutoCompletion.ObjDataTableEnglishNames;
@@ -48,7 +60,10 @@ public partial class CutsceneAction : UserControl
 			IsActionEnabled.IsChecked = true;
 			CastNameBox.Main.Text = Program.AutoCompletion.ObjDataTableList.ContainsValue(part.ActionEntry.CastName) ? Program.AutoCompletion.ObjDataTableList.Inverse[part.ActionEntry.CastName] : part.ActionEntry.CastName;
 			CastID.Value = part.ActionEntry.CastID;
-			ActionType.SelectedIndex = part.ActionEntry.ActionType;
+			if (MainWindow.Instance!.Core.GetArchive().IsSMG1)
+				ActionTypeSMG1.SelectedIndex = part.ActionEntry.ActionType;
+			else
+				ActionTypeSMG2.SelectedIndex = part.ActionEntry.ActionType;
 			PosName.Main.Text = part.ActionEntry.PosName;
 			AnimName.Main.Text = part.ActionEntry.AnimName;
 
@@ -69,7 +84,7 @@ public partial class CutsceneAction : UserControl
 
 				part.ActionEntry.CastName = CastNameBox.Main.Text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(CastNameBox.Main.Text) ? Program.AutoCompletion.ObjDataTableList[CastNameBox.Main.Text] : CastNameBox.Main.Text : "";
 				part.ActionEntry.CastID = CastID.Value.HasValue ? (int)CastID.Value.Value : -1;
-				part.ActionEntry.ActionType = ActionType.SelectedIndex;
+				part.ActionEntry.ActionType = MainWindow.Instance!.Core.GetArchive().IsSMG1 == true ? ActionTypeSMG1.SelectedIndex : ActionTypeSMG2.SelectedIndex;
 				part.ActionEntry.PosName = PosName.Main.Text ?? string.Empty;
 				part.ActionEntry.AnimName = AnimName.Main.Text ?? string.Empty;
 
@@ -91,7 +106,10 @@ public partial class CutsceneAction : UserControl
 	{
 		CastNameBox.IsEnabled = isEnabled;
 		CastID.IsEnabled = isEnabled;
-		ActionType.IsEnabled = isEnabled;
+		if (MainWindow.Instance!.Core.GetArchive().IsSMG1)
+			ActionTypeSMG1.IsEnabled = isEnabled;
+		else
+			ActionTypeSMG2.IsEnabled = isEnabled;
 		PosName.IsEnabled = isEnabled;
 		AnimName.IsEnabled = isEnabled;
 	}
@@ -121,14 +139,24 @@ public partial class CutsceneAction : UserControl
 				part.ActionEntry!.CastID = value.HasValue ? (int)value.Value : -1;
 			});
 
-		_actionTypeSubscription = ActionType.GetObservable(ComboBox.SelectedIndexProperty)
-			.Subscribe(value =>
-			{
-				if (value != part.ActionEntry!.ActionType)
-					MainWindow.Instance!.AddEditedCutscene();
+		if (MainWindow.Instance!.Core.GetArchive().IsSMG1)
+			_actionTypeSMG1Subscription = ActionTypeSMG1.GetObservable(ComboBox.SelectedIndexProperty)
+				.Subscribe(value =>
+				{
+					if (value != part.ActionEntry!.ActionType)
+						MainWindow.Instance!.AddEditedCutscene();
 
-				part.ActionEntry!.ActionType = ActionType.SelectedIndex;
-			});
+					part.ActionEntry!.ActionType = value;
+				});
+		else
+			_actionTypeSMG2Subscription = ActionTypeSMG2.GetObservable(ComboBox.SelectedIndexProperty)
+				.Subscribe(value =>
+				{
+					if (value != part.ActionEntry!.ActionType)
+						MainWindow.Instance!.AddEditedCutscene();
+
+					part.ActionEntry!.ActionType = value;
+				});
 
 		_posNameSubscription = PosName.Main.GetObservable(TextBox.TextProperty)
 			.Subscribe(text =>
@@ -153,7 +181,8 @@ public partial class CutsceneAction : UserControl
 	{
 		_castNameBoxSubscription?.Dispose();
 		_castIDSubscription?.Dispose();
-		_actionTypeSubscription?.Dispose();
+		_actionTypeSMG1Subscription?.Dispose();
+		_actionTypeSMG2Subscription?.Dispose();
 		_posNameSubscription?.Dispose();
 		_animNameSubscription?.Dispose();
 	}

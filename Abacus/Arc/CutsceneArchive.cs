@@ -21,6 +21,7 @@ public class CutsceneArchive {
 	public string? SelectedCutsceneName { get; private set; } = null;
 	public string FilePath { get; private set; } = "";
 	public bool IsYazCompressed { get; private set; } = true;
+	public bool IsSMG1 { get; private set; } = false;
 	private RARC _rarc;
 
 
@@ -32,6 +33,14 @@ public class CutsceneArchive {
 
 
 	private void LoadArchiveCutscenes()
+	{
+		if (IsSMG1)
+			LoadSMG1ArchvieCutscenes();
+		else
+			LoadSMG2ArchiveCutscenes();
+	}
+
+	private void LoadSMG2ArchiveCutscenes()
 	{
 		object? _rarcPath = _rarc["Stage/csv"];
 
@@ -45,6 +54,17 @@ public class CutsceneArchive {
 			{
 				string name = path.Substring(0, path.Length - 9);
 				this.CutsceneNames.Add(name);
+			}
+		}
+	}
+
+	private void LoadSMG1ArchvieCutscenes()
+	{
+		foreach (string path in _rarc.Root!.Items.Keys)
+		{
+			if (_rarc.Root[path] is RARC.Directory)
+			{
+				this.CutsceneNames.Add(path);
 			}
 		}
 	}
@@ -83,10 +103,14 @@ public class CutsceneArchive {
 		if (ca._rarc.Root == null)
 			return CutsceneArchiveReadWrapper.Error("The file is not a valid archive!");
 
-		if (ca._rarc.Root.Name != "Stage")
-			return CutsceneArchiveReadWrapper.Error("The arc doesn't have 'Stage' in the root!");
-		if (!ca._rarc.ItemExists("Stage/csv"))
-			return CutsceneArchiveReadWrapper.Error("The arc doesn't have 'Stage/csv'!");
+		// if (ca._rarc.Root.Name != "Stage")
+		// 	return CutsceneArchiveReadWrapper.Error("The arc doesn't have 'Stage' in the root!");
+
+		if (ca._rarc.Root.Items.Keys.Count == 1 && ca._rarc.Root.ItemExists("csv"))
+			ca.IsSMG1 = false;
+		else
+			ca.IsSMG1 = true;
+
 
 		ca.LoadArchiveCutscenes();
 		return CutsceneArchiveReadWrapper.Ok(ca);
@@ -98,10 +122,18 @@ public class CutsceneArchive {
 	{
 		if (!LoadedCutscenes.ContainsKey(cutsceneName))
 		{
-			object? rarcFileObj = _rarc[$"Stage/csv/{cutsceneName}Time.bcsv"];
-			if (rarcFileObj == null) return;
+			if (!IsSMG1)
+			{
+				object? rarcFileObj = _rarc[$"Stage/csv/{cutsceneName}Time.bcsv"];
+				if (rarcFileObj == null) return;
+			}
+			else
+			{
+				object? rarcFileObj = _rarc.Root![$"{cutsceneName.ToLower()}/{cutsceneName.ToLower()}time.bcsv"];
+				if (rarcFileObj == null) return;
+			}
 
-			LoadedCutscenes[cutsceneName] = Cutscene.NewCutsceneFromRarc(_rarc, cutsceneName);
+			LoadedCutscenes[cutsceneName] = Cutscene.NewCutsceneFromRarc(_rarc, IsSMG1, cutsceneName);
 		}
 	}
 
@@ -120,7 +152,7 @@ public class CutsceneArchive {
 			if (rarcFileObj == null)
 				throw new Exception($"No cutscene named '{cutsceneName}'!");
 
-			LoadedCutscenes[cutsceneName] = Cutscene.NewCutsceneFromRarc(_rarc, cutsceneName);
+			LoadedCutscenes[cutsceneName] = Cutscene.NewCutsceneFromRarc(_rarc, IsSMG1, cutsceneName);
 		}
 
 		return LoadedCutscenes[cutsceneName];
@@ -242,7 +274,7 @@ public class CutsceneArchive {
 	{
 		foreach (Cutscene cutscene in LoadedCutscenes.Values)
 		{
-			cutscene.SaveAll(_rarc);
+			cutscene.SaveAll(_rarc, IsSMG1);
 		}
 
 		_rarc.KeepFileIDsSynced = true;
@@ -261,7 +293,7 @@ public class CutsceneArchive {
 	{
 		foreach (Cutscene cutscene in LoadedCutscenes.Values)
 		{
-			cutscene.SaveAll(_rarc);
+			cutscene.SaveAll(_rarc, IsSMG1);
 		}
 
 		_rarc.KeepFileIDsSynced = true;

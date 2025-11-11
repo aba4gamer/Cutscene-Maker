@@ -36,7 +36,17 @@ public partial class CutsceneMainPart : UserControl
 		PartName.Text = part.PartName;
 		TotalStep.Value = part.TimeEntry.TotalStep;
 		SuspendFlag.IsChecked = part.TimeEntry.SuspendFlag != 0;
-		WaitUserInputFlag.IsChecked = part.TimeEntry.WaitUserInputFlag != 0;
+		if (!MainWindow.Instance!.Core.GetArchive().IsSMG1)
+		{
+			WaitUserInputFlag.IsChecked = part.TimeEntry.WaitUserInputFlag != 0;
+			WaitUserInputFlag.IsVisible = true;
+			WaitUserInputFlagName.IsVisible = true;
+		}
+		else
+		{
+			WaitUserInputFlag.IsVisible = false;
+			WaitUserInputFlagName.IsVisible = false;
+		}
 
 		SubscribeToChanges(part);
 	}
@@ -104,14 +114,15 @@ public partial class CutsceneMainPart : UserControl
 				part.TimeEntry.SuspendFlag = isChecked == true ? 1 : 0;
 			});
 
-		_waitUserInputFlagSubscription = WaitUserInputFlag.GetObservable(CheckBox.IsCheckedProperty)
-			.Subscribe(isChecked =>
-			{
-				if (isChecked != (part.TimeEntry.WaitUserInputFlag != 0))
-					MainWindow.Instance!.AddEditedCutscene();
+		if (!MainWindow.Instance!.Core.GetArchive().IsSMG1)
+			_waitUserInputFlagSubscription = WaitUserInputFlag.GetObservable(CheckBox.IsCheckedProperty)
+				.Subscribe(isChecked =>
+				{
+					if (isChecked != (part.TimeEntry.WaitUserInputFlag != 0))
+						MainWindow.Instance!.AddEditedCutscene();
 
-				part.TimeEntry.WaitUserInputFlag = isChecked == true ? 1 : 0;
-			});
+					part.TimeEntry.WaitUserInputFlag = isChecked == true ? 1 : 0;
+				});
 	}
 
 	private void DisposeSubscriptions()

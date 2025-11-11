@@ -48,17 +48,17 @@ public class Cutscene
 	/// <summary>
 	/// Load all BCSVs from an Arc file. You can use this function to reload a Cutscene if you know the folder where it is.
 	/// </summary>
-	public void LoadAllFromRarc(RARC rarc) // Since NewCutsceneFromFiles() exists idk which accesibility modificator use so I'll keep it in public.
+	public void LoadAllFromRarc(RARC rarc, bool IsSMG1) // Since NewCutsceneFromFiles() exists idk which accesibility modificator use so I'll keep it in public.
 	{
 		try
 		{
-			LoadOrDefault(rarc, CutsceneName, "Time", TimeBCSV);
-			LoadOrDefault(rarc, CutsceneName, "Player", PlayerBCSV);
-			LoadOrDefault(rarc, CutsceneName, "Wipe", WipeBCSV);
-			LoadOrDefault(rarc, CutsceneName, "Sound", SoundBCSV);
-			LoadOrDefault(rarc, CutsceneName, "Action", ActionBCSV);
-			LoadOrDefault(rarc, CutsceneName, "Camera", CameraBCSV);
-			LoadOrDefault(rarc, CutsceneName, "SubPart", SubPartBCSV);
+			LoadOrDefault(rarc, IsSMG1, CutsceneName, "Time", TimeBCSV);
+			LoadOrDefault(rarc, IsSMG1, CutsceneName, "Player", PlayerBCSV);
+			LoadOrDefault(rarc, IsSMG1, CutsceneName, "Wipe", WipeBCSV);
+			LoadOrDefault(rarc, IsSMG1, CutsceneName, "Sound", SoundBCSV);
+			LoadOrDefault(rarc, IsSMG1, CutsceneName, "Action", ActionBCSV);
+			LoadOrDefault(rarc, IsSMG1, CutsceneName, "Camera", CameraBCSV);
+			LoadOrDefault(rarc, IsSMG1, CutsceneName, "SubPart", SubPartBCSV);
 
             Console.WriteLine($"[Abacus] '{CutsceneName}' loaded succesfully!");
 		}
@@ -76,7 +76,8 @@ public class Cutscene
 			Parts.Add(new Part(PartName));
 			Parts[i].TimeEntry.TotalStep = (int)TimeBCSV[i][TimeBCSV[TimeHashes.TOTAL_STEP]];
 			Parts[i].TimeEntry.SuspendFlag = (int)TimeBCSV[i][TimeBCSV[TimeHashes.SUSPEND_FLAG]];
-			Parts[i].TimeEntry.WaitUserInputFlag = (int)TimeBCSV[i][TimeBCSV[TimeHashes.WAIT_USER_INPUT_FLAG]];
+			if (!IsSMG1)
+				Parts[i].TimeEntry.WaitUserInputFlag = (int)TimeBCSV[i][TimeBCSV[TimeHashes.WAIT_USER_INPUT_FLAG]];
 
 			FillProperties(Parts[i], PartName); // Load every property into every Entry into every Part.
 
@@ -223,12 +224,22 @@ public class Cutscene
 		}
 	}
 
-    protected static void LoadOrDefault(Archive rarc, string DemoName, string DemoType, BCSV Result)
+    protected static void LoadOrDefault(Archive rarc, bool IsSMG1, string DemoName, string DemoType, BCSV Result)
     {
-        if (rarc[$"Stage/csv/{DemoName}{DemoType}.bcsv"] is ArchiveFile af)
-            Result.Load((MemoryStream)af);
-        else
-            LoadBCSV(Path.Combine("Templates", $"DemoTemplate{DemoType}.bcsv"), Result);
+		if (!IsSMG1)
+		{
+			if (rarc[$"Stage/csv/{DemoName}{DemoType}.bcsv"] is ArchiveFile af)
+				Result.Load((MemoryStream)af);
+			else
+				LoadBCSV(Path.Combine("Templates", $"DemoTemplate{DemoType}.bcsv"), Result);
+		}
+		else
+		{
+			if (rarc.Root![$"{DemoName.ToLower()}/{DemoName.ToLower()}{DemoType.ToLower()}.bcsv"] is ArchiveFile af)
+				Result.Load((MemoryStream)af);
+			else
+				LoadBCSV(Path.Combine("Templates", $"DemoTemplate{DemoType}.bcsv"), Result);
+		}
     }
 
     protected static void LoadBCSV(string filePath, BCSV bcsv)
@@ -263,7 +274,7 @@ public class Cutscene
 		}
 		return -1;
 	}
-	public void SaveAll(RARC rarc)
+	public void SaveAll(RARC rarc, bool IsSMG1)
 	{
 		TimeBCSV.Clear();
 		SubPartBCSV.Clear();
@@ -275,7 +286,7 @@ public class Cutscene
 
 		foreach (Part part in Parts)
 		{
-			TimeBCSV.Add(part.TimeEntry.CreateEntryAndSave(part.PartName));
+			TimeBCSV.Add(part.TimeEntry.CreateEntryAndSave(part.PartName, IsSMG1));
 			SaveProperties(part, part.PartName);
 			if (part.SubPartEntries != null)
 				foreach (SubPart subPart in part.SubPartEntries)
@@ -318,13 +329,26 @@ public class Cutscene
 			rarcCamera.Load(msCamera);
 			rarcSubPart.Load(msSubPart);
 
-			rarc[$"Stage/csv/{CutsceneName}Time.bcsv"] = rarcTime;
-			rarc[$"Stage/csv/{CutsceneName}Player.bcsv"] = rarcPlayer;
-			rarc[$"Stage/csv/{CutsceneName}Wipe.bcsv"] = rarcWipe;
-			rarc[$"Stage/csv/{CutsceneName}Sound.bcsv"] = rarcSound;
-			rarc[$"Stage/csv/{CutsceneName}Action.bcsv"] = rarcAction;
-			rarc[$"Stage/csv/{CutsceneName}Camera.bcsv"] = rarcCamera;
-			rarc[$"Stage/csv/{CutsceneName}SubPart.bcsv"] = rarcSubPart;
+			if (!IsSMG1)
+			{
+				rarc[$"Stage/csv/{CutsceneName}Time.bcsv"] = rarcTime;
+				rarc[$"Stage/csv/{CutsceneName}Player.bcsv"] = rarcPlayer;
+				rarc[$"Stage/csv/{CutsceneName}Wipe.bcsv"] = rarcWipe;
+				rarc[$"Stage/csv/{CutsceneName}Sound.bcsv"] = rarcSound;
+				rarc[$"Stage/csv/{CutsceneName}Action.bcsv"] = rarcAction;
+				rarc[$"Stage/csv/{CutsceneName}Camera.bcsv"] = rarcCamera;
+				rarc[$"Stage/csv/{CutsceneName}SubPart.bcsv"] = rarcSubPart;
+			}
+			else
+			{
+				rarc.Root![$"{CutsceneName}/{CutsceneName}time.bcsv"] = rarcTime;
+				rarc.Root![$"{CutsceneName}/{CutsceneName}player.bcsv"] = rarcPlayer;
+				rarc.Root![$"{CutsceneName}/{CutsceneName}wipe.bcsv"] = rarcWipe;
+				rarc.Root![$"{CutsceneName}/{CutsceneName}sound.bcsv"] = rarcSound;
+				rarc.Root![$"{CutsceneName}/{CutsceneName}action.bcsv"] = rarcAction;
+				rarc.Root![$"{CutsceneName}/{CutsceneName}camera.bcsv"] = rarcCamera;
+				rarc.Root![$"{CutsceneName}/{CutsceneName}subpart.bcsv"] = rarcSubPart;
+			}
 
 // 			Directory.CreateDirectory(folderPath);
 //
@@ -449,10 +473,10 @@ public class Cutscene
 	/// </summary>
 	/// <param name="TimeBCSVPath"></param>
 	/// <returns></returns>
-	public static Cutscene NewCutsceneFromRarc(RARC rarc, string CutsceneName)
+	public static Cutscene NewCutsceneFromRarc(RARC rarc, bool IsSMG1, string CutsceneName)
 	{
 		Cutscene cut = new(CutsceneName);
-		cut.LoadAllFromRarc(rarc);
+		cut.LoadAllFromRarc(rarc, IsSMG1);
 		return cut;
 	}
 
@@ -482,13 +506,14 @@ public class Time
 	public int TotalStep = 0;
 	public int SuspendFlag = 0;
 	public int WaitUserInputFlag = 0;
-	public BCSV.Entry CreateEntryAndSave(string PartName)
+	public BCSV.Entry CreateEntryAndSave(string PartName, bool IsSMG1)
 	{
 		BCSV.Entry entry = new();
 		entry.Add(PART_NAME, PartName);
 		entry.Add(TimeHashes.TOTAL_STEP, TotalStep);
 		entry.Add(TimeHashes.SUSPEND_FLAG, SuspendFlag);
-		entry.Add(TimeHashes.WAIT_USER_INPUT_FLAG, WaitUserInputFlag);
+		if (!IsSMG1)
+			entry.Add(TimeHashes.WAIT_USER_INPUT_FLAG, WaitUserInputFlag);
 		return entry;
 	}
 }

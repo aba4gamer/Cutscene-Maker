@@ -929,6 +929,10 @@ public partial class MainWindow : Window
 		if (!newCutsceneName.StartsWith("Demo"))
 			newCutsceneName = $"Demo{newCutsceneName}";
 
+		// If it's an SMG1 archive, change the name to lowercase
+		if (Core.GetArchive().IsSMG1)
+			newCutsceneName = newCutsceneName.ToLower();
+
 		// Rename the cutscene
 		Core.GetArchive().RenameCutscene(cutsceneName, newCutsceneName);
 
@@ -1016,6 +1020,10 @@ public partial class MainWindow : Window
 		// Add "Demo" at the start if it isn't already present
 		if (!cutsceneName.StartsWith("Demo"))
 			cutsceneName = $"Demo{cutsceneName}";
+
+		// If it's an SMG1 archive, change the name to lowercase
+		if (Core.GetArchive().IsSMG1)
+			cutsceneName = cutsceneName.ToLower();
 
 		// Create the new cutscene with name
 		Core.GetArchive().CreateNewCutscene(cutsceneName);
