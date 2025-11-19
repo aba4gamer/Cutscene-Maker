@@ -234,7 +234,8 @@ public class CutsceneArchive {
 
 	public void DeleteCutscene(string cutsceneName)
 	{
-		LoadCutsceneName(cutsceneName);
+		if (!CutsceneNames.Contains(cutsceneName))
+			return;
 
 		LoadedCutscenes.Remove(cutsceneName);
 		CutsceneNames.RemoveAt(CutsceneNames.IndexOf(cutsceneName));
@@ -254,11 +255,15 @@ public class CutsceneArchive {
 	private void DeleteCutsceneBCSV(string cutsceneName, string bcsvName)
 	{
 		if (IsSMG1)
+		{
 			if (_rarc.Root!.ItemExists($"{cutsceneName.ToLower()}/{cutsceneName.ToLower()}{bcsvName.ToLower()}.bcsv"))
-				_rarc.Root!.Items.Remove($"{cutsceneName.ToLower()}/{cutsceneName.ToLower()}{bcsvName.ToLower()}.bcsv");
+				_rarc.Root[$"{cutsceneName.ToLower()}"] = null;
+		}
 		else
+		{
 			if (_rarc.Root!.ItemExists($"csv/{cutsceneName}{bcsvName}.bcsv"))
-				_rarc.Root!.Items.Remove($"csv/{cutsceneName}{bcsvName}.bcsv");
+				_rarc.Root![$"csv/{cutsceneName}{bcsvName}.bcsv"] = null;
+		}
 	}
 
 	public void ExportCutscene(string cutsceneName, string folderPath)

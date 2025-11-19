@@ -302,11 +302,53 @@ public class Cutscene
 
 		if (!IsSMG1 && !TimeBCSV.ContainsField(TimeHashes.WAIT_USER_INPUT_FLAG))
 		{
-			LoadBCSV(Path.Combine("Templates", "DemoTemplateTime.bcsv"), TimeBCSV);
+			TimeBCSV = new BCSV();
+
+			BCSV.Field PartNameField = new();
+			PartNameField.HashName = PART_NAME;
+			PartNameField.DataType = BCSV.DataTypes.STRING;
+			PartNameField.AutoRecalc = true;
+			TimeBCSV.Add(PartNameField);
+
+			BCSV.Field TotalStepField = new();
+			TotalStepField.HashName = TimeHashes.TOTAL_STEP;
+			TotalStepField.DataType = BCSV.DataTypes.INT32;
+			TotalStepField.AutoRecalc = true;
+			TimeBCSV.Add(TotalStepField);
+
+			BCSV.Field SuspendFlagField = new();
+			SuspendFlagField.HashName = TimeHashes.SUSPEND_FLAG;
+			SuspendFlagField.DataType = BCSV.DataTypes.INT32;
+			SuspendFlagField.AutoRecalc = true;
+			TimeBCSV.Add(SuspendFlagField);
+
+			BCSV.Field WaitUserInputFlagField = new();
+			WaitUserInputFlagField.HashName = TimeHashes.WAIT_USER_INPUT_FLAG;
+			WaitUserInputFlagField.DataType = BCSV.DataTypes.INT32;
+			WaitUserInputFlagField.AutoRecalc = true;
+			TimeBCSV.Add(WaitUserInputFlagField);
 		}
 		else if (IsSMG1 && TimeBCSV.ContainsField(TimeHashes.WAIT_USER_INPUT_FLAG))
 		{
-			LoadBCSV(Path.Combine("Templates", "DemoSMG1TemplateTime.bcsv"), TimeBCSV);
+			TimeBCSV = new BCSV();
+
+			BCSV.Field PartNameField = new();
+			PartNameField.HashName = PART_NAME;
+			PartNameField.DataType = BCSV.DataTypes.STRING;
+			PartNameField.AutoRecalc = true;
+			TimeBCSV.Add(PartNameField);
+
+			BCSV.Field TotalStepField = new();
+			TotalStepField.HashName = TimeHashes.TOTAL_STEP;
+			TotalStepField.DataType = BCSV.DataTypes.INT32;
+			TotalStepField.AutoRecalc = true;
+			TimeBCSV.Add(TotalStepField);
+
+			BCSV.Field SuspendFlagField = new();
+			SuspendFlagField.HashName = TimeHashes.SUSPEND_FLAG;
+			SuspendFlagField.DataType = BCSV.DataTypes.INT32;
+			SuspendFlagField.AutoRecalc = true;
+			TimeBCSV.Add(SuspendFlagField);
 		}
 
 		foreach (Part part in Parts)
