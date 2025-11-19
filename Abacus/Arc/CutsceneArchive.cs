@@ -284,6 +284,8 @@ public class CutsceneArchive {
 		if (!IsSMG1 && FromSMG1)
 		{
 			cutscene.CutsceneName = cutscene.CutsceneName.Replace("demo", "Demo");
+			while (CutsceneNames.Contains(cutscene.CutsceneName))
+				cutscene.CutsceneName = cutscene.CutsceneName + "_imported";
 			foreach (Cutscene.Part part in cutscene.Parts)
 			{
 				if (part.ActionEntry != null)
@@ -313,6 +315,8 @@ public class CutsceneArchive {
 		if (IsSMG1 && !FromSMG1)
 		{
 			cutscene.CutsceneName = cutscene.CutsceneName.ToLower();
+			while (CutsceneNames.Contains(cutscene.CutsceneName))
+				cutscene.CutsceneName = cutscene.CutsceneName + "_imported";
 			foreach (Cutscene.Part part in cutscene.Parts)
 			{
 				if (part.TimeEntry.WaitUserInputFlag > 0)

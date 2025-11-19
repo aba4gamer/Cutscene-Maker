@@ -154,6 +154,13 @@ public partial class CutsceneImportDialog : Window
 
 	public void OnImport(object? sender, RoutedEventArgs e)
 	{
+		ImportSubmit();
+	}
+
+	public void ImportSubmit()
+	{
+
+
 		Close();
 	}
 
