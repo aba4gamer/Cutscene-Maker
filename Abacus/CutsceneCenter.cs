@@ -275,22 +275,24 @@ public class Cutscene
 		return -1;
 	}
 
-	public void ExportAll(string folderPath, bool IsSMG1)
+	public void ExportAll(string folderPath)
 	{
 			Directory.CreateDirectory(folderPath);
 
-			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "time.bcsv" : CutsceneName + "Time.bcsv"), TimeBCSV);
-			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "player.bcsv" : CutsceneName + "Player.bcsv"), PlayerBCSV);
-			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "wipe.bcsv" : CutsceneName + "Wipe.bcsv"), WipeBCSV);
-			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "sound.bcsv" : CutsceneName + "Sound.bcsv"), SoundBCSV);
-			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "action.bcsv" : CutsceneName + "Action.bcsv"), ActionBCSV);
-			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "camera.bcsv" : CutsceneName + "Camera.bcsv"), CameraBCSV);
-			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "subpart.bcsv" : CutsceneName + "SubPart.bcsv"), SubPartBCSV);
+			WriteBCSVs(false);
+
+			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Time.bcsv"), TimeBCSV);
+			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Player.bcsv"), PlayerBCSV);
+			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Wipe.bcsv"), WipeBCSV);
+			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Sound.bcsv"), SoundBCSV);
+			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Action.bcsv"), ActionBCSV);
+			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Camera.bcsv"), CameraBCSV);
+			SaveBCSV(Path.Combine(folderPath, CutsceneName + "SubPart.bcsv"), SubPartBCSV);
 
 			Console.WriteLine($"[Abacus] '{CutsceneName}' exported to '{folderPath}'!");
 	}
 
-	public void SaveAll(RARC rarc, bool IsSMG1)
+	private void WriteBCSVs(bool IsSMG1)
 	{
 		TimeBCSV.Clear();
 		SubPartBCSV.Clear();
@@ -362,6 +364,11 @@ public class Cutscene
 					SaveProperties(subPart, subPart.SubPartName);
 				}
 		}
+	}
+
+	public void SaveAll(RARC rarc, bool IsSMG1)
+	{
+		WriteBCSVs(IsSMG1);
 
 		try
 		{
@@ -508,9 +515,8 @@ public class Cutscene
 	/// <returns></returns>
 	public static Cutscene NewCutsceneFromTemplate(string CutsceneName)
 	{
-		Cutscene cut = new("DemoTemplate");
+		Cutscene cut = new(CutsceneName);
 		cut.LoadAll("Templates");
-		cut.CutsceneName = CutsceneName;
 		return cut;
 	}
 	/// <summary>

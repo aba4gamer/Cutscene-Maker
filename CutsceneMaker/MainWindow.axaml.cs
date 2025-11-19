@@ -1073,37 +1073,50 @@ public partial class MainWindow : Window
 			return;
 
 		// Ask the user where they want to export the cutscene
-		string? filePath = await MsgBox.AskOpenArcFile(StorageProvider);
+		string? filePath = await MsgBox.AskOpenImportArcBCSVFile(StorageProvider);
 		if (filePath == null)
 		{
 			StatusText.Text = "Cutscene import aborted.";
 			return;
 		}
 
-		// Let the user chose the cutscenes to import
-		CutsceneImportDialog importer = new(filePath);
-		await importer.ShowDialog(this);
-
-		// If no cutscenes selected, abort
-		if (importer.Cutscenes.Count < 1)
-		{
-			StatusText.Text = "Cutscene import aborted.";
-			return;
-		}
-
-		// Import the cutscenes
 		string cutsceneNames = "'";
-		foreach (Cutscene cutscene in importer.Cutscenes)
+		if (filePath.EndsWith(".arc"))
 		{
-			cutsceneNames += cutscene.CutsceneName + "', '";
-			Core.GetArchive().ImportCutscene(cutscene, importer.IsSMG1);
+			// Let the user chose the cutscenes to import
+			CutsceneImportDialog importer = new(filePath);
+			await importer.ShowDialog(this);
+
+			// If no cutscenes selected, abort
+			if (importer.Cutscenes.Count < 1)
+			{
+				StatusText.Text = "Cutscene import aborted.";
+				return;
+			}
+
+			// Import the cutscenes
+			foreach (Cutscene cutscene in importer.Cutscenes)
+			{
+				cutsceneNames += cutscene.CutsceneName + "', '";
+				Core.GetArchive().ImportCutscene(cutscene, importer.IsSMG1);
+			}
+
+			cutsceneNames = cutsceneNames.Substring(0, cutsceneNames.Length - 2);
+		}
+		else if (filePath.EndsWith(".bcsv"))
+		{
+			// Open the BCSV cutscene files
+			Cutscene cutscene = Cutscene.NewCutsceneFromFiles(filePath);
+
+			// Import the cutscene
+			Core.GetArchive().ImportCutscene(cutscene, false);
+
+			cutsceneNames = $"'{cutscene.CutsceneName}'";
 		}
 		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
 
-		cutsceneNames = cutsceneNames.Substring(0, cutsceneNames.Length - 2);
-
 		// Update the status & set the title.
-		StatusText.Text = $"Successfully exported the cutscene with name {cutsceneNames} to '{filePath}'!";
+		StatusText.Text = $"Successfully imported the cutscene(s) with name(s) {cutsceneNames} from '{filePath}'!";
 	}
 
 	private async void CreateNewCutscene()

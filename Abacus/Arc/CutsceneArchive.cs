@@ -270,7 +270,73 @@ public class CutsceneArchive {
 	{
 		LoadCutsceneName(cutsceneName);
 
-		LoadedCutscenes[cutsceneName].ExportAll(folderPath, IsSMG1);
+		Cutscene cut = LoadedCutscenes[cutsceneName];
+		if (IsSMG1)
+			PortCutsceneToSMG2(cut);
+		cut.ExportAll(folderPath);
+		if (IsSMG1)
+			PortCutsceneToSMG1(cut);
+	}
+
+	public void PortCutsceneToSMG2(Cutscene cutscene)
+	{
+		cutscene.CutsceneName = cutscene.CutsceneName.Replace("demo", "Demo");
+		foreach (Cutscene.Part part in cutscene.Parts)
+		{
+			if (part.ActionEntry != null)
+			{
+				if (part.ActionEntry.ActionType < 11)
+					part.ActionEntry.ActionType++;
+				else if (part.ActionEntry.ActionType == 11)
+					part.ActionEntry.ActionType = 0;
+			}
+
+			if (part.SubPartEntries != null)
+				foreach (SubPart sPart in part.SubPartEntries)
+				{
+					if (sPart.ActionEntry != null)
+					{
+						if (sPart.ActionEntry.ActionType < 11)
+							sPart.ActionEntry.ActionType++;
+						else if (sPart.ActionEntry.ActionType == 11)
+							sPart.ActionEntry.ActionType = 0;
+					}
+				}
+		}
+	}
+
+	public void PortCutsceneToSMG1(Cutscene cutscene)
+	{
+		cutscene.CutsceneName = cutscene.CutsceneName.ToLower();
+		foreach (Cutscene.Part part in cutscene.Parts)
+		{
+			if (part.TimeEntry.WaitUserInputFlag > 0)
+				part.TimeEntry.WaitUserInputFlag = 0;
+
+			if (part.ActionEntry != null)
+			{
+				if (part.ActionEntry.ActionType == 0)
+					part.ActionEntry.ActionType = 11;
+				else if (part.ActionEntry.ActionType < 11)
+					part.ActionEntry.ActionType--;
+				else if (part.ActionEntry.ActionType > 13)
+					part.ActionEntry.ActionType = 0;
+			}
+
+			if (part.SubPartEntries != null)
+				foreach (SubPart sPart in part.SubPartEntries)
+				{
+					if (sPart.ActionEntry != null)
+					{
+						if (sPart.ActionEntry.ActionType == 0)
+							sPart.ActionEntry.ActionType = 11;
+						else if (sPart.ActionEntry.ActionType < 11)
+							sPart.ActionEntry.ActionType--;
+						else if (sPart.ActionEntry.ActionType > 13)
+							sPart.ActionEntry.ActionType = 0;
+					}
+				}
+		}
 	}
 
 	public void ImportCutscene(Cutscene cutscene, bool FromSMG1)
@@ -288,70 +354,18 @@ public class CutsceneArchive {
 		// Cutscene: SMG1
 		if (!IsSMG1 && FromSMG1)
 		{
-			cutscene.CutsceneName = cutscene.CutsceneName.Replace("demo", "Demo");
-			while (CutsceneNames.Contains(cutscene.CutsceneName))
-				cutscene.CutsceneName = cutscene.CutsceneName + "_imported";
-			foreach (Cutscene.Part part in cutscene.Parts)
-			{
-				if (part.ActionEntry != null)
-				{
-					if (part.ActionEntry.ActionType < 11)
-						part.ActionEntry.ActionType++;
-					else if (part.ActionEntry.ActionType == 11)
-						part.ActionEntry.ActionType = 0;
-				}
-
-				if (part.SubPartEntries != null)
-					foreach (SubPart sPart in part.SubPartEntries)
-					{
-						if (sPart.ActionEntry != null)
-						{
-							if (sPart.ActionEntry.ActionType < 11)
-								sPart.ActionEntry.ActionType++;
-							else if (sPart.ActionEntry.ActionType == 11)
-								sPart.ActionEntry.ActionType = 0;
-						}
-					}
-			}
+			PortCutsceneToSMG2(cutscene);
 		}
 
 		// Archive:  SMG1
 		// Cutscene: SMG2
 		if (IsSMG1 && !FromSMG1)
 		{
-			cutscene.CutsceneName = cutscene.CutsceneName.ToLower();
-			while (CutsceneNames.Contains(cutscene.CutsceneName))
-				cutscene.CutsceneName = cutscene.CutsceneName + "_imported";
-			foreach (Cutscene.Part part in cutscene.Parts)
-			{
-				if (part.TimeEntry.WaitUserInputFlag > 0)
-					part.TimeEntry.WaitUserInputFlag = 0;
-
-				if (part.ActionEntry != null)
-				{
-					if (part.ActionEntry.ActionType == 0)
-						part.ActionEntry.ActionType = 11;
-					else if (part.ActionEntry.ActionType < 11)
-						part.ActionEntry.ActionType--;
-					else if (part.ActionEntry.ActionType > 13)
-						part.ActionEntry.ActionType = 0;
-				}
-
-				if (part.SubPartEntries != null)
-					foreach (SubPart sPart in part.SubPartEntries)
-					{
-						if (sPart.ActionEntry != null)
-						{
-							if (sPart.ActionEntry.ActionType == 0)
-								sPart.ActionEntry.ActionType = 11;
-							else if (sPart.ActionEntry.ActionType < 11)
-								sPart.ActionEntry.ActionType--;
-							else if (sPart.ActionEntry.ActionType > 13)
-								sPart.ActionEntry.ActionType = 0;
-						}
-					}
-			}
+			PortCutsceneToSMG1(cutscene);
 		}
+
+		while (CutsceneNames.Contains(cutscene.CutsceneName))
+			cutscene.CutsceneName = cutscene.CutsceneName + "_imported";
 
 		LoadedCutscenes[cutscene.CutsceneName] = cutscene;
 		CutsceneNames.Add(cutscene.CutsceneName);

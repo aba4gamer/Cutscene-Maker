@@ -91,4 +91,17 @@ class MsgBox
 		return cnd.CutsceneName;
 	}
 
+	public static async Task<string?> AskOpenImportArcBCSVFile(IStorageProvider sp)
+	{
+		FilePickerFileType arc = new("*.arc (RARC Revolution Archive)") { Patterns = ["*.arc"] };
+		FilePickerFileType bcsv = new("*.bcsv (Binary Comma Separated Values)") { Patterns = ["*Time.bcsv"] };
+		IReadOnlyList<IStorageFile> filePaths = await sp.OpenFilePickerAsync(new FilePickerOpenOptions { Title = "Select a Demo.arc/Time.bcsv file to import", FileTypeFilter = [arc, bcsv], AllowMultiple = false });
+
+		if (filePaths == null || filePaths.Count < 1) return null;
+		string? localPath = filePaths[0].TryGetLocalPath();
+
+		if (localPath == null || localPath == "") return null;
+		return localPath;
+	}
+
 }
