@@ -332,8 +332,8 @@ public class CutsceneArchive {
 					if (part.ActionEntry.ActionType == 0)
 						part.ActionEntry.ActionType = 11;
 					else if (part.ActionEntry.ActionType < 11)
-						part.ActionEntry.ActionType++;
-					else
+						part.ActionEntry.ActionType--;
+					else if (part.ActionEntry.ActionType > 13)
 						part.ActionEntry.ActionType = 0;
 				}
 
@@ -344,9 +344,9 @@ public class CutsceneArchive {
 						{
 							if (sPart.ActionEntry.ActionType == 0)
 								sPart.ActionEntry.ActionType = 11;
-							else if (sPart.ActionEntry.ActionType < 12)
+							else if (sPart.ActionEntry.ActionType < 11)
 								sPart.ActionEntry.ActionType--;
-							else
+							else if (sPart.ActionEntry.ActionType > 13)
 								sPart.ActionEntry.ActionType = 0;
 						}
 					}
