@@ -163,6 +163,7 @@ public partial class TimelineView : UserControl
 		{
 			MovePartBefore.IsEnabled = false;
 			MovePartAfter.IsEnabled = false;
+			SubTimeline.ContextMenu = null;
 		}
 
 		if (parts.Count < 1)
