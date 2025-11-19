@@ -324,9 +324,11 @@ public class CutsceneArchive {
 
 				if (part.ActionEntry != null)
 				{
-					if (part.ActionEntry.ActionType < 11)
+					if (part.ActionEntry.ActionType == 0)
+						part.ActionEntry.ActionType = 11;
+					else if (part.ActionEntry.ActionType < 11)
 						part.ActionEntry.ActionType++;
-					else if (part.ActionEntry.ActionType == 11)
+					else
 						part.ActionEntry.ActionType = 0;
 				}
 
