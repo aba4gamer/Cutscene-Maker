@@ -82,7 +82,7 @@ public partial class CutsceneNameDialog : Window
 	{
 		switch (e.Key) {
 			case Key.Escape:
-				CloseWin();
+				Close();
 				break;
 			case Key.Enter:
 				DoSubmit();
@@ -105,15 +105,11 @@ public partial class CutsceneNameDialog : Window
 
 	private void OnCancel(object sender, RoutedEventArgs e)
 	{
-		CloseWin();
-	}
-
-
-
-	private void CloseWin()
-	{
 		Close();
 	}
+
+
+
 
 	private void DoSubmit()
 	{

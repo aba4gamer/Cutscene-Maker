@@ -9,7 +9,7 @@
 		<Button Name="MainBtn" HorizontalAlignment="Stretch" Click="OnClickCutscene">
 			<StackPanel Margin="4">
 				<DockPanel VerticalAlignment="Center">
-					<Svg Path="avares://CutsceneMaker/Assets/cutscene.svg" Width="14" Height="14" VerticalAlignment="Center" Margin="0, 0, 4, 0" />
+					<Image Source="/Assets/cutscene.png" Width="14" Height="14" VerticalAlignment="Center" Margin="0, 0, 4, 0" />
 					<TextBlock Name="CutsceneNameTxt" MaxLines="1" TextTrimming="CharacterEllipsis" FontSize="12" />
 				</DockPanel>
 			</StackPanel>

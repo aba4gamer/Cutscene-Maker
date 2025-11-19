@@ -33,6 +33,11 @@
 					</MenuItem.Icon>
 				</MenuItem>
 				<Separator />
+				<MenuItem Name="ImportBtn" Header="I_mport..." Click="OnImportCutscenes" InputGesture="Ctrl+Alt+M" HotKey="Ctrl+Alt+M" ToolTip.Tip="Import a cutscene from an archive or BCSV files">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/import-cutscene.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
 				<MenuItem Name="ReloadArchiveBtn" Header="_Reload Archive" Click="OnReloadArchive" InputGesture="Ctrl+R" HotKey="Ctrl+R" ToolTip.Tip="Reloads the .arc archive file discarding changes if any">
 					<MenuItem.Icon>
 						<Svg Path="Assets/menu/reload-archive.svg" />
@@ -61,6 +66,11 @@
 				<MenuItem Name="DeleteCutsceneBtn" Header="_Delete Selected Cutscene" Click="OnDeleteCutscene" InputGesture="Ctrl+Shift+D" HotKey="Ctrl+Shift+D" ToolTip.Tip="Deletes the selected cutscene">
 					<MenuItem.Icon>
 						<Svg Path="Assets/menu/delete-cutscene.svg" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Name="ExportCutsceneBtn" Header="_Export Selected Cutscene" Click="OnExportCutscene" InputGesture="Ctrl+Shift+E" HotKey="Ctrl+Shift+E" ToolTip.Tip="Exports the selected cutscene">
+					<MenuItem.Icon>
+						<Svg Path="Assets/menu/export-cutscene.svg" />
 					</MenuItem.Icon>
 				</MenuItem>
 			</MenuItem>
@@ -142,11 +152,21 @@
 					<Svg Path="Assets/menu/delete-cutscene.svg" />
 				</MenuItem.Icon>
 			</MenuItem>
+			<MenuItem Header="Export" Click="OnExportCutsceneContext" ToolTip.Tip="Exports the selected cutscene">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/export-cutscene.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
 			<Separator />
 			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext" ToolTip.Tip="Creates a new cutscene with a name">
 				<MenuItem.Icon>
-						<Svg Path="Assets/menu/new-cutscene.svg" />
-					</MenuItem.Icon>
+					<Svg Path="Assets/menu/new-cutscene.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Import..." Click="OnImportCutscenesContext" ToolTip.Tip="Import a cutscene from an archive or BCSV files">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/import-cutscene.svg" />
+				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="Reload" Click="OnReloadCutsceneContext" ToolTip.Tip="Reloads the .arc archive file discarding changes if any">
 				<MenuItem.Icon>
@@ -160,6 +180,11 @@
 			<MenuItem Header="New Cutscene" Click="OnNewCutsceneContext" ToolTip.Tip="Creates a new cutscene with a name">
 				<MenuItem.Icon>
 					<Svg Path="Assets/menu/new-cutscene.svg" />
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Import..." Click="OnImportCutscenesContext" ToolTip.Tip="Import a cutscene from an archive or BCSV files">
+				<MenuItem.Icon>
+					<Svg Path="Assets/menu/import-cutscene.svg" />
 				</MenuItem.Icon>
 			</MenuItem>
 			<MenuItem Header="Reload Archive" Click="OnReloadCutsceneContext" ToolTip.Tip="Reloads the .arc archive file discarding changes if any">

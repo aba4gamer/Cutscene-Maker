@@ -274,6 +274,22 @@ public class Cutscene
 		}
 		return -1;
 	}
+
+	public void ExportAll(string folderPath, bool IsSMG1)
+	{
+			Directory.CreateDirectory(folderPath);
+
+			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "time.bcsv" : CutsceneName + "Time.bcsv"), TimeBCSV);
+			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "player.bcsv" : CutsceneName + "Player.bcsv"), PlayerBCSV);
+			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "wipe.bcsv" : CutsceneName + "Wipe.bcsv"), WipeBCSV);
+			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "sound.bcsv" : CutsceneName + "Sound.bcsv"), SoundBCSV);
+			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "action.bcsv" : CutsceneName + "Action.bcsv"), ActionBCSV);
+			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "camera.bcsv" : CutsceneName + "Camera.bcsv"), CameraBCSV);
+			SaveBCSV(Path.Combine(folderPath, IsSMG1 ? CutsceneName.ToLower() + "subpart.bcsv" : CutsceneName + "SubPart.bcsv"), SubPartBCSV);
+
+			Console.WriteLine($"[Abacus] '{CutsceneName}' exported to '{folderPath}'!");
+	}
+
 	public void SaveAll(RARC rarc, bool IsSMG1)
 	{
 		TimeBCSV.Clear();
@@ -283,6 +299,50 @@ public class Cutscene
 		SoundBCSV.Clear();
 		ActionBCSV.Clear();
 		CameraBCSV.Clear();
+
+		if (!IsSMG1 && !TimeBCSV.ContainsField(TimeHashes.WAIT_USER_INPUT_FLAG))
+		{
+			TimeBCSV = new BCSV();
+
+			BCSV.Field PartNameField = new();
+			PartNameField.HashName = PART_NAME;
+			PartNameField.DataType = BCSV.DataTypes.STRING;
+			TimeBCSV.Add(PartNameField);
+
+			BCSV.Field TotalStepField = new();
+			TotalStepField.HashName = TimeHashes.TOTAL_STEP;
+			TotalStepField.DataType = BCSV.DataTypes.INT32;
+			TimeBCSV.Add(TotalStepField);
+
+			BCSV.Field SuspendFlagField = new();
+			SuspendFlagField.HashName = TimeHashes.SUSPEND_FLAG;
+			SuspendFlagField.DataType = BCSV.DataTypes.INT32;
+			TimeBCSV.Add(SuspendFlagField);
+
+			BCSV.Field WaitUserInputFlagField = new();
+			WaitUserInputFlagField.HashName = TimeHashes.WAIT_USER_INPUT_FLAG;
+			WaitUserInputFlagField.DataType = BCSV.DataTypes.INT32;
+			TimeBCSV.Add(WaitUserInputFlagField);
+		}
+		else if (IsSMG1 && TimeBCSV.ContainsField(TimeHashes.WAIT_USER_INPUT_FLAG))
+		{
+			TimeBCSV = new BCSV();
+
+			BCSV.Field PartNameField = new();
+			PartNameField.HashName = PART_NAME;
+			PartNameField.DataType = BCSV.DataTypes.STRING;
+			TimeBCSV.Add(PartNameField);
+
+			BCSV.Field TotalStepField = new();
+			TotalStepField.HashName = TimeHashes.TOTAL_STEP;
+			TotalStepField.DataType = BCSV.DataTypes.INT32;
+			TimeBCSV.Add(TotalStepField);
+
+			BCSV.Field SuspendFlagField = new();
+			SuspendFlagField.HashName = TimeHashes.SUSPEND_FLAG;
+			SuspendFlagField.DataType = BCSV.DataTypes.INT32;
+			TimeBCSV.Add(SuspendFlagField);
+		}
 
 		foreach (Part part in Parts)
 		{
@@ -295,6 +355,7 @@ public class Cutscene
 					SaveProperties(subPart, subPart.SubPartName);
 				}
 		}
+
 		try
 		{
 			MemoryStream msTime = new();
@@ -350,17 +411,7 @@ public class Cutscene
 				rarc.Root![$"{CutsceneName}/{CutsceneName}subpart.bcsv"] = rarcSubPart;
 			}
 
-// 			Directory.CreateDirectory(folderPath);
-//
-// 			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Time.bcsv"), TimeBCSV);
-// 			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Player.bcsv"), PlayerBCSV);
-// 			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Wipe.bcsv"), WipeBCSV);
-// 			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Sound.bcsv"), SoundBCSV);
-// 			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Action.bcsv"), ActionBCSV);
-// 			SaveBCSV(Path.Combine(folderPath, CutsceneName + "Camera.bcsv"), CameraBCSV);
-// 			SaveBCSV(Path.Combine(folderPath, CutsceneName + "SubPart.bcsv"), SubPartBCSV);
-
-			Console.WriteLine($"[Abacus] '{CutsceneName}' and saved in the archive succesfully!");
+			Console.WriteLine($"[Abacus] '{CutsceneName}' saved in the archive succesfully!");
 		}
 		catch (Exception e)
 		{

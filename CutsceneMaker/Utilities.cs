@@ -53,11 +53,29 @@ class MsgBox
 
 		return localFile;
 
-// 		if (folderPaths == null || folderPaths.Count < 1) return null;
-// 		string? localPath = folderPaths[0].TryGetLocalPath();
-//
-// 		if (localPath == null || localPath == "") return null;
-// 		return localPath;
+		// 		if (folderPaths == null || folderPaths.Count < 1) return null;
+		// 		string? localPath = folderPaths[0].TryGetLocalPath();
+		//
+		// 		if (localPath == null || localPath == "") return null;
+		// 		return localPath;
+	}
+
+	public static async Task<string?> AskSaveBCSVFile(IStorageProvider sp, string? folderPath, string cutsceneName)
+	{
+		IReadOnlyList<IStorageFolder> folders = await sp.OpenFolderPickerAsync(new FolderPickerOpenOptions
+		{
+			Title = $"Export '{cutsceneName}' to BCSV files",
+			SuggestedFileName = folderPath
+		});
+
+		if (folders.Count < 1)
+			return null;
+
+		string? localFolder = folders[0].TryGetLocalPath();
+		if (localFolder == null)
+			return null;
+
+		return localFolder;
 	}
 
 	public static async Task<ButtonResult> SendMessage(MainWindow win, string title, string body, ButtonEnum btnType)

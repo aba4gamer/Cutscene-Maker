@@ -148,7 +148,11 @@ public class CutsceneArchive {
 	{
 		if (!LoadedCutscenes.ContainsKey(cutsceneName))
 		{
-			object? rarcFileObj = _rarc[$"Stage/csv/{cutsceneName}Time.bcsv"];
+			object? rarcFileObj;
+			if (IsSMG1)
+				rarcFileObj = _rarc.Root![$"{cutsceneName.ToLower()}/{cutsceneName.ToLower()}time.bcsv"];
+			else
+				rarcFileObj = _rarc[$"Stage/csv/{cutsceneName}Time.bcsv"];
 			if (rarcFileObj == null)
 				throw new Exception($"No cutscene named '{cutsceneName}'!");
 
@@ -196,31 +200,30 @@ public class CutsceneArchive {
 		CutsceneNames.RemoveAt(i);
 		CutsceneNames.Insert(i, newCutsceneName);
 
+		if (IsSMG1)
+			_rarc.Root!.RenameItem($"{cutsceneName.ToLower()}", $"{newCutsceneName.ToLower()}");
 
-		object? _rarcPath = _rarc["Stage/csv"];
-
-		if (_rarcPath == null)
-			throw new Exception("Couldn't get the csv path in the arc file!");
-
-		RARC.Directory csv = (RARC.Directory) _rarcPath;
-
-		if (csv.ItemExists($"{cutsceneName}Time.bcsv"))
-			csv.RenameItem($"{cutsceneName}Time.bcsv", $"{newCutsceneName}Time.bcsv");
-		if (csv.ItemExists($"{cutsceneName}Player.bcsv"))
-			csv.RenameItem($"{cutsceneName}Player.bcsv", $"{newCutsceneName}Player.bcsv");
-		if (csv.ItemExists($"{cutsceneName}Wipe.bcsv"))
-			csv.RenameItem($"{cutsceneName}Wipe.bcsv", $"{newCutsceneName}Wipe.bcsv");
-		if (csv.ItemExists($"{cutsceneName}Sound.bcsv"))
-			csv.RenameItem($"{cutsceneName}Sound.bcsv", $"{newCutsceneName}Sound.bcsv");
-		if (csv.ItemExists($"{cutsceneName}Action.bcsv"))
-			csv.RenameItem($"{cutsceneName}Action.bcsv", $"{newCutsceneName}Action.bcsv");
-		if (csv.ItemExists($"{cutsceneName}Camera.bcsv"))
-			csv.RenameItem($"{cutsceneName}Camera.bcsv", $"{newCutsceneName}Camera.bcsv");
-		if (csv.ItemExists($"{cutsceneName}SubPart.bcsv"))
-			csv.RenameItem($"{cutsceneName}SubPart.bcsv", $"{newCutsceneName}SubPart.bcsv");
+		RenameCutsceneBCSVName(cutsceneName, newCutsceneName, "Time");
+		RenameCutsceneBCSVName(cutsceneName, newCutsceneName, "Player");
+		RenameCutsceneBCSVName(cutsceneName, newCutsceneName, "Wipe");
+		RenameCutsceneBCSVName(cutsceneName, newCutsceneName, "Sound");
+		RenameCutsceneBCSVName(cutsceneName, newCutsceneName, "Action");
+		RenameCutsceneBCSVName(cutsceneName, newCutsceneName, "Camera");
+		RenameCutsceneBCSVName(cutsceneName, newCutsceneName, "SubPart");
 
 		if (cutsceneName == SelectedCutsceneName)
 			SelectedCutsceneName = newCutsceneName;
+	}
+
+	private void RenameCutsceneBCSVName(string cutsceneName, string newCutsceneName, string bcsvName)
+	{
+		if (IsSMG1)
+			if (_rarc.Root!.ItemExists($"{newCutsceneName.ToLower()}/{cutsceneName.ToLower()}{bcsvName.ToLower()}.bcsv"))
+				if (_rarc.Root![newCutsceneName.ToLower()]! is RARC.Directory dir)
+					dir.RenameItem($"{cutsceneName.ToLower()}{bcsvName.ToLower()}.bcsv", $"{newCutsceneName.ToLower()}{bcsvName.ToLower()}.bcsv");
+		else
+			if (_rarc.Root!.ItemExists($"csv/{cutsceneName}{bcsvName}.bcsv"))
+				_rarc.Root!.RenameItem($"csv/{cutsceneName}{bcsvName}.bcsv", "csv/{newCutsceneName}{bcsvName}.bcsv");
 	}
 
 	public void RenameSelectedCutscene(string newCutsceneName)
@@ -236,31 +239,111 @@ public class CutsceneArchive {
 		LoadedCutscenes.Remove(cutsceneName);
 		CutsceneNames.RemoveAt(CutsceneNames.IndexOf(cutsceneName));
 
-
-		object? _rarcPath = _rarc["Stage/csv"];
-
-		if (_rarcPath == null)
-			throw new Exception("Couldn't get the csv path in the arc file!");
-
-		RARC.Directory csv = (RARC.Directory) _rarcPath;
-
-		if (csv.ItemExists($"{cutsceneName}Time.bcsv"))
-			csv.Items.Remove($"{cutsceneName}Time.bcsv");
-		if (csv.ItemExists($"{cutsceneName}Player.bcsv"))
-			csv.Items.Remove($"{cutsceneName}Player.bcsv");
-		if (csv.ItemExists($"{cutsceneName}Wipe.bcsv"))
-			csv.Items.Remove($"{cutsceneName}Wipe.bcsv");
-		if (csv.ItemExists($"{cutsceneName}Sound.bcsv"))
-			csv.Items.Remove($"{cutsceneName}Sound.bcsv");
-		if (csv.ItemExists($"{cutsceneName}Action.bcsv"))
-			csv.Items.Remove($"{cutsceneName}Action.bcsv");
-		if (csv.ItemExists($"{cutsceneName}Camera.bcsv"))
-			csv.Items.Remove($"{cutsceneName}Camera.bcsv");
-		if (csv.ItemExists($"{cutsceneName}SubPart.bcsv"))
-			csv.Items.Remove($"{cutsceneName}SubPart.bcsv");
+		DeleteCutsceneBCSV(cutsceneName, "Time");
+		DeleteCutsceneBCSV(cutsceneName, "Player");
+		DeleteCutsceneBCSV(cutsceneName, "Wipe");
+		DeleteCutsceneBCSV(cutsceneName, "Sound");
+		DeleteCutsceneBCSV(cutsceneName, "Action");
+		DeleteCutsceneBCSV(cutsceneName, "Camera");
+		DeleteCutsceneBCSV(cutsceneName, "SubPart");
 
 		if (cutsceneName == SelectedCutsceneName)
 			SelectedCutsceneName = null;
+	}
+
+	private void DeleteCutsceneBCSV(string cutsceneName, string bcsvName)
+	{
+		if (IsSMG1)
+			if (_rarc.Root!.ItemExists($"{cutsceneName.ToLower()}/{cutsceneName.ToLower()}{bcsvName.ToLower()}.bcsv"))
+				_rarc.Root!.Items.Remove($"{cutsceneName.ToLower()}/{cutsceneName.ToLower()}{bcsvName.ToLower()}.bcsv");
+		else
+			if (_rarc.Root!.ItemExists($"csv/{cutsceneName}{bcsvName}.bcsv"))
+				_rarc.Root!.Items.Remove($"csv/{cutsceneName}{bcsvName}.bcsv");
+	}
+
+	public void ExportCutscene(string cutsceneName, string folderPath)
+	{
+		LoadCutsceneName(cutsceneName);
+
+		LoadedCutscenes[cutsceneName].ExportAll(folderPath, IsSMG1);
+	}
+
+	public void ImportCutscene(Cutscene cutscene, bool FromSMG1)
+	{
+		// Archive:  SMG1
+		// Cutscene: SMG1
+		// Or
+		// Archive:  SMG2
+		// Cutscene: SMG2
+
+		// We do nothing since we're importing in the same version
+
+
+		// Archive:  SMG2
+		// Cutscene: SMG1
+		if (!IsSMG1 && FromSMG1)
+		{
+			cutscene.CutsceneName = cutscene.CutsceneName.Replace("demo", "Demo");
+			foreach (Cutscene.Part part in cutscene.Parts)
+			{
+				if (part.ActionEntry != null)
+				{
+					if (part.ActionEntry.ActionType < 11)
+						part.ActionEntry.ActionType++;
+					else if (part.ActionEntry.ActionType == 11)
+						part.ActionEntry.ActionType = 0;
+				}
+
+				if (part.SubPartEntries != null)
+					foreach (SubPart sPart in part.SubPartEntries)
+					{
+						if (sPart.ActionEntry != null)
+						{
+							if (sPart.ActionEntry.ActionType < 11)
+								sPart.ActionEntry.ActionType++;
+							else if (sPart.ActionEntry.ActionType == 11)
+								sPart.ActionEntry.ActionType = 0;
+						}
+					}
+			}
+		}
+
+		// Archive:  SMG1
+		// Cutscene: SMG2
+		if (IsSMG1 && !FromSMG1)
+		{
+			cutscene.CutsceneName = cutscene.CutsceneName.ToLower();
+			foreach (Cutscene.Part part in cutscene.Parts)
+			{
+				if (part.TimeEntry.WaitUserInputFlag > 0)
+					part.TimeEntry.WaitUserInputFlag = 0;
+
+				if (part.ActionEntry != null)
+				{
+					if (part.ActionEntry.ActionType < 11)
+						part.ActionEntry.ActionType++;
+					else if (part.ActionEntry.ActionType == 11)
+						part.ActionEntry.ActionType = 0;
+				}
+
+				if (part.SubPartEntries != null)
+					foreach (SubPart sPart in part.SubPartEntries)
+					{
+						if (sPart.ActionEntry != null)
+						{
+							if (sPart.ActionEntry.ActionType == 0)
+								sPart.ActionEntry.ActionType = 11;
+							else if (sPart.ActionEntry.ActionType < 12)
+								sPart.ActionEntry.ActionType--;
+							else
+								sPart.ActionEntry.ActionType = 0;
+						}
+					}
+			}
+		}
+
+		LoadedCutscenes[cutscene.CutsceneName] = cutscene;
+		CutsceneNames.Add(cutscene.CutsceneName);
 	}
 
 	public void DeleteSelectedCutscene()

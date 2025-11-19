@@ -110,10 +110,12 @@ public partial class MainWindow : Window
 		SaveBtn.IsEnabled = false;
 		SaveAsBtn.IsEnabled = false;
 		ReloadArchiveBtn.IsEnabled = false;
+		ImportBtn.IsEnabled = false;
 
 		ArchiveMenu.IsEnabled = false;
 		DeleteCutsceneBtn.IsEnabled = false;
 		RenameCutsceneBtn.IsEnabled = false;
+		ExportCutsceneBtn.IsEnabled = false;
 
 		CutsceneMenu.IsEnabled = false;
 		SubPartBtn.IsEnabled = false;
@@ -128,10 +130,12 @@ public partial class MainWindow : Window
 		SaveBtn.IsEnabled = true;
 		SaveAsBtn.IsEnabled = true;
 		ReloadArchiveBtn.IsEnabled = true;
+		ImportBtn.IsEnabled = true;
 
 		ArchiveMenu.IsEnabled = true;
 		DeleteCutsceneBtn.IsEnabled = false;
 		RenameCutsceneBtn.IsEnabled = false;
+		ExportCutsceneBtn.IsEnabled = false;
 
 		CutsceneMenu.IsEnabled = false;
 		SubPartBtn.IsEnabled = false;
@@ -146,10 +150,12 @@ public partial class MainWindow : Window
 		SaveBtn.IsEnabled = true;
 		SaveAsBtn.IsEnabled = true;
 		ReloadArchiveBtn.IsEnabled = true;
+		ImportBtn.IsEnabled = true;
 
 		ArchiveMenu.IsEnabled = true;
 		DeleteCutsceneBtn.IsEnabled = true;
 		RenameCutsceneBtn.IsEnabled = true;
+		ExportCutsceneBtn.IsEnabled = true;
 
 		CutsceneMenu.IsEnabled = true;
 		SubPartBtn.IsEnabled = false;
@@ -164,10 +170,12 @@ public partial class MainWindow : Window
 		SaveBtn.IsEnabled = true;
 		SaveAsBtn.IsEnabled = true;
 		ReloadArchiveBtn.IsEnabled = true;
+		ImportBtn.IsEnabled = true;
 
 		ArchiveMenu.IsEnabled = true;
 		DeleteCutsceneBtn.IsEnabled = true;
 		RenameCutsceneBtn.IsEnabled = true;
+		ExportCutsceneBtn.IsEnabled = true;
 
 		CutsceneMenu.IsEnabled = true;
 		SubPartBtn.IsEnabled = true;
@@ -182,10 +190,12 @@ public partial class MainWindow : Window
 		SaveBtn.IsEnabled = true;
 		SaveAsBtn.IsEnabled = true;
 		ReloadArchiveBtn.IsEnabled = true;
+		ImportBtn.IsEnabled = true;
 
 		ArchiveMenu.IsEnabled = true;
 		DeleteCutsceneBtn.IsEnabled = true;
 		RenameCutsceneBtn.IsEnabled = true;
+		ExportCutsceneBtn.IsEnabled = true;
 
 		CutsceneMenu.IsEnabled = true;
 		SubPartBtn.IsEnabled = true;
@@ -242,7 +252,7 @@ public partial class MainWindow : Window
 
 
 	// ============================
-	// Save, SaveAs, Reload & Settings
+	// Save, SaveAs, Import, Reload & Settings
 
 	private void OnClickSave(object? sender, RoutedEventArgs e)
 	{
@@ -252,6 +262,11 @@ public partial class MainWindow : Window
 	private void OnClickSaveAs(object? sender, RoutedEventArgs e)
 	{
 		Ask_SaveAs();
+	}
+
+	private void OnImportCutscenes(object? sender, RoutedEventArgs e)
+	{
+		ImportCutscenesFromFile();
 	}
 
 	private void OnReloadArchive(object? sender, RoutedEventArgs e)
@@ -302,7 +317,7 @@ public partial class MainWindow : Window
 
 
 	// ============================
-	// New, Rename & Delete
+	// New, Rename, Delete & Export
 	// Cutscenes
 
 	private void OnCreateNewCutscene(object? sender, RoutedEventArgs e)
@@ -328,6 +343,16 @@ public partial class MainWindow : Window
 
 		// Delete the cutscene
 		DeleteCutscene(Core.GetArchive().GetSelectedCutsceneName());
+	}
+
+	private void OnExportCutscene(object? sender, RoutedEventArgs e)
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasCutsceneSelected()  || ArchiveUI == null)
+			return;
+
+		// Export the cutscene
+		ExportCutscene(Core.GetArchive().GetSelectedCutsceneName());
 	}
 
 
@@ -817,6 +842,31 @@ public partial class MainWindow : Window
 		}
 	}
 
+	private void OnExportCutsceneContext(object? sender, RoutedEventArgs e)
+	{
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		if (sender != null && sender is MenuItem btnItem)
+		{
+			if (btnItem.Parent!.Parent!.Parent!.Parent! is CutsceneBtn btn)
+			{
+				ExportCutscene(btn.CutsceneName);
+			}
+		}
+	}
+
+	private void OnImportCutscenesContext(object? sender, RoutedEventArgs e)
+	{
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		if (sender != null && sender is MenuItem btnItem)
+		{
+			ImportCutscenesFromFile();
+		}
+	}
+
 	private void OnNewCutsceneContext(object? sender, RoutedEventArgs e)
 	{
 		CreateNewCutscene();
@@ -926,7 +976,7 @@ public partial class MainWindow : Window
 			return null;
 		}
 
-		if (!newCutsceneName.StartsWith("Demo"))
+		if (Core.GetArchive().IsSMG1 ? !newCutsceneName.StartsWith("demo") : !newCutsceneName.StartsWith("Demo"))
 			newCutsceneName = $"Demo{newCutsceneName}";
 
 		// If it's an SMG1 archive, change the name to lowercase
@@ -993,6 +1043,67 @@ public partial class MainWindow : Window
 
 		// Update the status & set the title.
 		StatusText.Text = $"Successfully deleted the cutscene with name '{cutsceneName}'!";
+	}
+
+	private async void ExportCutscene(string cutsceneName)
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		// Ask the user where they want to export the cutscene
+		string? filePath = await MsgBox.AskSaveBCSVFile(StorageProvider, Core.GetArchive().FilePath, cutsceneName);
+		if (filePath == null)
+		{
+			StatusText.Text = "Cutscene export aborted.";
+			return;
+		}
+
+		// Export the cutscene
+		Core.GetArchive().ExportCutscene(cutsceneName, filePath);
+
+		// Update the status & set the title.
+		StatusText.Text = $"Successfully exported the cutscene with name '{cutsceneName}' to '{filePath}'!";
+	}
+
+	private async void ImportCutscenesFromFile()
+	{
+		// Only run this if we have an archive & a cutscene open
+		if (!Core.HasArchiveOpen() || ArchiveUI == null)
+			return;
+
+		// Ask the user where they want to export the cutscene
+		string? filePath = await MsgBox.AskOpenArcFile(StorageProvider);
+		if (filePath == null)
+		{
+			StatusText.Text = "Cutscene import aborted.";
+			return;
+		}
+
+		// Let the user chose the cutscenes to import
+		CutsceneImportDialog importer = new(filePath);
+		await importer.ShowDialog(this);
+
+		// If no cutscenes selected, abort
+		if (importer.Cutscenes.Count < 1)
+		{
+			StatusText.Text = "Cutscene import aborted.";
+			return;
+		}
+
+		// Import the cutscenes
+		string cutsceneNames = "'";
+		foreach (Cutscene cutscene in importer.Cutscenes)
+		{
+			cutsceneNames += cutscene.CutsceneName + "', '";
+			Core.GetArchive().ImportCutscene(cutscene, importer.IsSMG1);
+		}
+		ArchiveUI.LoadCutsceneList(Core.GetArchive().CutsceneNames);
+
+		cutsceneNames = cutsceneNames.Substring(0, cutsceneNames.Length - 2);
+
+		// Update the status & set the title.
+		StatusText.Text = $"Successfully exported the cutscene with name {cutsceneNames} to '{filePath}'!";
 	}
 
 	private async void CreateNewCutscene()

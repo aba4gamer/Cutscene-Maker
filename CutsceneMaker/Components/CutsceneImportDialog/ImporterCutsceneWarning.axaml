@@ -1,0 +1,10 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 x:Class="CutsceneMakerUI.ImporterCutsceneWarning">
+	<Grid ColumnDefinitions="30, *, 20" Margin="13, 5">
+		<CheckBox Grid.Column="0" Name="SelectedCheck" />
+		<TextBlock Grid.Column="1" Name="CutsceneName" VerticalAlignment="Center" />
+		<Image Grid.Column="2" Source="/Assets/import-warning.png" VerticalAlignment="Center" Width="20" Height="20" Name="Warning" />
+	</Grid>
+</UserControl>

@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		SizeToContent="WidthAndHeight"
+		x:Class="CutsceneMaker.CutsceneImportDialog"
+		x:Name="CutsceneImportDialogWindow"
+		Title="Import Cutscenes"
+		Background="#3a3a3a"
+		WindowStartupLocation="CenterOwner"
+		CanResize="False"
+		Focusable="True">
+	<StackPanel Margin="10" Spacing="8" HorizontalAlignment="Stretch">
+		<TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" Text="Select the cutscenes that you'd like to import." />
+		<TextBlock Name="ImpCutscenes" TextWrapping="Wrap" HorizontalAlignment="Center" Text="Selected cutscenes (0): None." MaxWidth="480" Height="90" />
+		<WrapPanel MaxWidth="450" Height="50">
+			<TextBlock Name="WarningSelected" TextWrapping="Wrap" Foreground="#0000">
+				You&apos;ve selected a cutscene that isn&apos;t compatible to port from SMG2 to SMG1, please hover on the
+				<InlineUIContainer BaselineAlignment="Center">
+					<Image Name="WarningSelectedImage" IsVisible="False" Source="/Assets/import-warning.png" Width="20" Height="20" ToolTip.Tip="Like this, but on the cutscene" />
+				</InlineUIContainer>
+				icon for more informations.
+			</TextBlock>
+		</WrapPanel>
+		<DockPanel Background="#363636" Margin="5" Width="500">
+			<StackPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
+				<TextBox Name="SearchBox" Watermark="Search" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="3" />
+				<DockPanel>
+					<Button VerticalAlignment="Center" Click="OnSelectAll" Margin="3" ToolTip.Tip="Selects all the cutscenes in the list">Select All</Button>
+					<Button VerticalAlignment="Center" Click="OnSelectAllViewable" Margin="3" ToolTip.Tip="Selects all the visible cutscenes in the list">Select OnScreen</Button>
+					<Button VerticalAlignment="Center" Click="OnDeselectAll" Margin="3" ToolTip.Tip="Deselects all the cutscenes in the list">Deselect All</Button>
+					<Button VerticalAlignment="Center" Click="OnDeselectAllViewable" Margin="3" ToolTip.Tip="Deselects all the visible cutscenes in the list">Deselect OnScreen</Button>
+				</DockPanel>
+			</StackPanel>
+			<ScrollViewer Height="280">
+				<StackPanel Name="CutsceneList" />
+			</ScrollViewer>
+		</DockPanel>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
+			<Button Name="CancelButton" Content="Cancel" Click="OnCancel" />
+			<Button Name="ImportButton" Content="Import" Click="OnImport" />
+		</StackPanel>
+	</StackPanel>
+</Window>
