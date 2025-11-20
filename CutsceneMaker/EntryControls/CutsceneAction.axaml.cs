@@ -82,6 +82,16 @@ public partial class CutsceneAction : UserControl
 
 				AnimName.AutoCompletion = [];
 
+				// Defaults
+				if (CastNameBox.Main.Text == null && !CastID.Value.HasValue && (MainWindow.Instance!.Core.GetArchive().IsSMG1 ? ActionTypeSMG1.SelectedIndex == -1 : ActionTypeSMG2.SelectedIndex == -1) && PosName.Main.Text == null && AnimName.Main.Text == null)
+				{
+					CastID.Value = -1;
+					if (MainWindow.Instance!.Core.GetArchive().IsSMG1)
+						ActionTypeSMG1.SelectedIndex = 0;
+					else
+						ActionTypeSMG2.SelectedIndex = 1;
+				}
+
 				part.ActionEntry.CastName = CastNameBox.Main.Text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(CastNameBox.Main.Text) ? Program.AutoCompletion.ObjDataTableList[CastNameBox.Main.Text] : CastNameBox.Main.Text : "";
 				part.ActionEntry.CastID = CastID.Value.HasValue ? (int)CastID.Value.Value : -1;
 				part.ActionEntry.ActionType = MainWindow.Instance!.Core.GetArchive().IsSMG1 == true ? ActionTypeSMG1.SelectedIndex : ActionTypeSMG2.SelectedIndex;

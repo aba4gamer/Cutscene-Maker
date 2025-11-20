@@ -62,6 +62,13 @@ public partial class CutsceneWipe : UserControl
 				part.WipeEntry ??= new Abacus.Wipe();
 				SetControlsEnabled(true);
 
+				if (WipeName.Main.Text == null && WipeType.SelectedIndex == -1 && !WipeFrame.Value.HasValue)
+				{
+					WipeName.Main.Text = "Black Fade";
+					WipeType.SelectedIndex = 0;
+					WipeFrame.Value = 60;
+				}
+
 				part.WipeEntry.WipeName = WipeName.Main.Text != null ? WipeTypes.ContainsKey(WipeName.Main.Text) ? WipeTypes[WipeName.Main.Text] : WipeName.Main.Text : "";
 				part.WipeEntry.WipeType = WipeType.SelectedIndex;
 				part.WipeEntry.WipeFrame = WipeFrame.Value.HasValue ? (int)WipeFrame.Value.Value : -1;

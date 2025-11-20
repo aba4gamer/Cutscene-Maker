@@ -133,7 +133,7 @@
 		</Menu>
 
 		<Border DockPanel.Dock="Bottom" VerticalAlignment="Bottom" Padding="5" BorderThickness="0, 1, 0, 0" BorderBrush="White">
-			<TextBlock Name="StatusText" />
+			<TextBlock Name="StatusText" MinHeight="24" />
 		</Border>
 
 

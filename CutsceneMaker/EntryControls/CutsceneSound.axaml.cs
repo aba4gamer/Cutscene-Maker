@@ -32,7 +32,7 @@ public partial class CutsceneSound : UserControl
 		InitializeComponent();
 		BGM.AutoCompletion = Program.AutoCompletion.MusicList;
 		SystemSe.AutoCompletion = SoundEffectsList.PREFIX;
-		ActionSe.AutoCompletion = SoundEffectsList.PREFIX;
+		// ActionSe.AutoCompletion = SoundEffectsList.PREFIX;
 
 		if (part.SoundEntry != null)
 		{
@@ -57,6 +57,11 @@ public partial class CutsceneSound : UserControl
 			{
 				part.SoundEntry ??= new Abacus.Sound();
 				SetControlsEnabled(true);
+
+				if (BGM.Main.Text == null && SystemSe.Main.Text == null && ActionSe.Main.Text == null && ReturnBgm.IsChecked == false && !BgmWipeOutFrame.Value.HasValue && AllSoundStopFrame.IsChecked == false)
+				{
+					BgmWipeOutFrame.Value = -1;
+				}
 
 				part.SoundEntry.Bgm = BGM.Main.Text ?? "";
 				part.SoundEntry.SystemSe = SystemSe.Main.Text ?? string.Empty;
@@ -153,36 +158,38 @@ public partial class CutsceneSound : UserControl
 
 				if (text != null)
 				{
-					if (text.StartsWith(SoundEffectsList.PREFIX[0]))
-						ActionSe.AutoCompletion = SoundEffectsList.SYSTEM;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[1]))
-						ActionSe.AutoCompletion = SoundEffectsList.PLAYER_VOICE;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[2]))
-						ActionSe.AutoCompletion = SoundEffectsList.PLAYER_MOTION;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[3]))
-						ActionSe.AutoCompletion = SoundEffectsList.BOSS_VOICE;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[4]))
-						ActionSe.AutoCompletion = SoundEffectsList.BOSS_MOTION;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[5]))
-						ActionSe.AutoCompletion = SoundEffectsList.OBJECT;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[6]))
-						ActionSe.AutoCompletion = SoundEffectsList.ATMOSPHERE;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[7]))
-						ActionSe.AutoCompletion = SoundEffectsList.DEMO;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[8]))
-						ActionSe.AutoCompletion = SoundEffectsList.ENEMY_VOICE;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[9]))
-						ActionSe.AutoCompletion = SoundEffectsList.ENEMY_MOTION;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[10]))
-						ActionSe.AutoCompletion = SoundEffectsList.SUPPORTER_VOICE;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[11]))
-						ActionSe.AutoCompletion = SoundEffectsList.SUPPORTER_MOTION;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[12]))
-						ActionSe.AutoCompletion = SoundEffectsList.REMIX_SEQ;
-					else if (text.StartsWith(SoundEffectsList.PREFIX[13]))
-						ActionSe.AutoCompletion = SoundEffectsList.HOME_BUTTON_MENU;
-					else
-						ActionSe.AutoCompletion = SoundEffectsList.PREFIX;
+					// ActionSE is NOT what we think it is :eyes:
+
+					// if (text.StartsWith(SoundEffectsList.PREFIX[0]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.SYSTEM;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[1]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.PLAYER_VOICE;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[2]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.PLAYER_MOTION;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[3]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.BOSS_VOICE;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[4]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.BOSS_MOTION;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[5]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.OBJECT;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[6]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.ATMOSPHERE;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[7]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.DEMO;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[8]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.ENEMY_VOICE;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[9]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.ENEMY_MOTION;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[10]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.SUPPORTER_VOICE;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[11]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.SUPPORTER_MOTION;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[12]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.REMIX_SEQ;
+					// else if (text.StartsWith(SoundEffectsList.PREFIX[13]))
+					// 	ActionSe.AutoCompletion = SoundEffectsList.HOME_BUTTON_MENU;
+					// else
+					// 	ActionSe.AutoCompletion = SoundEffectsList.PREFIX;
 				}
 
 				part.SoundEntry!.ActionSe = text ?? string.Empty;

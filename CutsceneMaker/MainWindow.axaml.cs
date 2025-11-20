@@ -1178,7 +1178,7 @@ public partial class MainWindow : Window
 
 		// Add the part
 		Cutscene.Part part = new Cutscene.Part(partName);
-		part.TimeEntry.TotalStep = 40;
+		part.TimeEntry.TotalStep = 60;
 		Core.GetArchive().GetLoadedCutscene().Parts.Add(part);
 
 		// Set selected
@@ -1295,7 +1295,7 @@ public partial class MainWindow : Window
 
 		// Add the sub part
 		SubPart subPart = new SubPart(subPartName);
-		subPart.SubPartTotalStep = 40;
+		subPart.SubPartTotalStep = 60;
 		if (part.SubPartEntries == null)
 			part.SubPartEntries = new List<SubPart>();
 		part.SubPartEntries.Add(subPart);

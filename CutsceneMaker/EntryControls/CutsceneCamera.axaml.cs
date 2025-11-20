@@ -61,6 +61,13 @@ public partial class CutsceneCamera : UserControl
 				part.CameraEntry ??= new Abacus.Camera();
 				SetControlsEnabled(true);
 
+				if (CameraTargetName.Main.Text == null && !CameraTargetCastID.Value.HasValue && AnimCameraName.Main.Text == null && !AnimCameraStartFrame.Value.HasValue && !AnimCameraEndFrame.Value.HasValue && IsContinuous.IsChecked == false)
+				{
+					CameraTargetCastID.Value = -1;
+					AnimCameraStartFrame.Value = -1;
+					AnimCameraEndFrame.Value = -1;
+				}
+
 				part.CameraEntry.CameraTargetName = CameraTargetName.Main.Text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(CameraTargetName.Main.Text) ? Program.AutoCompletion.ObjDataTableList[CameraTargetName.Main.Text] : CameraTargetName.Main.Text : "";
 				part.CameraEntry.CameraTargetCastID = CameraTargetCastID.Value.HasValue ? (int)CameraTargetCastID.Value.Value : -1;
 				part.CameraEntry.AnimCameraName = AnimCameraName.Main.Text ?? string.Empty;
