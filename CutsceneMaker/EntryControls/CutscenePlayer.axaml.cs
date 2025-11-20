@@ -52,6 +52,11 @@ public partial class CutscenePlayer : UserControl
 				part.PlayerEntry ??= new Abacus.Player();
 				SetControlsEnabled(true);
 
+				if (PosName.Main.Text == null && BckName.Main.Text == null && Visible.IsChecked == false)
+				{
+					Visible.IsChecked = true;
+				}
+
 				part.PlayerEntry.PosName = PosName.Main.Text ?? string.Empty;
 				part.PlayerEntry.BckName = BckName.Main.Text ?? string.Empty;
 				part.PlayerEntry.Visible = Visible.IsChecked == true ? 1 : 0;
