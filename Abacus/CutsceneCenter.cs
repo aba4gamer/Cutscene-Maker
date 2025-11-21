@@ -238,7 +238,12 @@ public class Cutscene
 			if (rarc.Root![$"{DemoName.ToLower()}/{DemoName.ToLower()}{DemoType.ToLower()}.bcsv"] is ArchiveFile af)
 				Result.Load((MemoryStream)af);
 			else
-				LoadBCSV(Path.Combine("Templates", $"DemoTemplate{DemoType}.bcsv"), Result);
+			{
+				if (DemoType.ToLower() == "Time")
+					LoadBCSV(Path.Combine("Templates", $"DemoSMG1TemplateTime.bcsv"), Result);
+				else
+					LoadBCSV(Path.Combine("Templates", $"DemoTemplate{DemoType}.bcsv"), Result);
+			}
 		}
     }
 
@@ -515,8 +520,9 @@ public class Cutscene
 	/// <returns></returns>
 	public static Cutscene NewCutsceneFromTemplate(string CutsceneName)
 	{
-		Cutscene cut = new(CutsceneName);
+		Cutscene cut = new("DemoTemplate");
 		cut.LoadAll("Templates");
+		cut.CutsceneName = CutsceneName;
 		return cut;
 	}
 	/// <summary>
