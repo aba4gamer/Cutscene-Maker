@@ -543,7 +543,7 @@ public partial class MainWindow : Window
 		Core.LoadArchive(archiveWrapper.GetResult());
 
 		// Load other archives for auto completion
-		Program.AutoCompletion.LoadRarcs(arcPathName);
+		Program.AutoCompletion.LoadRarcs(arcPathName, Core.GetArchive().IsSMG1);
 		IsNewArchive = false;
 
 		// Update the menu buttons & update the UI

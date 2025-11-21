@@ -36,7 +36,7 @@ public partial class CutsceneCamera : UserControl
 		{
 			if (Program.AutoCompletion.ObjDataTableList.ContainsValue(part.CameraEntry.CameraTargetName) && Program.AutoCompletion.LoadedCanmObject != Program.AutoCompletion.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName])
 			{
-				Program.AutoCompletion.LoadRarc_ObjectCanm(Program.AutoCompletion.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName]);
+				Program.AutoCompletion.LoadRarc_ObjectCanm(Program.AutoCompletion.ObjDataTableList.Inverse[part.CameraEntry.CameraTargetName], MainWindow.Instance!.Core.GetArchive().IsSMG1);
 				AnimCameraName.AutoCompletion = Program.AutoCompletion.ObjectCanmList;
 			}
 
@@ -109,7 +109,7 @@ public partial class CutsceneCamera : UserControl
 				if ((text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(text) ? Program.AutoCompletion.ObjDataTableList[text] : text : "") != part.CameraEntry!.CameraTargetName)
 					MainWindow.Instance!.AddEditedCutscene();
 
-				Program.AutoCompletion.LoadRarc_ObjectCanm(text);
+				Program.AutoCompletion.LoadRarc_ObjectCanm(text, MainWindow.Instance!.Core.GetArchive().IsSMG1);
 				AnimCameraName.AutoCompletion = Program.AutoCompletion.ObjectCanmList;
 
 				part.CameraEntry!.CameraTargetName = text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(text) ? Program.AutoCompletion.ObjDataTableList[text] : text : "";

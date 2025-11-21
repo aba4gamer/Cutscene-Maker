@@ -52,7 +52,7 @@ public partial class CutsceneAction : UserControl
 		{
 			if (Program.AutoCompletion.ObjDataTableList.ContainsValue(part.ActionEntry.CastName) && Program.AutoCompletion.LoadedAnimObject != Program.AutoCompletion.ObjDataTableList.Inverse[part.ActionEntry.CastName])
 			{
-				Program.AutoCompletion.LoadRarc_ObjectAnim(Program.AutoCompletion.ObjDataTableList.Inverse[part.ActionEntry.CastName]);
+				Program.AutoCompletion.LoadRarc_ObjectAnim(Program.AutoCompletion.ObjDataTableList.Inverse[part.ActionEntry.CastName], MainWindow.Instance!.Core.GetArchive().IsSMG1);
 				AnimName.AutoCompletion = Program.AutoCompletion.ObjectAnimList;
 			}
 
@@ -134,7 +134,7 @@ public partial class CutsceneAction : UserControl
 				if ((text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(text) ? Program.AutoCompletion.ObjDataTableList[text] : text : "") != part.ActionEntry!.CastName)
 					MainWindow.Instance!.AddEditedCutscene();
 
-				Program.AutoCompletion.LoadRarc_ObjectAnim(text);
+				Program.AutoCompletion.LoadRarc_ObjectAnim(text, MainWindow.Instance!.Core.GetArchive().IsSMG1);
 				AnimName.AutoCompletion = Program.AutoCompletion.ObjectAnimList;
 
 				part.ActionEntry!.CastName = text != null ? Program.AutoCompletion.ObjDataTableList.ContainsKey(text) ? Program.AutoCompletion.ObjDataTableList[text] : text : "";

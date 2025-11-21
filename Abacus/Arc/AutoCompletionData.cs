@@ -40,9 +40,9 @@ public class AutoCompletionData
 
 	}
 
-	public RARC? TryLoadRarcYAZ0(string rpath)
+	public RARC? TryLoadRarcYAZ0(string rpath, bool IsSMG1)
 	{
-		string path = !rpath.StartsWith(".") ? Path.GetFullPath(Path.Combine(GamePath, rpath)) : Path.GetFullPath(rpath);
+		string path = !rpath.StartsWith(".") ? Path.GetFullPath(Path.Combine(IsSMG1 ? ".." : "", GamePath, rpath)) : Path.GetFullPath(IsSMG1 ? ".." : "", rpath);
 		if (!File.Exists(path) && VanillaGamePath.Trim() != "")
 		{
 			Console.WriteLine($"[WARNING] [AutoCompletionLoader] Can't find file: '{path}', trying with the base game...");
@@ -75,7 +75,7 @@ public class AutoCompletionData
 		return rarc;
 	}
 
-	public void LoadRarcs(string path)
+	public void LoadRarcs(string path, bool IsSMG1)
 	{
 		// Console.WriteLine(BCSV.StringToHash_JGadget("PosName"));
 		string gamePath = Path.Combine(path, "..", "..", "..");
@@ -88,25 +88,30 @@ public class AutoCompletionData
 		string productMapObjDataTablePath = Path.Combine("ObjectData", "ProductMapObjDataTable.arc");
 		string multiBgmInfoPath = Path.Combine("AudioRes", "Info", "MultiBgmInfo.arc");
 		string marioAnimePath = Path.Combine("ObjectData", "MarioAnime.arc");
-		string galaxyMapPath = Path.Combine("StageData", galaxyName, galaxyName + "Map.arc");
+		string galaxyMapPath = "";
+		if (!IsSMG1)
+			galaxyMapPath = Path.Combine("StageData", galaxyName, galaxyName + "Map.arc");
 
 		GamePath = gamePath;
 		GalaxyPath = galaxyPath;
 
-		LoadRarc_ObjDataTable(objDataTablePath);
-		LoadRarc_ProductMapObjDataTable(productMapObjDataTablePath);
-		LoadRarc_MultiBgmInfo(multiBgmInfoPath);
-		LoadRarc_MarioAnime(marioAnimePath);
-		if (File.Exists(galaxyMapPath))
-			LoadRarc_GeneralPos(galaxyMapPath);
+		LoadRarc_ObjDataTable(objDataTablePath, IsSMG1);
+		LoadRarc_ProductMapObjDataTable(productMapObjDataTablePath, IsSMG1);
+		LoadRarc_MultiBgmInfo(multiBgmInfoPath, IsSMG1);
+		LoadRarc_MarioAnime(marioAnimePath, IsSMG1);
+		if (!IsSMG1)
+		{
+			if (File.Exists(galaxyMapPath))
+				LoadRarc_GeneralPos(galaxyMapPath);
+		}
 	}
 
-	public void LoadRarc_ObjDataTable(string path)
+	public void LoadRarc_ObjDataTable(string path, bool IsSMG1)
 	{
 		ObjDataTableList = new();
 		ObjDataTableEnglishNames = [];
 
-		RARC? objDataTable = TryLoadRarcYAZ0(path) ?? TryLoadRarcYAZ0("./Templates/ObjNameTable.arc");
+		RARC? objDataTable = TryLoadRarcYAZ0(path, IsSMG1) ?? TryLoadRarcYAZ0("./Templates/ObjNameTable.arc", false);
 		if (objDataTable == null)
 			return;
 
@@ -140,11 +145,11 @@ public class AutoCompletionData
 		}
 	}
 
-	public void LoadRarc_ProductMapObjDataTable(string path)
+	public void LoadRarc_ProductMapObjDataTable(string path, bool IsSMG1)
 	{
 		ProductMapObjDataTableList = new();
 
-		RARC? ProductMapObjDataTable = TryLoadRarcYAZ0(path) ?? TryLoadRarcYAZ0("./Templates/ProductMapObjDataTable.arc");
+		RARC? ProductMapObjDataTable = TryLoadRarcYAZ0(path, IsSMG1) ?? TryLoadRarcYAZ0("./Templates/ProductMapObjDataTable.arc", false);
 		if (ProductMapObjDataTable == null)
 			return;
 
@@ -164,11 +169,11 @@ public class AutoCompletionData
 		}
 	}
 
-	public void LoadRarc_MultiBgmInfo(string path)
+	public void LoadRarc_MultiBgmInfo(string path, bool IsSMG1)
 	{
 		MusicList = [];
 
-		RARC? MultiBgmInfo = TryLoadRarcYAZ0(path) ?? TryLoadRarcYAZ0("./Templates/MultiBgmInfo.arc");
+		RARC? MultiBgmInfo = TryLoadRarcYAZ0(path, IsSMG1) ?? TryLoadRarcYAZ0("./Templates/MultiBgmInfo.arc", false);
 		if (MultiBgmInfo == null)
 			return;
 
@@ -190,11 +195,11 @@ public class AutoCompletionData
 		}
 	}
 
-	public void LoadRarc_MarioAnime(string path)
+	public void LoadRarc_MarioAnime(string path, bool IsSMG1)
 	{
 		MarioAnimeList = [];
 
-		RARC? MarioAnime = TryLoadRarcYAZ0(path) ?? TryLoadRarcYAZ0("./Templates/MarioAnime.arc");
+		RARC? MarioAnime = TryLoadRarcYAZ0(path, IsSMG1) ?? TryLoadRarcYAZ0("./Templates/MarioAnime.arc", false);
 		if (MarioAnime == null)
 			return;
 
@@ -211,7 +216,7 @@ public class AutoCompletionData
 		}
 	}
 
-	public void LoadRarc_ObjectAnim(string? objectName)
+	public void LoadRarc_ObjectAnim(string? objectName, bool IsSMG1)
 	{
 		ObjectAnimList = [];
 
@@ -224,7 +229,7 @@ public class AutoCompletionData
 		if (!File.Exists(path))
 			return;
 
-		RARC? ObjectArc = TryLoadRarcYAZ0(path);
+		RARC? ObjectArc = TryLoadRarcYAZ0(path, IsSMG1);
 		if (ObjectArc == null)
 			return;
 
@@ -245,7 +250,7 @@ public class AutoCompletionData
 		if (!File.Exists(animPath))
 			return;
 
-		RARC? ObjectAnim = TryLoadRarcYAZ0(animPath);
+		RARC? ObjectAnim = TryLoadRarcYAZ0(animPath, IsSMG1);
 		if (ObjectAnim == null)
 			return;
 
@@ -309,7 +314,7 @@ public class AutoCompletionData
 	{
 		GeneralPosList = [];
 
-		RARC? map = TryLoadRarcYAZ0(path);
+		RARC? map = TryLoadRarcYAZ0(path, false);
 		if (map == null)
 			return;
 
@@ -317,7 +322,7 @@ public class AutoCompletionData
 		LoadGeneralPos_LoadAllBCSVFromRarc(map);
 	}
 
-	public void LoadRarc_ObjectCanm(string? objectName)
+	public void LoadRarc_ObjectCanm(string? objectName, bool IsSMG1)
 	{
 		ObjectCanmList = [];
 
@@ -330,7 +335,7 @@ public class AutoCompletionData
 		if (!File.Exists(path))
 			return;
 
-		RARC? ObjectArc = TryLoadRarcYAZ0(path);
+		RARC? ObjectArc = TryLoadRarcYAZ0(path, IsSMG1);
 		if (ObjectArc == null)
 			return;
 
@@ -351,7 +356,7 @@ public class AutoCompletionData
 		if (!File.Exists(animPath))
 			return;
 
-		RARC? ObjectAnim = TryLoadRarcYAZ0(animPath);
+		RARC? ObjectAnim = TryLoadRarcYAZ0(animPath, IsSMG1);
 		if (ObjectAnim == null)
 			return;
 
