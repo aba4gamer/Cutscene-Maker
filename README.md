@@ -30,10 +30,11 @@ README in progress. If you can't run the app install .NET 9 but I think actually
 * From **Action:** `CastName` (**yes**), `ActionType` (**yes**), `PosName` (**yes**), `AnimName` (**yes**[^1]);
 * From **Player:** `PosName` (**yes**) `BckName` (**yes**);
 * From **Camera:** `CameraTargetName` (**yes**), `AnimCameraName` (**yes**[^1]);
-* From **Sound:** `Bgm` (**yes**), `SystemSe` (**yes**), `ActionSe` (**yes**);
+* From **Sound:** `Bgm` (**yes**), `SystemSe` (**yes**), `ActionSe` (**no**[^2]);
 * From **Wipe:** `WipeName` (**yes**), `WipeType` (**yes**);
 
 [^1]: Antonio225 still didn't understand how to convert ObjNameTable english entries to link to **.arc**s filenames so... Support for it might not work properly.
+[^2]: We figured out that `SystemSe` and `ActionSe` are not the same. We're maybe going to add it in 2.2.0 once we know more about `ActionSe` and how it works.
 
 ## Building
 To build use:
