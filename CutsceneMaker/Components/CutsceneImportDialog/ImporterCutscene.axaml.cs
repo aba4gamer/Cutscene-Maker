@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using Avalonia;
+using Avalonia.Input;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
@@ -20,5 +21,11 @@ public partial class ImporterCutscene : UserControl
 	{
 		InitializeComponent();
 		CutsceneName.Text = name;
+	}
+
+	public void GridClick(object sender, PointerPressedEventArgs e)
+	{
+		if (e.Properties.IsLeftButtonPressed)
+			SelectedCheck.IsChecked = !SelectedCheck.IsChecked;
 	}
 }
