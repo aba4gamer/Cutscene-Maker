@@ -42,7 +42,13 @@ public class AutoCompletionData
 
 	public RARC? TryLoadRarcYAZ0(string rpath, bool IsSMG1)
 	{
-		string path = !rpath.StartsWith(".") ? Path.GetFullPath(Path.Combine(IsSMG1 ? ".." : "", GamePath, rpath)) : Path.GetFullPath(IsSMG1 ? ".." : "", rpath);
+		Console.WriteLine(rpath);
+		string path = "";
+		if (!rpath.StartsWith("."))
+			path = Path.GetFullPath(Path.Combine(IsSMG1 ? ".." : "", GamePath, rpath));
+		else
+			path = Path.GetFullPath(Path.Combine(IsSMG1 ? ".." : "", rpath));
+
 		if (!File.Exists(path) && VanillaGamePath.Trim() != "")
 		{
 			Console.WriteLine($"[WARNING] [AutoCompletionLoader] Can't find file: '{path}', trying with the base game...");
