@@ -93,9 +93,10 @@ class MsgBox
 
 	public static async Task<string?> AskOpenImportArcBCSVFile(IStorageProvider sp)
 	{
+		FilePickerFileType arc_bcsv = new("*.arc/*Time.bcsv (Super Mario Galaxy Cutscene)") { Patterns = ["*.arc", "*Time.bcsv", "*time.bcsv"] };
 		FilePickerFileType arc = new("*.arc (RARC Revolution Archive)") { Patterns = ["*.arc"] };
-		FilePickerFileType bcsv = new("*.bcsv (Binary Comma Separated Values)") { Patterns = ["*Time.bcsv"] };
-		IReadOnlyList<IStorageFile> filePaths = await sp.OpenFilePickerAsync(new FilePickerOpenOptions { Title = "Select a Demo.arc/Time.bcsv file to import", FileTypeFilter = [arc, bcsv], AllowMultiple = false });
+		FilePickerFileType bcsv = new("*.bcsv (Binary Comma Separated Values)") { Patterns = ["*Time.bcsv", "*time.bcsv"] };
+		IReadOnlyList<IStorageFile> filePaths = await sp.OpenFilePickerAsync(new FilePickerOpenOptions { Title = "Select a Demo.arc/Time.bcsv file to import", FileTypeFilter = [arc_bcsv, arc, bcsv], AllowMultiple = false });
 
 		if (filePaths == null || filePaths.Count < 1) return null;
 		string? localPath = filePaths[0].TryGetLocalPath();

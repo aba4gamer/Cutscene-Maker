@@ -42,7 +42,6 @@ public class AutoCompletionData
 
 	public RARC? TryLoadRarcYAZ0(string rpath, bool IsSMG1)
 	{
-		Console.WriteLine(rpath);
 		string path = "";
 		if (!rpath.StartsWith("."))
 			path = Path.GetFullPath(Path.Combine(IsSMG1 ? ".." : "", GamePath, rpath));
