@@ -12,22 +12,19 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup .NET 9 (For Abacus)
+      - name: Setup .NET 10
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.0
+          dotnet-version: 10.0
 
       - name: Get Hack.io libraries
         run: git clone https://github.com/SuperHackio/Hack.io
-
-      - name: Build Libraries
-        run: |
-          dotnet build Abacus/Abacus.csproj
+          
 
       - name: Setup .NET 10 (For CutsceneMaker)
         uses: actions/setup-dotnet@v4
@@ -39,6 +36,7 @@ jobs:
           dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r win-x64 /p:PublishSingleFile=true --self-contained true -o "${{ github.workspace }}\CutsceneMaker-win-x64"
           dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r linux-x64 /p:PublishSingleFile=true --self-contained true -o "${{ github.workspace }}\CutsceneMaker-linux-x64"
           dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r osx-x64 /p:PublishSingleFile=true --self-contained true -o "${{ github.workspace }}\CutsceneMaker-osx-x64"
+      
       - name: Compress
         shell: pwsh
         run: |
