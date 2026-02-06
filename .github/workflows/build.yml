@@ -28,8 +28,7 @@ jobs:
       - name: Publish
         run: |
           dotnet build Abacus/Abacus.csproj
-          dotnet build Hack.io/Hack.io/Hack.io.csproj
-          dotnet build Hack.io/Hack.io.BCSV/Hack.io.BCSV.csproj
+          dotnet build CutsceneMaker/CutsceneMaker.csproj
           dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r win-x64 /p:PublishSingleFile=true --self-contained true -o "${{ github.workspace }}\CutsceneMaker-win-x64"
           dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r linux-x64 /p:PublishSingleFile=true --self-contained true -o "${{ github.workspace }}\CutsceneMaker-linux-x64"
           dotnet publish CutsceneMaker/CutsceneMaker.csproj -c Release -r osx-x64 /p:PublishSingleFile=true --self-contained true -o "${{ github.workspace }}\CutsceneMaker-osx-x64"
