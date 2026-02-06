@@ -1,6 +1,6 @@
 # Custcene Maker
-Tool that helps you making cutscene for Super Mario Galaxy 2.
-README in progress. If you can't run the app install .NET 9 but I think actually it's not mandatory.
+Tool that helps you making cutscene for Super Mario Galaxy 1 & 2.
+README in progress. If you can't run the app install .NET 10 but I think actually it's not mandatory.
 
 ## To do:
 

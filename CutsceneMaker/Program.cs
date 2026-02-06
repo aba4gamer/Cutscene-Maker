@@ -12,7 +12,7 @@ namespace CutsceneMaker;
 
 internal class Program
 {
-	public static string VERSION = "2.1.0";
+	public static string VERSION = "2.1.1";
 	public static AutoCompletionData AutoCompletion = new();
 
 	// Initialization code. Don't use any Avalonia, third-party APIs or any
