@@ -36,12 +36,14 @@ class MsgBox
 
 	public static async Task<string?> AskSaveArcFile(IStorageProvider sp, string? folderPath)
 	{
+		FilePickerFileType ff = new("*.arc (RARC Revolution Archive)") { Patterns = ["*.arc"] };
 		IStorageFile? file = await sp.SaveFilePickerAsync(new FilePickerSaveOptions
 		{
 			Title = "Save Demo .arc file",
 			SuggestedFileName = folderPath,
 			DefaultExtension = ".arc",
-			ShowOverwritePrompt = true
+			ShowOverwritePrompt = true,
+			FileTypeChoices = [ff]
 		});
 
 		if (file == null)
