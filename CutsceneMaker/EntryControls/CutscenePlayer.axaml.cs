@@ -37,7 +37,7 @@ public partial class CutscenePlayer : UserControl
 			IsPlayerEnabled.IsChecked = true;
 			PosName.Main.Text = part.PlayerEntry.PosName;
 			BckName.Main.Text = part.PlayerEntry.BckName;
-			Visible.IsChecked = part.PlayerEntry.Visible == 1;
+			Visible.SelectedIndex = part.PlayerEntry.Visible + 1;
 
 			SubscribeToChanges(part);
 		}
@@ -52,14 +52,14 @@ public partial class CutscenePlayer : UserControl
 				part.PlayerEntry ??= new Abacus.Player();
 				SetControlsEnabled(true);
 
-				if (PosName.Main.Text == null && BckName.Main.Text == null && Visible.IsChecked == false)
+				if (PosName.Main.Text == null && BckName.Main.Text == null && Visible.SelectedIndex == -1)
 				{
-					Visible.IsChecked = true;
+					Visible.SelectedIndex = 0;
 				}
 
 				part.PlayerEntry.PosName = PosName.Main.Text ?? string.Empty;
 				part.PlayerEntry.BckName = BckName.Main.Text ?? string.Empty;
-				part.PlayerEntry.Visible = Visible.IsChecked == true ? 1 : 0;
+				part.PlayerEntry.Visible = Visible.SelectedIndex - 1;
 
 				SubscribeToChanges(part);
 			}
@@ -107,13 +107,14 @@ public partial class CutscenePlayer : UserControl
 				PlayerEntry.BckName = text ?? "";
 			});
 
-		_visibleSubscription = Visible.GetObservable(CheckBox.IsCheckedProperty)
-			.Subscribe(isChecked =>
+		_visibleSubscription = Visible.GetObservable(ComboBox.SelectedIndexProperty)
+			.Subscribe(index =>
 			{
-				if (isChecked != (PlayerEntry.Visible != 0))
+				index--; // The first index is "0" but we need to start at "-1"
+				if (index != PlayerEntry.Visible)
 					MainWindow.Instance!.AddEditedCutscene();
 
-				PlayerEntry.Visible = isChecked == true ? 1 : 0;
+				PlayerEntry.Visible = index;
 			});
 	}
 

@@ -620,7 +620,7 @@ public class Player
 {
 	public string PosName = "0";
 	public string BckName = "0";
-	public int Visible = 0;
+	public int Visible = -1;
 	public BCSV.Entry CreateEntryAndSave(string PartName)
 	{
 		BCSV.Entry entry = new();

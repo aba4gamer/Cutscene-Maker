@@ -12,7 +12,11 @@
 		<TextBlock Text="BckName" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<views:AutoTextBox Name="BckName" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
-		<TextBlock Text="Visible" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<CheckBox Name="Visible" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
+		<TextBlock Text="Visibility" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
+		<ComboBox Name="Visible" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5">
+			<ComboBoxItem ToolTip.Tip="If the previous part has the value set to &quot;Visible&quot; then Mario will stay visible on this part too.&#10;If the previous part is set to &quot;Invisible&quot; then Mario will stay invisible.&#10;&#10;If there are no previous parts, Mario stays visible.">Unchanged</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Makes Mario visible">Visible</ComboBoxItem>
+			<ComboBoxItem ToolTip.Tip="Makes Mario invisible">Invisible</ComboBoxItem>
+		</ComboBox>
 	</Grid>
 </UserControl>
