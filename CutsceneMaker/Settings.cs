@@ -9,7 +9,7 @@ namespace CutsceneMaker;
 
 public class Settings
 {
-	private readonly string FILE_PATH = "./settings.toml";
+	private readonly string FILE_PATH = $"{AppContext.BaseDirectory}/settings.toml";
 
 	public string? VanillaGamePath { get; set; }
 
