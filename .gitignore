@@ -4,6 +4,7 @@
 Test/
 CutsceneMaker/Templates/
 CutsceneMaker/settings.toml
+CutsceneMaker/build/
 
 **/bin/
 **/dbg/
