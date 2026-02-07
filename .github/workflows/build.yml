@@ -22,8 +22,8 @@ jobs:
         with:
           dotnet-version: 10.0.100
 
-      - name: Get Hack.io libraries
-        run: git clone https://github.com/SuperHackio/Hack.io
+      # - name: Get Hack.io libraries
+      #   run: git clone https://github.com/SuperHackio/Hack.io
       
       - name: Publish
         run: |
