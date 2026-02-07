@@ -249,14 +249,14 @@ public class Cutscene
 
     protected static void LoadBCSV(string filePath, BCSV bcsv)
 	{
-		StreamUtil.SetEndianBig(); // StreamUtil my beloved. This saved me from manually reverse every byte.
+		StreamUtil.PushEndianBig(); // StreamUtil my beloved. This saved me from manually reverse every byte.
 		using FileStream stream = File.OpenRead(filePath);
 		bcsv.Load(stream);
 	}
 
 	protected static void SaveBCSV(string filePath, BCSV bcsv)
 	{
-		StreamUtil.SetEndianBig();
+		StreamUtil.PushEndianBig();
 		using FileStream stream = File.Create(filePath);
 		bcsv.Save(stream);
 	}

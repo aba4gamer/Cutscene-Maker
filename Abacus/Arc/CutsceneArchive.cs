@@ -73,7 +73,7 @@ public class CutsceneArchive {
 	{
 		try
 		{
-			StreamUtil.SetEndianBig();
+			StreamUtil.PushEndianBig();
 			if (FileUtil.LoadFileWithDecompression(path, ca._rarc.Load, [(YAZ0.Check, YAZ0.Decompress)]) == -1)
 			{
 				ca.IsYazCompressed = false;
@@ -387,13 +387,13 @@ public class CutsceneArchive {
 
 		_rarc.KeepFileIDsSynced = true;
 
-		StreamUtil.SetEndianBig();
+		StreamUtil.PushEndianBig();
 		FileStream stream = File.OpenWrite(FilePath);
 		_rarc.Save(stream);
 		stream.Close();
 
 		byte[] savedArc = File.ReadAllBytes(FilePath);
-		byte[] compressedArc = YAZ0.Compress(savedArc);
+		byte[] compressedArc = YAZ0.Compress_Default(savedArc);
 		File.WriteAllBytes(FilePath, compressedArc);
 	}
 
@@ -406,13 +406,13 @@ public class CutsceneArchive {
 
 		_rarc.KeepFileIDsSynced = true;
 
-		StreamUtil.SetEndianBig();
+		StreamUtil.PushEndianBig();
 		FileStream stream = File.OpenWrite(path);
 		_rarc.Save(stream);
 		stream.Close();
 
 		byte[] savedArc = File.ReadAllBytes(path);
-		byte[] compressedArc = YAZ0.Compress(savedArc);
+		byte[] compressedArc = YAZ0.Compress_Default(savedArc);
 		File.WriteAllBytes(path, compressedArc);
 
 		FilePath = path;

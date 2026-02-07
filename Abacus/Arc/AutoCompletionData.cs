@@ -63,7 +63,7 @@ public class AutoCompletionData
 		RARC rarc = new();
 		try
 		{
-			StreamUtil.SetEndianBig();
+			StreamUtil.PushEndianBig();
 			if (FileUtil.LoadFileWithDecompression(path, rarc.Load, [(YAZ0.Check, YAZ0.Decompress)]) == -1)
 			{
 				FileStream stream = File.OpenRead(path);
