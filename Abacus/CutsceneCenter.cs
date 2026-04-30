@@ -226,6 +226,7 @@ public class Cutscene
 
     protected static void LoadOrDefault(Archive rarc, bool IsSMG1, string DemoName, string DemoType, BCSV Result)
     {
+		StreamUtil.PushEndianBig();
 		if (!IsSMG1)
 		{
 			if (rarc[$"Stage/csv/{DemoName}{DemoType}.bcsv"] is ArchiveFile af)
@@ -299,6 +300,7 @@ public class Cutscene
 
 	private void WriteBCSVs(bool IsSMG1)
 	{
+
 		TimeBCSV.Clear();
 		SubPartBCSV.Clear();
 		PlayerBCSV.Clear();
@@ -373,6 +375,7 @@ public class Cutscene
 
 	public void SaveAll(RARC rarc, bool IsSMG1)
 	{
+		StreamUtil.PushEndianBig();
 		WriteBCSVs(IsSMG1);
 
 		try
