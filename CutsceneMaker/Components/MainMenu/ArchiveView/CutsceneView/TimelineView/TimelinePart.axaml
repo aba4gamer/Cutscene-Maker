@@ -8,7 +8,7 @@
 		<Grid Name="Grid" RowDefinitions="0.5*,0.5*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3,0,0,3">
 			<Label Grid.Row="0" Name="NameLabel" VerticalAlignment="Top" />
 			<ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch">
-				<StackPanel  Spacing="3" Orientation="Horizontal" VerticalAlignment="Bottom">
+				<StackPanel Spacing="3" Orientation="Horizontal" VerticalAlignment="Bottom">
 					<Image Name="PlayerIcon" Source="/Assets/timeline/player.png" Width="14" Height="14" ToolTip.Tip="Player Enabled" />
 					<Image Name="ActionIcon" Source="/Assets/timeline/action.png" Width="14" Height="14" ToolTip.Tip="Action Enabled" />
 					<Image Name="CameraIcon" Source="/Assets/timeline/camera.png" Width="14" Height="14" ToolTip.Tip="Camera Enabled" />

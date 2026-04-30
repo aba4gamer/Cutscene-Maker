@@ -142,8 +142,11 @@ public partial class TimelineView : UserControl
 		if (SelectedTimelinePart == null)
 			return;
 
-		if (MainWindow.Instance!.Core.HasSubPartSelected() && SelectedTimelineSubPart != null)
-			SelectedTimelineSubPart.ChangePartEnabledIcons(part);
+		if (MainWindow.Instance!.Core.HasSubPartSelected())
+		{
+			if (SelectedTimelineSubPart != null)
+				SelectedTimelineSubPart.ChangePartEnabledIcons(part);
+		}
 		else
 			SelectedTimelinePart.ChangePartEnabledIcons(part);
 	}
