@@ -27,7 +27,7 @@ public partial class CutsceneNameDialog : Window
 		KeyDown += OnKeyDown;
 	}
 
-	public CutsceneNameDialog(string title, string body, string? watermark, string? defaultName, List<string>? disabledNames, string? disabledNameMessage)
+	public CutsceneNameDialog(string title, string body, string? placeholderText, string? defaultName, List<string>? disabledNames, string? disabledNameMessage)
 	{
 		InitializeComponent();
 		KeyDown += OnKeyDown;
@@ -35,7 +35,7 @@ public partial class CutsceneNameDialog : Window
 		Title = title;
 		Body.Text = body;
 		CutsceneName = NameBox.Text = defaultName;
-		NameBox.Watermark = watermark;
+		NameBox.PlaceholderText = placeholderText;
 
 		DisabledName.Foreground = Brush.Parse("#0000");
 		if (disabledNameMessage != null)

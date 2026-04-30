@@ -13,7 +13,7 @@
 	<StackPanel Margin="10" Spacing="8">
 
 		<TextBlock Name="Body" TextWrapping="Wrap"/>
-		<TextBox Name="NameBox" Watermark="Ex: DemoMyCoolCutscene"/>
+		<TextBox Name="NameBox" PlaceholderText="Ex: DemoMyCoolCutscene"/>
 		<TextBlock Name="DisabledName" Foreground="#ab0404" TextWrapping="Wrap" />
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
 			<Button Name="CancelButton" Content="Cancel" Click="OnCancel" />

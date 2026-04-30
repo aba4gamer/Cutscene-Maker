@@ -23,7 +23,7 @@
 		</WrapPanel>
 		<DockPanel Background="#363636" Margin="5" Width="500">
 			<StackPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
-				<TextBox Name="SearchBox" Watermark="Search" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="3" />
+				<TextBox Name="SearchBox" PlaceholderText="Search" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="3" />
 				<DockPanel>
 					<Button VerticalAlignment="Center" Click="OnSelectAll" Margin="3" ToolTip.Tip="Selects all the cutscenes in the list">Select All</Button>
 					<Button VerticalAlignment="Center" Click="OnSelectAllViewable" Margin="3" ToolTip.Tip="Selects all the visible cutscenes in the list">Select OnScreen</Button>

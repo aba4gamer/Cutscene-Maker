@@ -10,7 +10,7 @@
 	<Grid Margin="6" RowDefinitions="1*, *">
 		<TextBlock Text="Base Game Path" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Grid.Row="0"/>
 		<Grid ColumnDefinitions="*, 78" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-			<TextBox Grid.Column="0" Name="BaseGamePathBox" HorizontalAlignment="Stretch" VerticalAlignment="Center" ToolTip.Tip="The program will use ObjNameTable.arc as a reference" Watermark="C:\I\am\a\cool\base\path\SMG2\DATA\files\"/>
+			<TextBox Grid.Column="0" Name="BaseGamePathBox" HorizontalAlignment="Stretch" VerticalAlignment="Center" ToolTip.Tip="The program will use ObjNameTable.arc as a reference" PlaceholderText="C:\I\am\a\cool\base\path\SMG2\DATA\files\"/>
 			<Button Grid.Column="1" Name="BrowseBaseGamePathBtn" Content="Browse..." HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Click="OnBrowse"/>
 		</Grid>
 		<TextBlock Grid.Row="1" Name="PathValidatorBlock"/>
