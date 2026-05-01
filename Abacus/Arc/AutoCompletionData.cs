@@ -221,18 +221,11 @@ public class AutoCompletionData
 		}
 	}
 
-	public void LoadRarc_ObjectAnim(string? objectName, bool IsSMG1)
+	private void LoadRarc_ObjectAnim_Internal(string? objectName, bool IsSMG1)
 	{
 		ObjectAnimList = [];
 
-		if (objectName == null)
-			return;
-
-		string path = Path.Combine(GamePath, "ObjectData", objectName + ".arc");
-		string animPath = Path.Combine(GamePath, "ObjectData", objectName + "Anim.arc");
-
-		if (!File.Exists(path))
-			return;
+		string path = Path.Combine("ObjectData", objectName + ".arc");
 
 		RARC? ObjectArc = TryLoadRarcYAZ0(path, IsSMG1);
 		if (ObjectArc == null)
@@ -249,27 +242,31 @@ public class AutoCompletionData
 				}
 			}
 		}
+	}
 
+	public void LoadRarc_ObjectAnim(string? objectName, bool IsSMG1)
+	{
+		ObjectAnimList = [];
+		Console.WriteLine($"[AutoCompletionLoader: ObjectAnimList]: Loading '{objectName}' archive...");
 
-		LoadedAnimObject = objectName;
-		if (!File.Exists(animPath))
-			return;
-
-		RARC? ObjectAnim = TryLoadRarcYAZ0(animPath, IsSMG1);
-		if (ObjectAnim == null)
-			return;
-
-		foreach (string filePath in ObjectAnim.Root!.Items.Keys)
+		if (objectName == null)
 		{
-			if (ObjectAnim.Root[filePath]! is RARC.File && (filePath.EndsWith(".bck") || filePath.EndsWith(".bca") || filePath.EndsWith(".btk") || filePath.EndsWith(".brk") || filePath.EndsWith(".btp") || filePath.EndsWith(".bpk") || filePath.EndsWith(".bpa") || filePath.EndsWith(".bva") || filePath.EndsWith(".blk") || filePath.EndsWith(".bxk") || filePath.EndsWith(".bxa")))
-			{
-				string name = filePath.Split(".")[0];
-				if (!ObjectAnimList.Contains(name))
-				{
-					ObjectAnimList.Add(name);
-				}
-			}
+			Console.WriteLine($"[WARNING] [AutoCompletionLoader: ObjectAnimList]: Abort loading '{objectName}' because it's null!");
+			return;
 		}
+
+		LoadRarc_ObjectAnim_Internal(objectName, IsSMG1);
+
+		if (ObjectAnimList.Count() == 0)
+		{
+			Console.WriteLine($"[WARNING] [AutoCompletionLoader: ObjectAnimList]: Didn't find the archive of '{objectName}.arc' Trying with '{objectName}Anim.arc'...");
+			LoadRarc_ObjectAnim_Internal(objectName + "Anim", IsSMG1);
+		}
+
+		if (ObjectAnimList.Count() == 0)
+			return;
+
+		Console.WriteLine($"[AutoCompletionLoader: ObjectAnimList]: '{objectName}' Loaded successfully with {ObjectAnimList.Count()} animations!");
 	}
 
 	private void LoadGeneralPos_ExtractValues(BCSV genPos)
