@@ -95,7 +95,7 @@ public class AutoCompletionData
 		string marioAnimePath = Path.Combine("ObjectData", "MarioAnime.arc");
 		string galaxyMapPath = "";
 		if (!IsSMG1)
-			galaxyMapPath = Path.Combine("StageData", galaxyName, galaxyName + "Map.arc");
+			galaxyMapPath = Path.Combine(galaxyPath, galaxyName + "Map.arc");
 
 		GamePath = gamePath;
 		GalaxyPath = galaxyPath;
@@ -104,6 +104,7 @@ public class AutoCompletionData
 		LoadRarc_ProductMapObjDataTable(productMapObjDataTablePath, IsSMG1);
 		LoadRarc_MultiBgmInfo(multiBgmInfoPath, IsSMG1);
 		LoadRarc_MarioAnime(marioAnimePath, IsSMG1);
+
 		if (!IsSMG1)
 		{
 			if (File.Exists(galaxyMapPath))
