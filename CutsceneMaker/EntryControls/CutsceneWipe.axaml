@@ -21,6 +21,6 @@
 		</ComboBox>
 
 		<TextBlock Text="WipeFrame" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="5" />
-		<NumericUpDown Name="WipeFrame" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" />
+		<NumericUpDown Name="WipeFrame" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="-1"/>
 	</Grid>
 </UserControl>

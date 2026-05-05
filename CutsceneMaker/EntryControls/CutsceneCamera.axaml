@@ -17,10 +17,10 @@
 		<views:AutoTextBox Name="AnimCameraName" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="AnimCameraStartFrame" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<NumericUpDown Name="AnimCameraStartFrame" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>
+		<NumericUpDown Name="AnimCameraStartFrame" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="-1"/>
 
 		<TextBlock Text="AnimCameraEndFrame" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<NumericUpDown Name="AnimCameraEndFrame" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>
+		<NumericUpDown Name="AnimCameraEndFrame" Grid.Row="7" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="-1"/>
 
 		<TextBlock Text="IsContinuous" Grid.Row="8" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<CheckBox Name="IsContinuous" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
