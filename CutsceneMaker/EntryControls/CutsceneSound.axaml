@@ -21,7 +21,7 @@
 		<CheckBox Name="ReturnBgm" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
 
 		<TextBlock Text="BgmWipeOutFrame" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
-		<NumericUpDown Name="BgmWipeOutFrame" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1"/>
+		<NumericUpDown Name="BgmWipeOutFrame" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5" ParsingNumberStyle="Integer" Increment="1" Minimum="-1"/>
 
 		<TextBlock Text="AllSoundStopFrame" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Margin="5"/>
 		<CheckBox Name="AllSoundStopFrame" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center" Margin="5"/>
