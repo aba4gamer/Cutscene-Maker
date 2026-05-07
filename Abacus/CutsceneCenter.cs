@@ -6,14 +6,12 @@ using Hack.io.Class;
 using Hack.io.Utility;
 
 
-
-
 namespace Abacus;
 /*
 	The idea is to give a lot of useful functions to make the UI development easier including the organization of all the BCSVs.
 	This consists of that a Cutscene has a list of Parts that are connected to all the BCSVs using its PartName.
 
-	Note for the UI designer: I think you can directly load every parameter from the respective class of each Part, you don't have to search inside the BCSVs.
+	Note for the UI designer?? I think you can directly load every parameter from the respective class of each Part, you don't have to search inside the BCSVs.
 */
 /// <summary>
 /// The main Cutscene that contains a lot of different Parts. Use the static functions to create one.
@@ -64,7 +62,7 @@ public class Cutscene
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine($"[Abacus] Something went wrong with loading!\nCheck this: {e.Message}");
+			Console.WriteLine($"[Abacus] Something went wrong with loading!\nCheck this?? {e.Message}");
 		}
 
 		Parts.Clear();
@@ -121,7 +119,7 @@ public class Cutscene
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine($"Something went wrong with loading!\nCheck this: {e.Message}");
+			Console.WriteLine($"Something went wrong with loading!\nCheck this?? {e.Message}");
 		}
 
 		Parts.Clear();
@@ -157,17 +155,16 @@ public class Cutscene
 			}
 		}
 	}
-
-	protected void FillProperties(ICommonEntries part, string PartName)
+	protected void FillProperties(ICommonPartEntries part, string PartName)
 	{
-		int iPlayer = GetPartNameIndex(PlayerBCSV, PartName);
-		if (iPlayer != -1)
+		BCSV.Entry[] playerEntries = GetPartNameEntries(PlayerBCSV, PartName);
+		if (playerEntries.Length > 0)
 		{
 			part.PlayerEntry = new()
 			{
-				PosName = PlayerBCSV.ContainsField(PlayerHashes.POS_NAME) ? (string)PlayerBCSV[iPlayer][PlayerBCSV[PlayerHashes.POS_NAME]] : "",
-				BckName = PlayerBCSV.ContainsField(PlayerHashes.BCK_NAME) ? (string)PlayerBCSV[iPlayer][PlayerBCSV[PlayerHashes.BCK_NAME]] : "",
-				Visible = PlayerBCSV.ContainsField(PlayerHashes.VISIBLE) ? (int)PlayerBCSV[iPlayer][PlayerBCSV[PlayerHashes.VISIBLE]] : -1
+				PosName = (string)playerEntries[^1][PlayerBCSV[PlayerHashes.POS_NAME]] ?? "",
+				BckName = playerEntries.Select(p => (string)p[PlayerBCSV[PlayerHashes.BCK_NAME]] ?? "").ToList() ?? [],
+				Visible = (int)playerEntries[^1][PlayerBCSV[PlayerHashes.VISIBLE]],
 			};
 		}
 
@@ -176,37 +173,37 @@ public class Cutscene
 		{
 			part.WipeEntry = new()
 			{
-				WipeName = WipeBCSV.ContainsField(WipeHashes.WIPE_NAME) ? (string)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_NAME]] : "",
-				WipeType = WipeBCSV.ContainsField(WipeHashes.WIPE_TYPE) ? (int)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_TYPE]] : 0,
-				WipeFrame = WipeBCSV.ContainsField(WipeHashes.WIPE_FRAME) ? (int)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_FRAME]] : 0
+				WipeName =(string)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_NAME]] ?? "",
+				WipeType =(int)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_TYPE]],
+				WipeFrame = (int)WipeBCSV[iWipe][WipeBCSV[WipeHashes.WIPE_FRAME]],
 			};
 		}
 
-		int iSound = GetPartNameIndex(SoundBCSV, PartName);
-		if (iSound != -1)
+		BCSV.Entry[] entries = GetPartNameEntries(SoundBCSV, PartName);
+		if (entries.Length > 0)
 		{
-			part.SoundEntry = new()
-			{
-				Bgm = SoundBCSV.ContainsField(SoundHashes.BGM_NAME) ? (string)SoundBCSV[iSound][SoundBCSV[SoundHashes.BGM_NAME]] : "",
-				SystemSe = SoundBCSV.ContainsField(SoundHashes.SYSTEM_SE) ? (string)SoundBCSV[iSound][SoundBCSV[SoundHashes.SYSTEM_SE]] : "",
-				ActionSe = SoundBCSV.ContainsField(SoundHashes.ACTION_SE) ? (string)SoundBCSV[iSound][SoundBCSV[SoundHashes.ACTION_SE]] : "",
-				ReturnBgm = SoundBCSV.ContainsField(SoundHashes.RETURN_BGM) ? (int)SoundBCSV[iSound][SoundBCSV[SoundHashes.RETURN_BGM]] : -1,
-				WipeOutFrame = SoundBCSV.ContainsField(SoundHashes.BGM_WIPEOUT_FRAME) ? (int)SoundBCSV[iSound][SoundBCSV[SoundHashes.BGM_WIPEOUT_FRAME]] : -1,
-				AllSoundStopFrame = SoundBCSV.ContainsField(SoundHashes.ALL_SOUND_STOP_FRAME) ? (int)SoundBCSV[iSound][SoundBCSV[SoundHashes.ALL_SOUND_STOP_FRAME]] : -1
-			};
-		}
+            part.SoundEntry = new()
+            {
+                // BGMProperties = (entries.Select(p => (string)p[SoundBCSV[SoundHashes.BGM_NAME]] ?? ""), entries.Select(p => (string)p[SoundBCSV[SoundHashes.BGM_WIPEOUT_FRAME]] ?? ""), entries.Select(p => (int)p[SoundBCSV[SoundHashes.RETURN_BGM]])) ,
+				SystemSe = [.. entries.Select(p => (string)p[SoundBCSV[SoundHashes.SYSTEM_SE]] ?? "")],
+				ActionSe = [.. entries.Select(p => (string)p[SoundBCSV[SoundHashes.ACTION_SE]] ?? "")],
+				AllSoundStopFrame = (int)entries[0][SoundBCSV[SoundHashes.ALL_SOUND_STOP_FRAME]],
+            };
 
-		int iAction = GetPartNameIndex(ActionBCSV, PartName);
-		if (iAction != -1)
+        }
+
+		BCSV.Entry[] actionEntries = GetPartNameEntries(ActionBCSV, PartName);
+		if (actionEntries.Length > 0)
 		{
-			part.ActionEntry = new()
-			{
-				CastName = ActionBCSV.ContainsField(ActionHashes.CAST_NAME) ? (string)ActionBCSV[iAction][ActionBCSV[ActionHashes.CAST_NAME]] : "",
-				CastID = ActionBCSV.ContainsField(ActionHashes.CAST_ID) ? (int)ActionBCSV[iAction][ActionBCSV[ActionHashes.CAST_ID]] : -1,
-				ActionType = ActionBCSV.ContainsField(ActionHashes.ACTION_TYPE) ? (int)ActionBCSV[iAction][ActionBCSV[ActionHashes.ACTION_TYPE]] : -1,
-				PosName = ActionBCSV.ContainsField(ActionHashes.POS_NAME) ? (string)ActionBCSV[iAction][ActionBCSV[ActionHashes.POS_NAME]] : "",
-				AnimName = ActionBCSV.ContainsField(ActionHashes.ANIM_NAME) ? (string)ActionBCSV[iAction][ActionBCSV[ActionHashes.ANIM_NAME]] : ""
-			};
+            for (int i = 0; i < actionEntries.Length; i++)
+                part.ActionEntries.Add( new()
+                {
+                    CastName = (string)ActionBCSV[i][ActionBCSV[ActionHashes.CAST_NAME]] ?? "",
+                    CastID = (int)ActionBCSV[i][ActionBCSV[ActionHashes.CAST_ID]],
+                    ActionType = (int)ActionBCSV[i][ActionBCSV[ActionHashes.ACTION_TYPE]],
+                    PosName = (string)ActionBCSV[i][ActionBCSV[ActionHashes.POS_NAME]] ?? "",
+                    AnimName = (string)ActionBCSV[i][ActionBCSV[ActionHashes.ANIM_NAME]] ?? "",
+                });
 		}
 
 		int iCamera = GetPartNameIndex(CameraBCSV, PartName);
@@ -214,12 +211,12 @@ public class Cutscene
 		{
 			part.CameraEntry = new()
 			{
-				CameraTargetName = CameraBCSV.ContainsField(CameraHashes.CAMERA_TARGET_NAME) ? (string)CameraBCSV[iCamera][CameraBCSV[CameraHashes.CAMERA_TARGET_NAME]] : "",
-				CameraTargetCastID = CameraBCSV.ContainsField(CameraHashes.CAMERA_TARGET_CAST_ID) ? (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.CAMERA_TARGET_CAST_ID]] : -1,
-				AnimCameraName = CameraBCSV.ContainsField(CameraHashes.ANIM_CAMERA_NAME) ? (string)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_NAME]] : "",
-				AnimCameraStartFrame = CameraBCSV.ContainsField(CameraHashes.ANIM_CAMERA_START_FRAME) ? (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_START_FRAME]] : -1,
-				AnimCameraEndFrame = CameraBCSV.ContainsField(CameraHashes.ANIM_CAMERA_END_FRAME) ? (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_END_FRAME]] : 0,
-				IsContinuous = CameraBCSV.ContainsField(CameraHashes.IS_CONTINUOUS) ? (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.IS_CONTINUOUS]] : -1
+				CameraTargetName = (string)CameraBCSV[iCamera][CameraBCSV[CameraHashes.CAMERA_TARGET_NAME]] ?? "",
+				CameraTargetCastID = (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.CAMERA_TARGET_CAST_ID]],
+				AnimCameraName = (string)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_NAME]] ?? "",
+				AnimCameraStartFrame = (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_START_FRAME]],
+				AnimCameraEndFrame = (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.ANIM_CAMERA_END_FRAME]],
+				IsContinuous = (int)CameraBCSV[iCamera][CameraBCSV[CameraHashes.IS_CONTINUOUS]],
 			};
 		}
 	}
@@ -269,16 +266,29 @@ public class Cutscene
 	/// <param name="bcsv"></param>
 	/// <param name="PartName"></param>
 	/// <returns></returns>
-	public static int GetPartNameIndex(BCSV bcsv, string PartName)
+    private int GetPartNameIndex(BCSV bcsv, string PartName)
+    {
+        for (int i = 0; i < bcsv.EntryCount; i++)
+        {
+            if ((string)bcsv[i][bcsv[PART_NAME]] == PartName) // Yoo, this works!
+			{
+                return i;
+			}
+        }
+        return -1;
+    }
+	public static BCSV.Entry[] GetPartNameEntries(BCSV bcsv, string PartName)
 	{
+        List<BCSV.Entry> entries = [];
 		for (int i = 0; i < bcsv.EntryCount; i++)
 		{
 			if ((string)bcsv[i][bcsv[PART_NAME]] == PartName) // Yoo, this works!
 			{
-				return i;
+                BCSV.Entry entry = bcsv[i];
+				entries.Add(entry);
 			}
 		}
-		return -1;
+		return [.. entries];
 	}
 
 	public void ExportAll(string folderPath)
@@ -313,61 +323,75 @@ public class Cutscene
 		{
 			TimeBCSV = new BCSV();
 
-			BCSV.Field PartNameField = new();
-			PartNameField.HashName = PART_NAME;
-			PartNameField.DataType = BCSV.DataTypes.STRING;
-			PartNameField.AutoRecalc = true;
-			TimeBCSV.Add(PartNameField);
+            BCSV.Field PartNameField = new()
+            {
+                HashName = PART_NAME,
+                DataType = BCSV.DataTypes.STRING,
+                AutoRecalc = true
+            };
+            TimeBCSV.Add(PartNameField);
 
-			BCSV.Field TotalStepField = new();
-			TotalStepField.HashName = TimeHashes.TOTAL_STEP;
-			TotalStepField.DataType = BCSV.DataTypes.INT32;
-			TotalStepField.AutoRecalc = true;
-			TimeBCSV.Add(TotalStepField);
+            BCSV.Field TotalStepField = new()
+            {
+                HashName = TimeHashes.TOTAL_STEP,
+                DataType = BCSV.DataTypes.INT32,
+                AutoRecalc = true
+            };
+            TimeBCSV.Add(TotalStepField);
 
-			BCSV.Field SuspendFlagField = new();
-			SuspendFlagField.HashName = TimeHashes.SUSPEND_FLAG;
-			SuspendFlagField.DataType = BCSV.DataTypes.INT32;
-			SuspendFlagField.AutoRecalc = true;
-			TimeBCSV.Add(SuspendFlagField);
+            BCSV.Field SuspendFlagField = new()
+            {
+                HashName = TimeHashes.SUSPEND_FLAG,
+                DataType = BCSV.DataTypes.INT32,
+                AutoRecalc = true
+            };
+            TimeBCSV.Add(SuspendFlagField);
 
-			BCSV.Field WaitUserInputFlagField = new();
-			WaitUserInputFlagField.HashName = TimeHashes.WAIT_USER_INPUT_FLAG;
-			WaitUserInputFlagField.DataType = BCSV.DataTypes.INT32;
-			WaitUserInputFlagField.AutoRecalc = true;
-			TimeBCSV.Add(WaitUserInputFlagField);
+            BCSV.Field WaitUserInputFlagField = new()
+            {
+                HashName = TimeHashes.WAIT_USER_INPUT_FLAG,
+                DataType = BCSV.DataTypes.INT32,
+                AutoRecalc = true
+            };
+            TimeBCSV.Add(WaitUserInputFlagField);
 		}
-		else if (IsSMG1 && TimeBCSV.ContainsField(TimeHashes.WAIT_USER_INPUT_FLAG))
+		else if (IsSMG1 && !TimeBCSV.ContainsField(TimeHashes.WAIT_USER_INPUT_FLAG))
 		{
 			TimeBCSV = new BCSV();
 
-			BCSV.Field PartNameField = new();
-			PartNameField.HashName = PART_NAME;
-			PartNameField.DataType = BCSV.DataTypes.STRING;
-			PartNameField.AutoRecalc = true;
-			TimeBCSV.Add(PartNameField);
+            BCSV.Field PartNameField = new()
+            {
+                HashName = PART_NAME,
+                DataType = BCSV.DataTypes.STRING,
+                AutoRecalc = true
+            };
+            TimeBCSV.Add(PartNameField);
 
-			BCSV.Field TotalStepField = new();
-			TotalStepField.HashName = TimeHashes.TOTAL_STEP;
-			TotalStepField.DataType = BCSV.DataTypes.INT32;
-			TotalStepField.AutoRecalc = true;
-			TimeBCSV.Add(TotalStepField);
+            BCSV.Field TotalStepField = new()
+            {
+                HashName = TimeHashes.TOTAL_STEP,
+                DataType = BCSV.DataTypes.INT32,
+                AutoRecalc = true
+            };
+            TimeBCSV.Add(TotalStepField);
 
-			BCSV.Field SuspendFlagField = new();
-			SuspendFlagField.HashName = TimeHashes.SUSPEND_FLAG;
-			SuspendFlagField.DataType = BCSV.DataTypes.INT32;
-			SuspendFlagField.AutoRecalc = true;
-			TimeBCSV.Add(SuspendFlagField);
+            BCSV.Field SuspendFlagField = new()
+            {
+                HashName = TimeHashes.SUSPEND_FLAG,
+                DataType = BCSV.DataTypes.INT32,
+                AutoRecalc = true
+            };
+            TimeBCSV.Add(SuspendFlagField);
 		}
 
 		foreach (Part part in Parts)
 		{
-			TimeBCSV.Add(part.TimeEntry.CreateEntryAndSave(part.PartName, IsSMG1));
+			TimeBCSV.Add(part.TimeEntry.CreateEntries(part.PartName, IsSMG1));
 			SaveProperties(part, part.PartName);
 			if (part.SubPartEntries != null)
 				foreach (SubPart subPart in part.SubPartEntries)
 				{
-					SubPartBCSV.Add(subPart.CreateEntryAndSave(part.PartName));
+					SubPartBCSV.Add(subPart.CreateEntries(part.PartName));
 					SaveProperties(subPart, subPart.SubPartName);
 				}
 		}
@@ -437,22 +461,22 @@ public class Cutscene
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine($"[Abacus] Something went wrong with saving!\nCheck this: {e.Message}");
+			Console.WriteLine($"[Abacus] Something went wrong with saving!\nCheck this?? {e.Message}");
 		}
 	}
 
-	private void SaveProperties(ICommonEntries part, string PartName)
+	private void SaveProperties(ICommonPartEntries part, string PartName)
 	{
 		if (part.PlayerEntry != null)
-			PlayerBCSV.Add(part.PlayerEntry.CreateEntryAndSave(PartName));
+			PlayerBCSV.Add(part.PlayerEntry.CreateEntries(PartName));
 		if (part.WipeEntry != null)
-			WipeBCSV.Add(part.WipeEntry.CreateEntryAndSave(PartName));
+			WipeBCSV.Add(part.WipeEntry.CreateEntries(PartName));
 		if (part.SoundEntry != null)
-			SoundBCSV.Add(part.SoundEntry.CreateEntryAndSave(PartName));
-		if (part.ActionEntry != null)
-			ActionBCSV.Add(part.ActionEntry.CreateEntryAndSave(PartName));
+			SoundBCSV.Add(part.SoundEntry.CreateEntries(PartName));
+		if (part.ActionEntries != null)
+			ActionBCSV.AddRange([.. part.ActionEntries.Select(a => a.CreateEntries(PartName))]);
 		if (part.CameraEntry != null)
-			CameraBCSV.Add(part.CameraEntry.CreateEntryAndSave(PartName));
+			CameraBCSV.Add(part.CameraEntry.CreateEntries(PartName));
 	}
 
 	/// <summary>
@@ -553,11 +577,14 @@ public class Cutscene
 		return cut;
 	}
 
+// You maybe ask why aren't these entries objects from BCSV.Entry. With this you can easily access every property instead of getting it using a hash for every property like I did before.
+#region EntryClasses
+
 	/// <summary>
 	/// This connects the same PartName across all the BCSVs with the idea of each Part being an independent object with multiple entries.
 	/// </summary>
 	/// <param name="PartName"></param>
-	public class Part(string PartName) : ICommonEntries
+	public class Part(string PartName) : ICommonPartEntries
 	{
 		public string PartName = PartName;
 
@@ -566,20 +593,18 @@ public class Cutscene
 		public Player? PlayerEntry { get; set; }
 		public Wipe? WipeEntry { get; set; }
 		public Sound? SoundEntry { get; set; }
-		public Action? ActionEntry { get; set; }
+		public List<Action> ActionEntries { get; set; } = [];
 		public Camera? CameraEntry { get; set; }
-		public List<SubPart>? SubPartEntries; // I'll make an exception with SubPart.
+		public List<SubPart>? SubPartEntries;
 	}
 }
-// You maybe ask why aren't these entries objects from BCSV.Entry. With this you can easily access every property instead of getting it using a hash for every property like I did before.
-#region EntryClasses
 
 public class Time
 {
 	public int TotalStep = 0;
 	public int SuspendFlag = 0;
 	public int WaitUserInputFlag = 0;
-	public BCSV.Entry CreateEntryAndSave(string PartName, bool IsSMG1)
+	public BCSV.Entry CreateEntries(string PartName, bool IsSMG1)
 	{
 		BCSV.Entry entry = new();
 		entry.Add(PART_NAME, PartName);
@@ -594,7 +619,7 @@ public class Time
 /// <summary>
 /// This is the best way to manage this class
 /// </summary>
-public class SubPart(string SubPartName) : ICommonEntries
+public class SubPart(string SubPartName) : ICommonPartEntries
 {
 
 	public string SubPartName = SubPartName;
@@ -605,9 +630,9 @@ public class SubPart(string SubPartName) : ICommonEntries
 	public Player? PlayerEntry { get; set; }
 	public Wipe? WipeEntry { get; set; }
 	public Sound? SoundEntry { get; set; }
-	public Action? ActionEntry { get; set; }
+	public List<Action> ActionEntries { get; set; } = [];
 	public Camera? CameraEntry { get; set; }
-	public BCSV.Entry CreateEntryAndSave(string MainPartName)
+	public BCSV.Entry CreateEntries(string MainPartName)
 	{
 		this.MainPartName = MainPartName;
 		BCSV.Entry entry = new();
@@ -622,25 +647,37 @@ public class SubPart(string SubPartName) : ICommonEntries
 public class Player
 {
 	public string PosName = "0";
-	public string BckName = "0";
+	public List<string> BckName = [""];
 	public int Visible = -1;
-	public BCSV.Entry CreateEntryAndSave(string PartName)
+	public BCSV.Entry[] CreateEntries(string PartName)
 	{
-		BCSV.Entry entry = new();
-		entry.Add(PART_NAME, PartName);
-		entry.Add(PlayerHashes.POS_NAME, PosName);
-		entry.Add(PlayerHashes.BCK_NAME, BckName);
-		entry.Add(PlayerHashes.VISIBLE, Visible);
-		return entry;
+        List<BCSV.Entry> entries = [];
+        BCSV.Entry entry = new();
+
+        for (int i = 1; i < BckName.Count; i++)
+        {
+            BCSV.Entry extraEntry = new();
+            extraEntry.Add(PlayerHashes.BCK_NAME, BckName[i]);
+            entries.Add(extraEntry);
+        }
+
+        entry.Add(PART_NAME, PartName);
+        entry.Add(PlayerHashes.POS_NAME, PosName);
+        entry.Add(PlayerHashes.VISIBLE, Visible);    
+        entry.Add(PlayerHashes.BCK_NAME, BckName[0]);
+        entries.Add(entry);
+
+        
+		return [.. entries];
 	}
 }
 
 public class Wipe
 {
-	public string WipeName = "0";
+	public string WipeName = "";
 	public int WipeType = 0;
 	public int WipeFrame = 0;
-	public BCSV.Entry CreateEntryAndSave(string PartName)
+	public BCSV.Entry CreateEntries(string PartName)
 	{
 		BCSV.Entry entry = new();
 		entry.Add(PART_NAME, PartName);
@@ -650,26 +687,41 @@ public class Wipe
 		return entry;
 	}
 }
-
+/// <summary>
+/// This one class is pretty weird. Since ReturnBgm makes the cutscene play a BGM after it ends that gives us a window of two BGMs at the same
+/// cutscene. Meanwhile, infinite sounds can be played at the same time.
+/// </summary>
 public class Sound
 {
-	public string Bgm = "0";
-	public string SystemSe = "0";
-	public string ActionSe = "0";
-	public int ReturnBgm = 0;
-	public int WipeOutFrame = 0;
+	public (string BgmName, int WipeOutFrame, int ReturnBgm)[] BGMProperties = new(string, int, int)[2];
+	public List<string> SystemSe = [""];
+	public List<string> ActionSe = [""];
 	public int AllSoundStopFrame = 0;
-	public BCSV.Entry CreateEntryAndSave(string PartName)
+	public BCSV.Entry[] CreateEntries(string PartName)
 	{
+        List<BCSV.Entry> entries = [];
 		BCSV.Entry entry = new();
-		entry.Add(PART_NAME, PartName);
-		entry.Add(SoundHashes.BGM_NAME, Bgm);
-		entry.Add(SoundHashes.SYSTEM_SE, SystemSe);
-		entry.Add(SoundHashes.ACTION_SE, ActionSe);
-		entry.Add(SoundHashes.RETURN_BGM, ReturnBgm);
-		entry.Add(SoundHashes.BGM_WIPEOUT_FRAME, WipeOutFrame);
-		entry.Add(SoundHashes.ALL_SOUND_STOP_FRAME, AllSoundStopFrame);
-		return entry;
+        
+        for (int i = 0; i < Math.Max(Math.Max(BGMProperties.Count(n => n.BgmName != null), SystemSe.Count), ActionSe.Count) - 1; i++) {
+            entry = new();
+            entry.Add(PART_NAME, PartName);
+
+            entry.Add(SoundHashes.BGM_NAME, BGMProperties.ElementAtOrDefault(i).BgmName ?? "");
+		    entry.Add(SoundHashes.BGM_WIPEOUT_FRAME, BGMProperties.ElementAtOrDefault(i).WipeOutFrame);
+            entry.Add(SoundHashes.RETURN_BGM, BGMProperties.ElementAtOrDefault(i).ReturnBgm);
+
+            entry.Add(SoundHashes.SYSTEM_SE, SystemSe.ElementAtOrDefault(i) ?? "");
+            entry.Add(SoundHashes.ACTION_SE, ActionSe.ElementAtOrDefault(i) ?? "");
+            
+            if (i == 0)
+		        entry.Add(SoundHashes.ALL_SOUND_STOP_FRAME, AllSoundStopFrame);
+            else
+                entry.Add(SoundHashes.ALL_SOUND_STOP_FRAME, -1);
+            
+            entries.Add(entry);
+        }
+
+		return [..entries];
 	}
 }
 
@@ -680,7 +732,7 @@ public class Action
 	public int ActionType = 0;
 	public string PosName = "0";
 	public string AnimName = "0";
-	public BCSV.Entry CreateEntryAndSave(string PartName)
+	public BCSV.Entry CreateEntries(string PartName)
 	{
 		BCSV.Entry entry = new();
 		entry.Add(PART_NAME, PartName);
@@ -701,7 +753,7 @@ public class Camera
 	public int AnimCameraStartFrame = 0;
 	public int AnimCameraEndFrame = 0;
 	public int IsContinuous = 0;
-	public BCSV.Entry CreateEntryAndSave(string PartName)
+	public BCSV.Entry CreateEntries(string PartName)
 	{
 		BCSV.Entry entry = new();
 		entry.Add(PART_NAME, PartName);
@@ -714,12 +766,12 @@ public class Camera
 		return entry;
 	}
 }
-public interface ICommonEntries // Before using SubParts I didn't have to use this...
+public interface ICommonPartEntries // Before using SubParts I didn't have to use this...
 {
 	public Player? PlayerEntry { get; set; }
 	public Wipe? WipeEntry { get; set; }
 	public Sound? SoundEntry { get; set; }
-	public Action? ActionEntry { get; set; }
+	public List<Action> ActionEntries { get; set; }
 	public Camera? CameraEntry { get; set; }
 }
 #endregion EntryClasses
